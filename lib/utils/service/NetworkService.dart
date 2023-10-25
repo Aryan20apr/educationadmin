@@ -29,7 +29,7 @@ class NetworkService extends GetConnect {
   final String channels="channels/all";
   final String channelfiles="resources/channel/files/";
   final String channelvideos="resources/channel/videos/";
-
+  final String creatorChannels="channels/creator/channels";
 
   final String userchannels="channels/..";
 
@@ -112,6 +112,12 @@ on Exception catch (_) {
 Future<ChannelListModal> getAllChannelList({String? token}) async
 {
   Response<Map<String,dynamic>> response = await get('$baseURL$channels',headers: {"Authorization":"Bearer $token"});
+    Logger().e(response.body);
+   return ChannelListModal.fromJson(response.body!);
+  }
+Future<ChannelListModal> getCreatorList({String? token}) async
+{
+  Response<Map<String,dynamic>> response = await get('$baseURL$creatorChannels',headers: {"Authorization":"Bearer $token"});
     Logger().e(response.body);
    return ChannelListModal.fromJson(response.body!);
   }

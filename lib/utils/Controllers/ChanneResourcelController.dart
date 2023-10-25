@@ -20,12 +20,15 @@ import 'AuthenticationController.dart';
 class ChannelResourceController extends GetxController
 {
 
-  final String AES_KEY="rsrq5CdSIJaUq5f9hfq5daWJIaIsbEnKudxERZOtqBM=";
+  
   AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
   final fileData=FileResourcesData().obs;
   final videoData=VideoResourcesData().obs;
  
   NetworkService networkService=Get.find<NetworkService>();
+
+
+  
 
   Future<void> getChannelFiles({required int channelId}) async
   {

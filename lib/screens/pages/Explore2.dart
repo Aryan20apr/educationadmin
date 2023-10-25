@@ -19,10 +19,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Color(0xFF3D5AFE); // Primary Color - Indigo
-    final accentColor = Color(0xFFFF8F00); // Accent Color - Amber
-    final textColor = Color(0xFF212121); // Text Color - Black
-    final cardBackgroundColor = Color(0xFFE6F0FF); // Light blue gradient background
+    final primaryColor = const Color(0xFF3D5AFE); // Primary Color - Indigo
+    final accentColor = const Color(0xFFFF8F00); // Accent Color - Amber
+    final textColor = const Color(0xFF212121); // Text Color - Black
+    final cardBackgroundColor = const Color(0xFFE6F0FF); // Light blue gradient background
 
     return Scaffold(
       appBar: AppBar(
@@ -44,20 +44,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               future: exploreViewModal.getChannels(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Center(
-                        child: SizedBox(
-                          height: Get.height * 0.05,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ),
-                    ),
-                  );
+                  return const ProgressIndicatorWidget();
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   if (exploreViewModal.channelData.value.channels == null) {
-                    return Center(child: Text('Could not obtain channels'));
+                    return const Center(child: Text('Could not obtain channels'));
                   }
                   return ListView.builder(
                     itemBuilder: (context, index) {
@@ -78,10 +68,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                     color: cardBackgroundColor, // Set card background color
                                   ),
-                                  margin: EdgeInsets.all(10),
+                                  margin: const EdgeInsets.all(10),
                                   child: Column(
                                     children: [
                                       // Title and subtitle
@@ -101,7 +91,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 5),
+                                            const SizedBox(height: 5),
                                             Text(
                                               'Created by ${exploreViewModal.channelData.value.channels![index].createdBy}',
                                               style: TextStyle(
@@ -160,22 +150,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Center(
-                        child: SizedBox(
-                          height: Get.height * 0.05,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ),
-                    ),
-                  );
+                  return const ProgressIndicatorWidget();
                 }
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProgressIndicatorWidget extends StatelessWidget {
+  const ProgressIndicatorWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: SizedBox(
+            height: Get.height * 0.05,
+            child: const CircularProgressIndicator(),
+          ),
+        ),
       ),
     );
   }

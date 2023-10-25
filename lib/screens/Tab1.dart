@@ -106,7 +106,7 @@ import 'package:logger/logger.dart';
 
 
 class VideoResourcesTab extends StatefulWidget {
-  VideoResourcesTab({Key? key, required this.channelId}) : super(key: key);
+ const VideoResourcesTab({Key? key, required this.channelId}) : super(key: key);
   final int channelId;
 
   @override

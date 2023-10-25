@@ -1,4 +1,10 @@
+
+
+import 'dart:developer';
+import 'package:logger/logger.dart';
+import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannel.dart';
+import 'package:educationadmin/screens/pages/creator/CreateChannelsController.dart';
 import 'package:educationadmin/screens/pages/creator/CreatorChannel.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
@@ -7,11 +13,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-class CreaterHome extends StatelessWidget {
+import '../../../Modals/ChannelListModal.dart';
+
+class CreaterHome extends StatefulWidget {
+
+  const CreaterHome({super.key});
+
+  @override
+  State<CreaterHome> createState() => _CreaterHomeState();
+}
+
+class _CreaterHomeState extends State<CreaterHome> {
   final UserDetailsManager userDetailsManager = Get.find<UserDetailsManager>();
-
-  CreaterHome({super.key});
-
+  final CreaterChannelsController createrChannelsController=Get.put(CreaterChannelsController());
+  Future<bool>? isChannelFetched;
+  final Logger logger=Logger();
+  @override
+  void initState()
+  {
+    super.initState();
+    logger.e("In initState");
+    isChannelFetched=createrChannelsController.getChannels();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,27 +115,53 @@ class CreaterHome extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return VideoCard(
-                      thumbnailUrl: 'https://via.placeholder.com/400x200',
-                      title: 'Channel Title $index',
-                      channelName: 'Channel Name',
-                      viewsCount: '1M Subscribers',
-                      duration: '10:00',
-                      avatarUrl: 'https://via.placeholder.com/40x40',
-                      accentColor: ColorConstants.accentColor,
-                      gradientStartColor: ColorConstants.primaryColor,
-                      gradientEndColor: ColorConstants.secondaryColor,
-                    );
-                  },
-                ),
-              ],
+            child: FutureBuilder<bool>(
+              future: isChannelFetched,
+              builder: (context,snapshot) {
+                if(ConnectionState.waiting==snapshot.connectionState)
+                {
+                    return const ProgressIndicatorWidget();
+                }
+                else if(ConnectionState.done==snapshot.connectionState)
+                {
+                  if(snapshot.data==false)
+                  {
+                    return const Center(child: Text('Could not obtain channels'),);
+                  }
+                  else
+                  {
+                    if(createrChannelsController.channelData.value.channels!.isNotEmpty)
+                    {
+                      return Column(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: createrChannelsController.channelData.value.channels?.length,
+                      itemBuilder: (context, index) {
+                        return VideoCard(
+                          channel:createrChannelsController.channelData.value.channels![index],
+                         
+                          accentColor: ColorConstants.accentColor,
+                          gradientStartColor: ColorConstants.primaryColor,
+                          gradientEndColor: ColorConstants.secondaryColor,
+                        );
+                      },
+                    ),
+                  ],
+                );
+                    }
+                    else
+                    {
+                      return const Center(child: Text('No channels available'),);
+                    }
+                  }
+                }
+                else
+                {
+                  return const ProgressIndicatorWidget();
+                }
+              }
             ),
           ),
         ],
@@ -122,24 +171,15 @@ class CreaterHome extends StatelessWidget {
 }
 
 class VideoCard extends StatelessWidget {
-  final String thumbnailUrl;
-  final String title;
-  final String channelName;
-  final String viewsCount;
-  final String duration;
-  final String avatarUrl;
+ 
   final Color accentColor;
   final Color gradientStartColor;
   final Color gradientEndColor;
   final VoidCallback? onTap;
-
-  VideoCard({
-    required this.thumbnailUrl,
-    required this.title,
-    required this.channelName,
-    required this.viewsCount,
-    required this.duration,
-    required this.avatarUrl,
+  final Channels channel;
+  const VideoCard({super.key, 
+    required this.channel,
+    
     required this.accentColor,
     required this.gradientStartColor,
     required this.gradientEndColor,
@@ -169,7 +209,7 @@ class VideoCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            Get.to(() => const CreatorChannel());
+            Get.to(() => CreatorChannel(channel: channel,));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,16 +217,16 @@ class VideoCard extends StatelessWidget {
               ClipRRect(
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(8.0)),
-                child: Image.network(thumbnailUrl,
+                child: Image.network(channel.thumbnail!,
                     height: 200.0, width: double.infinity, fit: BoxFit.cover),
               ),
               const SizedBox(height: 8.0),
               ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(avatarUrl),
+                leading: const CircleAvatar(
+                  backgroundImage: NetworkImage("https://via.placeholder.com/40x40"),
                 ),
                 title: Text(
-                  title,
+                  channel.name??"",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12.sp,
@@ -196,20 +236,18 @@ class VideoCard extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(channelName,
-                        style: const TextStyle(color: Colors.white)),
+                   
                     Row(
                       children: [
-                        Text(viewsCount,
+                        Text('₹${channel.price??""}',
                             style: const TextStyle(color: Colors.white)),
                         const SizedBox(width: 8.0),
-                        Text(duration,
-                            style: const TextStyle(color: Colors.white)),
+                       
                       ],
                     ),
                   ],
                 ),
-                trailing: const Icon(Icons.more_vert, color: Colors.white),
+                trailing: const Icon(Icons.more_vert_rounded, color: Colors.white),
               ),
             ],
           ),
