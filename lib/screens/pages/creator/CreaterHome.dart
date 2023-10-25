@@ -1,6 +1,7 @@
 
 
 import 'dart:developer';
+import 'package:educationadmin/screens/pages/creator/EditChannelScreen.dart';
 import 'package:logger/logger.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannel.dart';
@@ -42,7 +43,9 @@ class _CreaterHomeState extends State<CreaterHome> {
         backgroundColor: ColorConstants.secondaryColor,
         foregroundColor: Colors.white,
         onPressed: () {
-          Get.to(()=> CreateChannel());
+          Get.to(()=> CreateChannel())!.then((value) => setState((){
+            createrChannelsController.getChannels();
+          }));
         },
         elevation: 20.0,
         highlightElevation: 50,
@@ -134,19 +137,41 @@ class _CreaterHomeState extends State<CreaterHome> {
                     {
                       return Column(
                   children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: createrChannelsController.channelData.value.channels?.length,
-                      itemBuilder: (context, index) {
-                        return VideoCard(
-                          channel:createrChannelsController.channelData.value.channels![index],
-                         
-                          accentColor: ColorConstants.accentColor,
-                          gradientStartColor: ColorConstants.primaryColor,
-                          gradientEndColor: ColorConstants.secondaryColor,
-                        );
-                      },
+                    Obx(
+                      ()=> ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: createrChannelsController.channelData.value.channels?.length,
+                        itemBuilder: (context, index) {
+                          return VideoCard(
+                            channel:createrChannelsController.channelData.value.channels![index],
+                            onPressed: () async{
+                                    // Handle Delete
+                                     // Handle Cancel
+                                    CreaterChannelsController controller=Get.put(CreaterChannelsController());
+                              bool result=    await controller.deleteChannel(channelId:createrChannelsController.channelData.value.channels![index].id!);
+                                    if(result)
+                                    {
+                                      Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
+                                      setState(() {
+                                        createrChannelsController.channelData.value.channels!.remove(createrChannelsController.channelData.value.channels![index]);
+                                      });
+                                    }
+                                    else{
+                                      Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
+                                    }
+                                 
+                                 Navigator.of(context).pop();
+                                    
+                                    // Perform the delete operation
+                                    print('Item deleted');
+                                  },
+                            accentColor: ColorConstants.accentColor,
+                            gradientStartColor: ColorConstants.primaryColor,
+                            gradientEndColor: ColorConstants.secondaryColor,
+                          );
+                        },
+                      ),
                     ),
                   ],
                 );
@@ -177,9 +202,10 @@ class VideoCard extends StatelessWidget {
   final Color gradientEndColor;
   final VoidCallback? onTap;
   final Channels channel;
+  final Function() onPressed;
   const VideoCard({super.key, 
     required this.channel,
-    
+    required this.onPressed,
     required this.accentColor,
     required this.gradientStartColor,
     required this.gradientEndColor,
@@ -247,12 +273,82 @@ class VideoCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                trailing: const Icon(Icons.more_vert_rounded, color: Colors.white),
+                trailing: PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert, color: Colors.white), // Icon color is green
+      itemBuilder: (context) {
+        return <PopupMenuEntry<String>>[
+          const PopupMenuItem<String>(
+            value: 'edit',
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.edit, color: Colors.green), // Edit icon is green
+                SizedBox(width: 8),
+                Text('Edit', style: TextStyle(color: Colors.green)),
+              ],
+            ),
+          ),
+          const PopupMenuItem<String>(
+            value: 'delete',
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.delete, color: Colors.green), // Delete icon is green
+                SizedBox(width: 8),
+                Text('Delete', style: TextStyle(color: Colors.green)),
+              ],
+            ),
+          ),
+        ];
+      },
+      onSelected: (value) {
+        if (value == 'edit') {
+          Get.to(()=>EditChannel(channel:channel));
+          print('Edit selected');
+        } else if (value == 'delete') {
+          // Handle Delete option
+          print('Delete selected');
+          _showDeleteConfirmationDialog(context);
+        }
+      },
+    ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          
+          title: const Text('Delete Confirmation'),
+          content: const Text('Are you sure you want to delete this channel?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+               
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+              ),
+              onPressed:onPressed,
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

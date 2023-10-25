@@ -136,7 +136,7 @@ class _FilesTabState extends State<FilesTab> {
                 {
                   if(snapshot.data==false)
                   {
-                    return Center(child: Text('Could not obtain videos'),);
+                    return const Center(child: Text('Could not obtain videos'),);
                   }
                   else
                   {
@@ -171,13 +171,13 @@ class _FilesTabState extends State<FilesTab> {
                     }
                     else
                     {
-                      return Center(child: Text('No Files available'),);
+                      return const Center(child: Text('No Files available'),);
                     }
                   }
                 }
                 else
                 {
-                  return ProgressIndicatorWidget();
+                  return const ProgressIndicatorWidget();
                 }
        
       }
@@ -221,7 +221,7 @@ class _VideosTabState extends State<VideosTab> {
                 {
                   if(snapshot.data==false)
                   {
-                    return Center(child: Text('Could not obtain videos'),);
+                    return const Center(child: Text('Could not obtain videos'),);
                   }
                   else
                   {
@@ -255,13 +255,13 @@ class _VideosTabState extends State<VideosTab> {
                     }
                     else
                     {
-                      return Center(child: Text('No Videos available'),);
+                      return const Center(child: Text('No Videos available'),);
                     }
                   }
                 }
                 else
                 {
-                  return ProgressIndicatorWidget();
+                  return const ProgressIndicatorWidget();
                 }
        
       }

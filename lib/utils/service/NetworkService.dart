@@ -1,7 +1,7 @@
 import 'dart:async';
 
 
-
+import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart';
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:educationadmin/Modals/LoginModal.dart';
@@ -12,8 +12,9 @@ import 'package:educationadmin/Modals/VideoResourcesModal.dart';
 import 'package:educationadmin/utils/status.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-
+import 'package:dio/dio.dart' as dio;
 import '../../Modals/SingnupModal.dart';
 
 
@@ -30,9 +31,12 @@ class NetworkService extends GetConnect {
   final String channelfiles="resources/channel/files/";
   final String channelvideos="resources/channel/videos/";
   final String creatorChannels="channels/creator/channels";
-  final String subscribeByCreator="subscription/subscribe/creator/";
-
+  
+  final String createchannel="channels/create";
   final String userchannels="channels/..";
+  final String editchannel="channels/edit";
+  final String deletechannel="channels/delete/";
+  final String addconsumerfromcreator="subscription/subscribe/creator";
 
   Future<SignupResponseModal?> signUp(SignupModal model) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
@@ -144,5 +148,146 @@ Response<Map<String,dynamic>> response = await get('$baseURL$channelvideos$chann
 }
 
 
+Future<CreateChannelResponseModal> createChannel({required String? token, required XFile file,required bool isCompletelyPaid, required String name,required int price })async
+{
+   var formData = dio.FormData.fromMap({
+  
+  'file': await dio.MultipartFile.fromFile(file.path,filename: file.name),
+  
+    'price': price,
+    'isCompletelyPaid': isCompletelyPaid,
+    'name': name,
+});
+
+
+  //   FormData formData = FormData({
+  //   'file':  MultipartFile(file,filename: name),
+  //   'price': price,
+  //   'isCompletelyPaid': '"$isCompletelyPaid"',
+  //   'name': name,
+  // });
+
+   try {
+    //Response<Map<String,dynamic>> response=await post('$baseURL$createchannel', formData,contentType:"multipart/form-data",headers: {"Authorization":"Bearer $token"} );
+    dio.Response<Map<String,dynamic>> response = await dio.Dio().post('$baseURL$createchannel', data: formData,options: dio.Options(contentType: "multipart/form-data",headers:{"Authorization":"Bearer $token"}));
+    print(response.data);
+    if (response.statusCode == 200||response.statusCode==201) {
+      print('Success: ${response.data}');
+      return CreateChannelResponseModal.fromJson(response.data!);
+    } else {
+      return CreateChannelResponseModal();
+    }
+  } catch (e) {
+    print('Error: $e');
+   
+  }
+   return CreateChannelResponseModal();
+  }
+Future<CreateChannelResponseModal> editChannel({required String? token, XFile? file, required String name,required int channelid})async
+{
+   var formData;
+   if(file!=null)
+   { 
+   formData = dio.FormData.fromMap({
+  
+  'file': await dio.MultipartFile.fromFile(file.path,filename: file.name),
+    'name': name,
+});}
+else
+{
+  formData = dio.FormData.fromMap({
+  
+  
+    'name': name,
+});}
+
+
+  //   FormData formData = FormData({
+  //   'file':  MultipartFile(file,filename: name),
+  //   'price': price,
+  //   'isCompletelyPaid': '"$isCompletelyPaid"',
+  //   'name': name,
+  // });
+
+   try {
+    //Response<Map<String,dynamic>> response=await post('$baseURL$createchannel', formData,contentType:"multipart/form-data",headers: {"Authorization":"Bearer $token"} );
+    dio.Response<Map<String,dynamic>> response = await dio.Dio().put('$baseURL$editchannel/$channelid', data: formData,options: dio.Options(contentType: "multipart/form-data",headers:{"Authorization":"Bearer $token"}));
+    print(response.data);
+    if (response.statusCode == 200||response.statusCode==201) {
+      print('Success: ${response.data}');
+      return CreateChannelResponseModal.fromJson(response.data!);
+    } else {
+      return CreateChannelResponseModal();
+    }
+  } catch (e) {
+    print('Error: $e');
+   
+  }
+   return CreateChannelResponseModal();
+  }
+
+  Future<bool> deleteChannel({required String token,required int channelId})async
+  {
+      Response<Map<String,dynamic>> response=await delete("$baseURL$deletechannel$channelId",headers: {"Authorization":"Bearer $token"});
+
+      if(response.statusCode==200 ||response.statusCode==201)
+      {
+        return true;
+
+      }
+      else
+      {
+        return false;
+      }
+  }
+  Future<GeneralResponse> subscribeByCreator({required String token,required int channelId,required int consumerId})async
+  {
+     try {
+  Response<Map<String,dynamic>> response=await post("$baseURL$addconsumerfromcreator/$channelId/$consumerId",{},headers: {"Authorization":"Bearer $token"});
+   
+   if(response.statusCode==200 ||response.statusCode==201)
+   {
+     return GeneralResponse.fromJson(response.body!);
+  
+   }
+  
+} on Exception catch (e) {
+   return GeneralResponse(msg: "Could not subscibe",status: false);
 }
+return   GeneralResponse(msg: "Could not subscibe",status: false);
+  }
+  
+}
+
+
  
+class GeneralResponse {
+  String? _msg;
+  bool? _status;
+
+  GeneralResponse({String? msg, bool? status}) {
+    if (msg != null) {
+      this._msg = msg;
+    }
+    if (status != null) {
+      this._status = status;
+    }
+  }
+
+  String? get msg => _msg;
+  set msg(String? msg) => _msg = msg;
+  bool? get status => _status;
+  set status(bool? status) => _status = status;
+
+  GeneralResponse.fromJson(Map<String, dynamic> json) {
+    _msg = json['msg'];
+    _status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['msg'] = this._msg;
+    data['status'] = this._status;
+    return data;
+  }
+}

@@ -1,48 +1,46 @@
-
 import 'dart:io';
 
-import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
-import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
-import 'package:educationadmin/utils/service/NetworkService.dart';
+import 'package:educationadmin/screens/pages/creator/CreateChannel.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-class CreateChannel extends StatefulWidget {
+
+import '../../../Modals/ChannelListModal.dart';
+class EditChannel extends StatefulWidget {
+ const EditChannel({super.key,required this.channel});
+ final Channels channel;
   @override
-  _CreateChannelState createState() => _CreateChannelState();
+  EditChannelState createState() => EditChannelState();
 }
 
-class _CreateChannelState extends State<CreateChannel> {
-  TextEditingController _channelNameController = TextEditingController();
-  TextEditingController _channelPriceController = TextEditingController();
+class EditChannelState extends State<EditChannel> {
+  final TextEditingController _channelNameController = TextEditingController();
+  final TextEditingController _channelPriceController = TextEditingController();
   final ImagePickerController controller = Get.put(ImagePickerController());
   bool _isChannelPaid = false;
 
   final _formKey = GlobalKey<FormState>(); // Create a form key
   final Logger logger=Logger();
  
+  @override
+  void initState(){
+    _channelNameController.text=widget.channel.name!;
+    _channelPriceController.text=(widget.channel.price!).toString();
+    _isChannelPaid=widget.channel.isCompletelyPaid!;
+    super.initState();
+  }
 
   void _createChannel() {
     if (_formKey.currentState!.validate()) {
       // Implement channel creation logic here
       controller.channelName.value = _channelNameController.text;
-      controller.channelPrice.value = int.parse(_channelPriceController.text.isEmpty?"0":_channelPriceController.text);
+      controller.channelPrice.value = int.parse(_channelPriceController.text);
       controller.isChannelPaid.value=_isChannelPaid;
-      logger.e("Is channel paid: $_isChannelPaid");
       logger.e("Image is blank ${controller.imagePath}");
-      if (controller.imagePath.value.isEmpty) {
-        Get.showSnackbar(const GetSnackBar(
-          backgroundColor: Colors.green,
-          message: 'Image cannot be empty',
-          duration: Duration(seconds: 3),
-        ));
-        
-      }
-      else
-      {
-        controller.createChannel();
-      }
+   
+     
+        controller.updateChannel(widget.channel.id!);
+      
 
       // Continue with channel creation and validation logic.
     }
@@ -52,7 +50,7 @@ class _CreateChannelState extends State<CreateChannel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Channel"),
+        title: const Text("Edit Channel"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -110,8 +108,8 @@ class _CreateChannelState extends State<CreateChannel> {
                       value: _isChannelPaid,
                       onChanged: (value) {
                         setState(() {
-                          _isChannelPaid = value;
-                          _channelPriceController.clear(); // Clear the price when changing the switch.
+                          //_isChannelPaid = value;
+                          //_channelPriceController.clear(); // Clear the price when changing the switch.
                         });
                       },
                     ),
@@ -123,6 +121,7 @@ class _CreateChannelState extends State<CreateChannel> {
                         children: <Widget>[
                           const Text("Price (in Rupees)"),
                           TextFormField(
+                            enabled: false,
                             controller: _channelPriceController,
                              validator: (value) {
                               final digitOnly = RegExp(r'^\d+$');
@@ -145,7 +144,7 @@ class _CreateChannelState extends State<CreateChannel> {
                     onPressed: _createChannel,
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text("Create Channel"),
+                      child: Text("Update Channel"),
                     ),
                   ):ElevatedButton(
                     
@@ -164,54 +163,3 @@ class _CreateChannelState extends State<CreateChannel> {
     );
   }
 }
-
-class ImagePickerController extends GetxController {
-  RxString imagePath = ''.obs;
-  RxString channelName="".obs;
-  RxInt channelPrice=0.obs;
-  RxBool isChannelPaid=false.obs;
-  RxBool isLoading=false.obs;
-  void pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      imagePath.value = pickedFile.path;
-    }
-  }
-  
-  Future<void> createChannel() async{
-    isLoading.value=true;
-    NetworkService networkService=NetworkService();
-    AuthenticationManager authmanager=Get.put(AuthenticationManager());
-     String? token=await authmanager.getToken();
-     Logger().e("Is channel completely paid ${isChannelPaid}");
-    CreateChannelResponseModal modal=await networkService.createChannel(token:token,file: XFile(imagePath.value), isCompletelyPaid: isChannelPaid.value, name: channelName.value, price: channelPrice.value);
-    if(modal.data!=null)
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel Created Successfully',duration: Duration(seconds: 3),));
-    }
-    else
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel Could not be created',duration: Duration(seconds: 3)));
-    }
-    isLoading.value=false;
-  }
-  Future<void> updateChannel(int channelId) async{
-    isLoading.value=true;
-    NetworkService networkService=NetworkService();
-    AuthenticationManager authmanager=Get.put(AuthenticationManager());
-     String? token=await authmanager.getToken();
-     Logger().e("Is channel completely paid ${isChannelPaid}");
-    CreateChannelResponseModal modal=await networkService.editChannel(token:token,file:imagePath.value.isNotEmpty? XFile(imagePath.value):null,  name: channelName.value, channelid: channelId);
-    if(modal.data!=null)
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel Updated Successfully',duration: Duration(seconds: 3),));
-    }
-    else
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel could not be updated',duration: Duration(seconds: 3)));
-    }
-    isLoading.value=false;
-  }
-} 

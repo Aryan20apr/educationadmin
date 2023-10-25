@@ -77,4 +77,20 @@ AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
     }
     return true;
   }
+
+  Future<bool> deleteChannel({required int channelId})async
+  {
+      NetworkChecker networkChecker=NetworkChecker();
+    bool check=await networkChecker.checkConnectivity();
+    if(check==false) {
+      return false;
+    }
+    String? token=await _authmanager.getToken();
+    if(token!=null)
+    {
+    bool isDeleted=await   networkService.deleteChannel(token: token,channelId: channelId);
+     return isDeleted;
+    }
+    return false;
+  }
 }

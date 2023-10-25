@@ -111,10 +111,10 @@ late TextEditingController passwordController;
                       child: Container(
                         width: double.infinity,
                         alignment: Alignment.center,
-                        child: Obx(()=>authenticationViewModel.isLoading.value? const CircularProgressIndicator.adaptive(): const Text(
+                        child: Obx(()=>authenticationViewModel.isLoading.value?  const CircularProgressIndicator.adaptive():  Text(
                           'Log in',
                           style: TextStyle(
-                            fontSize: 18.0,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),)

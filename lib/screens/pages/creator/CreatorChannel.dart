@@ -118,7 +118,7 @@ class _CreatorChannelState extends State<CreatorChannel> {
         // Implement your logic for adding a subscriber here
         Get.defaultDialog(
           backgroundColor: Colors.white,
-          title: "Enter phone number of new subscriber",
+          title: "Enter id number of new subscriber",
           titleStyle: TextStyle(fontSize: 14.sp),
           content: Column(
             children: [
@@ -127,16 +127,16 @@ class _CreatorChannelState extends State<CreatorChannel> {
                 onChanged: (value) {
                   channelOptionsController.updatePhoneNumber(value);
                 },
-                decoration:  InputDecoration(labelText: "Phone Number",hintStyle: TextStyle(fontSize: 12.sp)),
+                decoration:  InputDecoration(labelText: "Id",hintStyle: TextStyle(fontSize: 12.sp)),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  // Implement your logic to add a subscriber with dialogController.phoneNumber.value
-                  Get.back(); // Close the dialog
+                onPressed: ()async {
+                await channelOptionsController.addSubscriber(channeId: widget.channel.id! );
+                 
                 },
-                child: const Text("Add Subscriber"),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red,foregroundColor: Colors.white,elevation: 10),
+                child: Obx(()=>channelOptionsController.isLoading.value?const CircularProgressIndicator.adaptive(): const Text("Add Subscriber")),
               ),
             ],
           ),
