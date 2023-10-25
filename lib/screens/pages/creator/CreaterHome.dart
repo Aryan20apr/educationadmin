@@ -42,7 +42,7 @@ class _CreaterHomeState extends State<CreaterHome> {
         backgroundColor: ColorConstants.secondaryColor,
         foregroundColor: Colors.white,
         onPressed: () {
-          Get.to(()=>const CreateChannel());
+          Get.to(()=> CreateChannel());
         },
         elevation: 20.0,
         highlightElevation: 50,

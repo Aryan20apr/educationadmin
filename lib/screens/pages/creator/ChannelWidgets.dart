@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:educationadmin/screens/PdfView.dart';
+import 'package:educationadmin/screens/VideoScreen.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannelsController.dart';
 import 'package:flutter/material.dart';
@@ -149,7 +151,7 @@ class _FilesTabState extends State<FilesTab> {
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               elevation: 4,
               child: ListTile(
-                onTap: () {},
+                onTap: () { Get.to(()=>PdfView(file: files[index]));},
                 contentPadding: const EdgeInsets.all(10),
                 leading: Image.network(
                   'https://img.freepik.com/free-photo/clipboard-with-checklist-paper-note-icon-symbol-purple-background-3d-rendering_56104-1491.jpg?w=826&t=st=1698135465~exp=1698136065~hmac=cadd6ad00463dcae2be4df14c42d6b256a018d075562de67de8327ad7cadd052', // Replace with the actual file thumbnail URL
@@ -169,7 +171,7 @@ class _FilesTabState extends State<FilesTab> {
                     }
                     else
                     {
-                      return Center(child: Text('No Videos available'),);
+                      return Center(child: Text('No Files available'),);
                     }
                   }
                 }
@@ -234,7 +236,9 @@ class _VideosTabState extends State<VideosTab> {
               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               elevation: 4,
               child: ListTile(
-                onTap: () {},
+                onTap: () {
+                   Get.to(() => YouTubePlayerScreen(video: videos[index]));
+                },
                 contentPadding: const EdgeInsets.all(10),
                 leading: Image.network(
                     'https://img.freepik.com/free-photo/multi-color-fabric-texture-samples_1373-434.jpg?t=st=1698132567~exp=1698133167~hmac=4cefa7b45b26f445d5823b41320e1c572ef6a98f6313f54ce351f818b03cc26e'),

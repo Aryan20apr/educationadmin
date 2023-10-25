@@ -30,6 +30,7 @@ class NetworkService extends GetConnect {
   final String channelfiles="resources/channel/files/";
   final String channelvideos="resources/channel/videos/";
   final String creatorChannels="channels/creator/channels";
+  final String subscribeByCreator="subscription/subscribe/creator/";
 
   final String userchannels="channels/..";
 
