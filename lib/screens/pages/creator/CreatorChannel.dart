@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:circular_menu/circular_menu.dart';
+import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/screens/pages/creator/ChannelOptionController.dart';
 import 'package:educationadmin/screens/pages/creator/ChannelWidgets.dart';
 import 'package:file_picker/file_picker.dart';
@@ -24,8 +25,11 @@ class _CreatorChannelState extends State<CreatorChannel> {
       Get.put(ChannelOptionsController());
 
        TextEditingController fileNameController = TextEditingController();
-  File? selectedPDF;
+       TextEditingController videoTitleTextEditingController=TextEditingController();
+       TextEditingController videoUrlcontroller=TextEditingController();
 
+  File? selectedPDF;
+final _formKey = GlobalKey<FormState>();
   Future<File?> requestPermissionAndPickPDFFile() async {
     PermissionStatus status = await Permission.storage.request();
     if (!status.isGranted) {
@@ -51,7 +55,7 @@ class _CreatorChannelState extends State<CreatorChannel> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Add PDF File"),
+          title: const Text("Add PDF File"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -65,19 +69,19 @@ class _CreatorChannelState extends State<CreatorChannel> {
                     });
                   }
                 },
-                child: Text("Choose PDF File"),
+                child: const Text("Choose PDF File"),
               ),
               if (selectedPDF != null)
                 Column(
                   children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: fileNameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: "File Name",
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
                         String fileName = fileNameController.text;
@@ -87,7 +91,7 @@ class _CreatorChannelState extends State<CreatorChannel> {
                           Navigator.of(context).pop();
                         }
                       },
-                      child: Text("Upload"),
+                      child: const Text("Upload"),
                     ),
                   ],
                 ),
@@ -98,17 +102,102 @@ class _CreatorChannelState extends State<CreatorChannel> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
           ],
         );
       },
     );
   }
+  void showAddVideoDialog(BuildContext context)
+  {
+    showDialog(
+                context: context,
+                builder: (context) =>  Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Text(
+                  "Upload New Video",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: videoTitleTextEditingController,
+                  decoration: const InputDecoration(labelText: 'Title'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: videoUrlcontroller,
+                  decoration: const InputDecoration(labelText: 'Video Link'),
+                  validator: (value) {
+                    // Add your link validation regex here
+                    // For example, to require a valid URL:
+                    if (!Uri.tryParse(value??"")!.isAbsolute == true) {
+                      return 'Please enter a valid URL';
+                    }
+                    return null;
+                  },
+                ),
+                Row(
+                  children: <Widget>[
+                    const Text('Paid Video:'),
+                    Switch(
+                      value: false, // Set the initial value as needed
+                      onChanged: (value) {
+                        // Handle the switch state change
+                        channelOptionsController.isVideoPaid.value=value;
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                   validateFieldsAndUpload();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: const Size(200, 50), // Adjust button size as needed
+                  ),
+                  child: const Text('Upload Video'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    )
+              );
+  }
+   bool validateFieldsAndUpload() {
+    if (_formKey.currentState!.validate()) {
+                     channelOptionsController.uploadVideo(videoRequestModal: VideoRequestModal(title:videoTitleTextEditingController.text,link: videoUrlcontroller.text,isPaid:channelOptionsController.isVideoPaid.value.toString(),type: 'Video',channelId: widget.channel.id ));
+                    }
+    return true; // Replace with your validation logic.
+  }
   void _handleOptionSelected(String option) {
     switch (option) {
       case "Add Video":
-        // Implement your logic for adding a video here
+        showAddVideoDialog(context);
         break;
       case "Add File":
         // Implement your logic for adding a file here

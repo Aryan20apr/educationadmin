@@ -6,13 +6,15 @@ import 'package:educationadmin/Modals/SingnupModal.dart';
 import 'package:educationadmin/Modals/UserModal.dart';
 import 'package:educationadmin/authentication/OTPVerification.dart';
 import 'package:educationadmin/authentication/SignupScreen.dart';
-import 'package:educationadmin/screens/MainScreen.dart';
+
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+
+import '../../screens/common/MainScreen.dart';
 
 class AuthenticationViewModal extends GetxController {
 

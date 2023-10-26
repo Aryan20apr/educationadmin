@@ -1,11 +1,12 @@
 
 
 import 'package:educationadmin/Modals/ChannelListModal.dart';
-import 'package:educationadmin/screens/Tab1.dart';
-import 'package:educationadmin/screens/Tab2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+
+import 'Tab1.dart';
+import 'Tab2.dart';
 
 class ChannelDetails extends StatefulWidget {
   Channels channel;

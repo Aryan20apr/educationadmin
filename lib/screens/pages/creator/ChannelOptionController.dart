@@ -1,3 +1,5 @@
+import 'package:educationadmin/Modals/VideoRequestModal.dart';
+import 'package:educationadmin/Modals/VideoUploadResponse.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:get/get.dart';
@@ -7,7 +9,7 @@ class ChannelOptionsController extends GetxController
   final NetworkService networkService=NetworkService();
   RxBool isLoading=false.obs;
  RxString phoneNumber = ''.obs;
-
+  RxBool isVideoPaid=false.obs;
   void updatePhoneNumber(String value) {
     phoneNumber.value = value;
   }
@@ -37,6 +39,21 @@ class ChannelOptionsController extends GetxController
   else
   {
     return false;
+  }
+}
+Future<void> uploadVideo({required VideoRequestModal videoRequestModal})async
+{
+  String? token=await authenticationManager.getToken();
+  VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadVideo(token: token!, videoRequestModal: videoRequestModal);
+  if(videoUploadResponseModal.data!.resource!=null)
+  {
+    Get.back();
+    Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
+  }
+  else
+  {
+    Get.back();
+    Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
 }
 }

@@ -1,5 +1,5 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:educationadmin/screens/FirstScreen.dart';
+
 import 'package:educationadmin/utils/Themes.dart';
 
 import 'package:flutter/foundation.dart';
@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 
 
 import 'package:sizer/sizer.dart';
+
+import 'screens/common/FirstScreen.dart';
 
 
 void main() async{

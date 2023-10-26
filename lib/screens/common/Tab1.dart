@@ -2,7 +2,8 @@
 
 
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
-import 'package:educationadmin/screens/VideoScreen.dart';
+import 'package:educationadmin/screens/common/VideoScreen.dart';
+
 import 'package:educationadmin/utils/Controllers/ChanneResourcelController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

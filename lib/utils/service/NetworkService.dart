@@ -8,7 +8,9 @@ import 'package:educationadmin/Modals/LoginModal.dart';
 import 'package:educationadmin/Modals/PhoneVerificationModal.dart';
 import 'package:educationadmin/Modals/SignupResponseModal.dart';
 import 'package:educationadmin/Modals/UserModal.dart';
+import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
+import 'package:educationadmin/Modals/VideoUploadResponse.dart';
 import 'package:educationadmin/utils/status.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect.dart';
@@ -37,10 +39,12 @@ class NetworkService extends GetConnect {
   final String editchannel="channels/edit";
   final String deletechannel="channels/delete/";
   final String addconsumerfromcreator="subscription/subscribe/creator";
-
+  final String addvideo="resources/create";
+  final String channelsubscribers="analytics/channel/myConsumers";
+  final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
-    Logger().e(response.body.toString());
+    logger.e(response.body.toString());
     if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
       return SignupResponseModal.fromJson(response.body!);
     } else {
@@ -54,7 +58,7 @@ TODO: "Handle signup error ";
 
  Future<SignupResponseModal?> login(LoginModal model) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$signin', model.toJson());
-    Logger().e(response.body.toString());
+    logger.e(response.body.toString());
     if(response.body!=null)
     {
     if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
@@ -72,7 +76,7 @@ TODO: "Handle signup error ";
 
 Future<OTPModal?> sendOTP({required PhoneModal phone}) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$sendotp', phone.toJson());
-    Logger().e(response.body);
+    logger.e(response.body);
     if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
       
       return OTPModal.fromJson(response.body!);
@@ -92,7 +96,7 @@ TODO: "Handle OTP error ";
     throw Exception("Could not obtain user data");
   }
   
-  Logger().e("Response of userDetails api ${response.body}");
+  logger.e("Response of userDetails api ${response.body}");
     if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
       
       return UserModal.fromJson(response.body!);
@@ -117,33 +121,33 @@ on Exception catch (_) {
 Future<ChannelListModal> getAllChannelList({String? token}) async
 {
   Response<Map<String,dynamic>> response = await get('$baseURL$channels',headers: {"Authorization":"Bearer $token"});
-    Logger().e(response.body);
+    logger.e(response.body);
    return ChannelListModal.fromJson(response.body!);
   }
 Future<ChannelListModal> getCreatorList({String? token}) async
 {
   Response<Map<String,dynamic>> response = await get('$baseURL$creatorChannels',headers: {"Authorization":"Bearer $token"});
-    Logger().e(response.body);
+    logger.e(response.body);
    return ChannelListModal.fromJson(response.body!);
   }
 Future<ChannelListModal> getUserChannelList({String? token,required int userid}) async
 {
   Response<Map<String,dynamic>> response = await get('$baseURL$channels',headers: {"Authorization":"Bearer $token"});
-    Logger().e(response.body);
+    logger.e(response.body);
    return ChannelListModal.fromJson(response.body!);
   }
 
 Future<FileResourcesData> getChannelFiles({String? token, required int channelId}) async
 {
 Response<Map<String,dynamic>> response = await get('$baseURL$channelfiles$channelId',headers: {"Authorization":"Bearer $token"});
-    Logger().e(response.body);
+    logger.e(response.body);
    return FileResourcesData.fromJson(response.body!);
 }
 
 Future<VideoResourcesData> getChannelVideo({String? token, required int channelId}) async
 {
 Response<Map<String,dynamic>> response = await get('$baseURL$channelvideos$channelId',headers: {"Authorization":"Bearer $token"});
-    Logger().e(response.body);
+    logger.e(response.body);
    return VideoResourcesData.fromJson(response.body!);
 }
 
@@ -257,6 +261,22 @@ else
 return   GeneralResponse(msg: "Could not subscibe",status: false);
   }
   
+
+  Future<VideoUploadResponseModal> uploadVideo({required String token,required VideoRequestModal videoRequestModal})async
+{
+  try{
+    Response<Map<String,dynamic>> response=await post('$baseURL$addvideo',videoRequestModal.toJson(),headers: {"Authorization":"Bearer $token"});
+      logger.e(response.body);
+      if(response.statusCode==200 || response.statusCode==201)
+      {
+        return VideoUploadResponseModal.fromJson(response.body!);
+      }
+    }  catch (e)
+  {
+        return VideoUploadResponseModal(data: VideoUploadData(msg: "Could not upload video",resource: null));
+  }
+  return VideoUploadResponseModal(data: VideoUploadData(msg: "Could not upload video",resource: null));
+}
 }
 
 
@@ -267,10 +287,10 @@ class GeneralResponse {
 
   GeneralResponse({String? msg, bool? status}) {
     if (msg != null) {
-      this._msg = msg;
+      _msg = msg;
     }
     if (status != null) {
-      this._status = status;
+      _status = status;
     }
   }
 
@@ -286,8 +306,11 @@ class GeneralResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['msg'] = this._msg;
-    data['status'] = this._status;
+    data['msg'] = _msg;
+    data['status'] = _status;
     return data;
   }
+
+
+  
 }

@@ -1,11 +1,12 @@
 
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
-import 'package:educationadmin/screens/PdfView.dart';
 import 'package:educationadmin/utils/Controllers/ChanneResourcelController.dart';
 import 'package:educationadmin/utils/Controllers/FileDownloadStatusController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import 'PdfView.dart';
 
 
 class FileResourcesTab extends StatefulWidget {

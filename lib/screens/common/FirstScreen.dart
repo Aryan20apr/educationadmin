@@ -3,13 +3,15 @@ import 'dart:developer';
 
 
 import 'package:educationadmin/authentication/LoginScreen.dart';
-import 'package:educationadmin/screens/MainScreen.dart';
+
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+
+import 'MainScreen.dart';
 
 
 class FirstScreen extends StatelessWidget {

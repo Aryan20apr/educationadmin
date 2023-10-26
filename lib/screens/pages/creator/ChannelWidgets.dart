@@ -1,7 +1,4 @@
-import 'dart:io';
 
-import 'package:educationadmin/screens/PdfView.dart';
-import 'package:educationadmin/screens/VideoScreen.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannelsController.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +7,8 @@ import 'package:get/get.dart';
 
 import '../../../Modals/FileResourcesModal.dart';
 import '../../../Modals/VideoResourcesModal.dart';
+import '../../common/PdfView.dart';
+import '../../common/VideoScreen.dart';
 class DescriptionTab extends StatelessWidget {
   const DescriptionTab({
     super.key,
