@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
 
 import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart';
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
+import 'package:educationadmin/Modals/FileUploadResponseModal.dart';
 import 'package:educationadmin/Modals/LoginModal.dart';
 import 'package:educationadmin/Modals/PhoneVerificationModal.dart';
 import 'package:educationadmin/Modals/SignupResponseModal.dart';
+import 'package:educationadmin/Modals/SubsciberModal.dart';
 import 'package:educationadmin/Modals/UserModal.dart';
 import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
@@ -39,8 +43,10 @@ class NetworkService extends GetConnect {
   final String editchannel="channels/edit";
   final String deletechannel="channels/delete/";
   final String addconsumerfromcreator="subscription/subscribe/creator";
-  final String addvideo="resources/create";
-  final String channelsubscribers="analytics/channel/myConsumers";
+  final String addresource="resources/create";
+  final String channelsubscribers="analytics/channel/myConsumers/";
+  final String uploadpdf="resources/upload/pdf";
+
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
@@ -265,7 +271,7 @@ return   GeneralResponse(msg: "Could not subscibe",status: false);
   Future<VideoUploadResponseModal> uploadVideo({required String token,required VideoRequestModal videoRequestModal})async
 {
   try{
-    Response<Map<String,dynamic>> response=await post('$baseURL$addvideo',videoRequestModal.toJson(),headers: {"Authorization":"Bearer $token"});
+    Response<Map<String,dynamic>> response=await post('$baseURL$addresource',videoRequestModal.toJson(),headers: {"Authorization":"Bearer $token"});
       logger.e(response.body);
       if(response.statusCode==200 || response.statusCode==201)
       {
@@ -276,6 +282,52 @@ return   GeneralResponse(msg: "Could not subscibe",status: false);
         return VideoUploadResponseModal(data: VideoUploadData(msg: "Could not upload video",resource: null));
   }
   return VideoUploadResponseModal(data: VideoUploadData(msg: "Could not upload video",resource: null));
+}
+
+Future<FileUploadResponse> uploadFile({required String token,required File file  })async
+{
+ var formData = dio.FormData.fromMap({
+  
+  'file': await dio.MultipartFile.fromFile(file.path,filename: file.path.substring(file.path.lastIndexOf("/")+1)),
+});
+
+try {
+  dio.Response<Map<String,dynamic>> response = await dio.Dio().post('$baseURL$createchannel', data: formData,options: dio.Options(contentType: "multipart/form-data",headers:{"Authorization":"Bearer $token"}));
+     logger.e(response.data);
+     if(response.statusCode==200 || response.statusCode==201)
+     {
+        return FileUploadResponse.fromJson(response.data!);
+     }
+     else
+     {
+      return FileUploadResponse.fromJson(response.data!);
+     }
+} on Exception catch (e) {
+  e.printError();
+  return FileUploadResponse(data: null);
+}
+  
+}
+Future<SubscriberListModal> getChannelSubcribers({required String token,required int channelId})async
+{
+ 
+
+try {
+  Response<Map<String,dynamic>> response = await get('$baseURL$createchannel$channelId',headers: {"Authorization":"Bearer $token"});
+     logger.e(response.body);
+     if(response.statusCode==200 || response.statusCode==201)
+     {
+        return SubscriberListModal.fromJson(response.body!);
+     }
+     else
+     {
+      return SubscriberListModal.fromJson(response.body!);
+     }
+} on Exception catch (e) {
+  e.printError();
+  return SubscriberListModal(data: null);
+}
+  
 }
 }
 
