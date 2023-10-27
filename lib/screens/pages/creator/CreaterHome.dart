@@ -152,16 +152,19 @@ class _CreaterHomeState extends State<CreaterHome> {
                               bool result=    await controller.deleteChannel(channelId:createrChannelsController.channelData.value.channels![index].id!);
                                     if(result)
                                     {
+                                      Get.back();
                                       Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
-                                      setState(() {
-                                        createrChannelsController.channelData.value.channels!.remove(createrChannelsController.channelData.value.channels![index]);
-                                      });
+                                      
+                                      // setState(() {
+                                      await  createrChannelsController.getChannels();
+                                      // });
                                     }
                                     else{
+                                      Get.back();
                                       Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
                                     }
                                  
-                                 Navigator.of(context).pop();
+                                 
                                     
                                     // Perform the delete operation
                                     print('Item deleted');
@@ -299,14 +302,15 @@ class VideoCard extends StatelessWidget {
           ),
         ];
       },
-      onSelected: (value) {
+      onSelected: (value) async{
         if (value == 'edit') {
           Get.to(()=>EditChannel(channel:channel));
           print('Edit selected');
         } else if (value == 'delete') {
           // Handle Delete option
           print('Delete selected');
-          _showDeleteConfirmationDialog(context);
+        await  _showDeleteConfirmationDialog(context);
+       
         }
       },
     ),
@@ -318,8 +322,8 @@ class VideoCard extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog(
+  Future<void> _showDeleteConfirmationDialog(BuildContext context)async {
+    await showDialog(
       
       barrierDismissible: false,
       context: context,

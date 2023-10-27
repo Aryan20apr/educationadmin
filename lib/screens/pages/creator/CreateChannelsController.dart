@@ -1,5 +1,6 @@
 
 
+import 'package:educationadmin/Modals/EditResourceModal.dart';
 import 'package:educationadmin/Modals/SubsciberModal.dart';
 import 'package:logger/logger.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart' as channellist;
@@ -122,5 +123,57 @@ AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
   Future<bool> deleteSubscriber({required int subscriberId})async
   {
     return true;
+  }
+
+  Future<bool> editResource({required String filename,required int resourceId}) async{
+
+     NetworkChecker networkChecker=NetworkChecker();
+    bool check=await networkChecker.checkConnectivity();
+    if(check==false) {
+      Get.showSnackbar(const GetSnackBar(message: 'Could not update',duration: Duration(seconds:3),));
+      return false;
+    }
+    String? token=await _authmanager.getToken();
+    EditResourceModal editResourceModal=await networkService.editResource(token: token!,resourceId:resourceId,title: filename );
+    if(editResourceModal.data!.updatedResource==null)
+    {
+      Get.back();
+      Get.showSnackbar(const GetSnackBar(message:"Could not update successfully",duration: Duration(seconds: 3),));
+      
+      return false;
+    }
+    else
+    {
+      Get.back();
+      Get.showSnackbar(const GetSnackBar(message:"Resource updated successfully",duration: Duration(seconds: 3),));
+      
+      return true;
+    }
+  }
+
+  Future<bool> deleteResource({required int resourceId }) async
+  {
+     NetworkChecker networkChecker=NetworkChecker();
+    bool check=await networkChecker.checkConnectivity();
+    if(check==false) {
+      Get.showSnackbar(const GetSnackBar(message: 'Could not delete',duration: Duration(seconds:3),));
+      return false;
+    }
+    String? token=await _authmanager.getToken();
+   GeneralResponse editResourceModal=await networkService.deleteresource(token: token!,resourceId:resourceId, );
+    if(editResourceModal.status==false)
+    {
+       Get.back();
+      Get.showSnackbar(const GetSnackBar(message:"Could not delete successfully",duration: Duration(seconds: 3),));
+     
+      return false;
+    }
+    else
+    {
+       Get.back();
+      Get.showSnackbar(const GetSnackBar(message:"Resource delete successfully",duration: Duration(seconds: 3),));
+     
+      return true;
+    }
   }
 }

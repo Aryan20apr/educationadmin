@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:educationadmin/Modals/FileUploadResponseModal.dart';
@@ -13,6 +14,8 @@ class ChannelOptionsController extends GetxController
   RxBool isLoading=false.obs;
  RxString phoneNumber = ''.obs;
   RxBool isVideoPaid=false.obs;
+  RxBool isFilePaid=false.obs;
+  RxString filePath="".obs;
   void updatePhoneNumber(String value) {
     phoneNumber.value = value;
   }
@@ -60,14 +63,14 @@ Future<void> uploadVideo({required VideoRequestModal videoRequestModal})async
   }
 }
 
-Future<void> uploadFile({required String path,required String title,required bool isPaid, required int channeId})async
+Future<void> uploadFile({required title,required int channeId})async
 {
   
 String? token=await authenticationManager.getToken();
-FileUploadResponse fileUploadResponse=await networkService.uploadFile(token: token!, file: File(path));
+FileUploadResponse fileUploadResponse=await networkService.uploadFile(token: token!, file: File(filePath.value));
 if(fileUploadResponse.data!=null&&fileUploadResponse.data!=null)
 {
-  VideoRequestModal fileRequestModal= VideoRequestModal(title:title,link: fileUploadResponse.data!.url,isPaid:isPaid.toString(),type: 'file',channelId: channeId );
+  VideoRequestModal fileRequestModal= VideoRequestModal(title:title,link: fileUploadResponse.data!.url,isPaid:isFilePaid.value.toString(),type: 'file',channelId: channeId );
    VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadFileData(token: token, videoRequestModal: fileRequestModal);
   if(videoUploadResponseModal.data!.resource!=null)
   {

@@ -28,7 +28,7 @@ class _CreatorChannelState extends State<CreatorChannel> {
        TextEditingController videoTitleTextEditingController=TextEditingController();
        TextEditingController videoUrlcontroller=TextEditingController();
 
-  File? selectedPDF;
+  //File? selectedPDF;
 final _formKey = GlobalKey<FormState>();
   Future<File?> requestPermissionAndPickPDFFile() async {
     PermissionStatus status = await Permission.storage.request();
@@ -51,51 +51,70 @@ final _formKey = GlobalKey<FormState>();
   }
 
   Future<void> showAddFileDialog(BuildContext context) async {
+    channelOptionsController.filePath.value="";
+    channelOptionsController.isFilePaid.value=false;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Add PDF File"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-             if(selectedPDF!=null) Text(selectedPDF!.path),
-              ElevatedButton(
-                onPressed: () async {
-                  File? pdfFile = await requestPermissionAndPickPDFFile();
-                  if (pdfFile != null) {
-                    setState(() {
-                      selectedPDF = pdfFile;
-                    });
-                  }
-                },
-                child: const Text("Choose PDF File"),
+          content: Obx(
+            ()=> SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                 if(channelOptionsController.filePath.value.isEmpty==false) Text(channelOptionsController.filePath.value),
+                  ElevatedButton(
+                    onPressed: () async {
+                      File? pdfFile = await requestPermissionAndPickPDFFile();
+                      if (pdfFile != null) {
+                        // setState(() {
+                        //   selectedPDF = pdfFile;
+                        // });
+                        channelOptionsController.filePath.value=pdfFile.path;
+                      }
+                    },
+                    child: const Text("Choose PDF File"),
+                  ),
+                  if ( channelOptionsController.filePath.value.isEmpty==false)
+                    Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: fileNameController,
+                          decoration: const InputDecoration(
+                            labelText: "File Name",
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children:[ const Text('Is File Paid'),Switch(
+                                               value: channelOptionsController.isFilePaid.value, // Set the initial value as needed
+                                               onChanged: (value) {
+                            // Handle the switch state change
+                            channelOptionsController.isFilePaid.value=value;
+                                               },
+                                             ),]
+                         ),
+                        const SizedBox(height: 10,),
+                        ElevatedButton(
+                          onPressed: () async{
+                            String fileName = fileNameController.text;
+                            if (fileName.isNotEmpty) {
+                            await channelOptionsController.uploadFile(title:fileName, channeId: widget.channel.id!);
+                             setState(() {
+                               
+                             });
+                            }
+                          },
+                          child: const Text("Upload"),
+                        ),
+                      ],
+                    ),
+                ],
               ),
-              if (selectedPDF != null)
-                Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: fileNameController,
-                      decoration: const InputDecoration(
-                        labelText: "File Name",
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        String fileName = fileNameController.text;
-                        if (fileName.isNotEmpty) {
-                          // Implement your logic to upload the PDF file with the chosen name
-                          // For example: File(selectedPDF.path).copy('$yourFilePath/$fileName.pdf');
-                         
-                        }
-                      },
-                      child: const Text("Upload"),
-                    ),
-                  ],
-                ),
-            ],
+            ),
           ),
           actions: <Widget>[
             TextButton(

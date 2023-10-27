@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart';
+import 'package:educationadmin/Modals/EditResourceModal.dart';
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:educationadmin/Modals/FileUploadResponseModal.dart';
 import 'package:educationadmin/Modals/LoginModal.dart';
@@ -46,7 +47,8 @@ class NetworkService extends GetConnect {
   final String addresource="resources/create";
   final String channelsubscribers="analytics/channel/myConsumers/";
   final String uploadpdf="resources/upload/pdf";
-
+  final String editresource="resources/edit/";
+  final String deleteResource="resources/delete/";
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
@@ -244,7 +246,7 @@ else
   Future<bool> deleteChannel({required String token,required int channelId})async
   {
       Response<Map<String,dynamic>> response=await delete("$baseURL$deletechannel$channelId",headers: {"Authorization":"Bearer $token"});
-
+      logger.e("Channel Delete Response is ${response.body}");
       if(response.statusCode==200 ||response.statusCode==201)
       {
         return true;
@@ -312,7 +314,7 @@ Future<FileUploadResponse> uploadFile({required String token,required File file 
 });
 
 try {
-  dio.Response<Map<String,dynamic>> response = await dio.Dio().post('$baseURL$createchannel', data: formData,options: dio.Options(contentType: "multipart/form-data",headers:{"Authorization":"Bearer $token"}));
+  dio.Response<Map<String,dynamic>> response = await dio.Dio().post('$baseURL$uploadpdf', data: formData,options: dio.Options(contentType: "multipart/form-data",headers:{"Authorization":"Bearer $token"}));
      logger.e(response.data);
      if(response.statusCode==200 || response.statusCode==201)
      {
@@ -349,6 +351,29 @@ try {
 }
   
 }
+Future<EditResourceModal> editResource({required String token,required int resourceId,required String title })async
+{
+  try {
+  Response response=await put('$baseURL$editresource$resourceId', {"title" :title },headers: {"Authorization":"Bearer $token"});
+  logger.e("Edit resource response ${response.body}");
+  return EditResourceModal.fromJson(response.body);
+} on Exception catch (e) {
+  e.printError();
+  return EditResourceModal(data: EditedData(msg: "Could not update ",updatedResource: null));
+}
+}
+Future<GeneralResponse> deleteresource({required String token,required int resourceId})async
+{
+  try {
+  Response response=await delete('$baseURL$deleteResource$resourceId', headers: {"Authorization":"Bearer $token"});
+  logger.e("Delete resource response ${response.body}");
+  return GeneralResponse(msg: "Successfully deleted",status: true);
+} on Exception catch (e) {
+  e.printError();
+  return GeneralResponse(msg: 'Could not delete the resource',status: false);
+}
+}
+
 }
 
 
