@@ -1,5 +1,6 @@
 
 
+import 'package:educationadmin/Modals/SubsciberModal.dart';
 import 'package:logger/logger.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart' as channellist;
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
@@ -16,12 +17,13 @@ class CreaterChannelsController extends GetxController{
   final NetworkService networkService=Get.find<NetworkService>();
 final channelData=channellist.Data().obs;
 
+
 AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
   final fileData=FileResourcesData().obs;
   final videoData=VideoResourcesData().obs;
- 
+  final consumerList=SubcriberData().obs;
  Logger logger=Logger();
- 
+  RxBool isLoading=false.obs;
 
   Future<bool> getChannelFiles({required int channelId}) async
   {
@@ -73,6 +75,8 @@ AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
     if(token!=null)
     {
      channellist.ChannelListModal channelListModal=await   networkService.getCreatorList(token: token);
+     if(channelListModal.data==null)
+     return false;
      channelData.value=channelListModal.data!;
     }
     return true;
@@ -92,5 +96,31 @@ AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
      return isDeleted;
     }
     return false;
+  }
+
+  Future<bool> getChannelSubscribers({required int channelId })async
+  {
+    isLoading.value=true;
+     NetworkChecker networkChecker=NetworkChecker();
+    bool check=await networkChecker.checkConnectivity();
+    if(check==false) {
+      Get.showSnackbar(const GetSnackBar(message: 'Could not obtain required data',duration: Duration(seconds:3),));
+      return false;
+    }
+    String? token=await _authmanager.getToken();
+    if(token!=null)
+    {
+     SubscriberListModal subscriberListModal=await networkService.getChannelSubcribers(token: token, channelId:channelId );
+     consumerList.value=subscriberListModal.data!;
+     isLoading.value=false;
+     return true;
+    }
+    return false;
+
+  }
+
+  Future<bool> deleteSubscriber({required int subscriberId})async
+  {
+    return true;
   }
 }

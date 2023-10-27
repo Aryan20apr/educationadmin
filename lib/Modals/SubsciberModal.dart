@@ -1,17 +1,17 @@
 class SubscriberListModal {
-  Data? _data;
+  SubcriberData? _data;
 
-  SubscriberListModal({Data? data}) {
+  SubscriberListModal({SubcriberData? data}) {
     if (data != null) {
       _data = data;
     }
   }
 
-  Data? get data => _data;
-  set data(Data? data) => _data = data;
+  SubcriberData? get data => _data;
+  set data(SubcriberData? data) => _data = data;
 
   SubscriberListModal.fromJson(Map<String, dynamic> json) {
-    _data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    _data = json['data'] != null ? new SubcriberData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,11 +23,11 @@ class SubscriberListModal {
   }
 }
 
-class Data {
+class SubcriberData {
   List<Consumers>? _consumers;
   String? _msg;
 
-  Data({List<Consumers>? consumers, String? msg}) {
+  SubcriberData({List<Consumers>? consumers, String? msg}) {
     if (consumers != null) {
       _consumers = consumers;
     }
@@ -41,7 +41,7 @@ class Data {
   String? get msg => _msg;
   set msg(String? msg) => _msg = msg;
 
-  Data.fromJson(Map<String, dynamic> json) {
+  SubcriberData.fromJson(Map<String, dynamic> json) {
     if (json['consumers'] != null) {
       _consumers = <Consumers>[];
       json['consumers'].forEach((v) {

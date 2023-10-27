@@ -132,9 +132,14 @@ Future<ChannelListModal> getAllChannelList({String? token}) async
   }
 Future<ChannelListModal> getCreatorList({String? token}) async
 {
+  try {
   Response<Map<String,dynamic>> response = await get('$baseURL$creatorChannels',headers: {"Authorization":"Bearer $token"});
     logger.e(response.body);
    return ChannelListModal.fromJson(response.body!);
+} on Exception catch (e) {
+  e.printError();
+  return ChannelListModal();
+}
   }
 Future<ChannelListModal> getUserChannelList({String? token,required int userid}) async
 {
@@ -283,6 +288,21 @@ return   GeneralResponse(msg: "Could not subscibe",status: false);
   }
   return VideoUploadResponseModal(data: VideoUploadData(msg: "Could not upload video",resource: null));
 }
+Future<VideoUploadResponseModal> uploadFileData({required String token,required VideoRequestModal videoRequestModal})async
+{
+  try{
+    Response<Map<String,dynamic>> response=await post('$baseURL$addresource',videoRequestModal.toJson(),headers: {"Authorization":"Bearer $token"});
+      logger.e(response.body);
+      if(response.statusCode==200 || response.statusCode==201)
+      {
+        return VideoUploadResponseModal.fromJson(response.body!);
+      }
+    }  catch (e)
+  {
+        return VideoUploadResponseModal(data: VideoUploadData(msg: "Could not upload video",resource: null));
+  }
+  return VideoUploadResponseModal(data: VideoUploadData(msg: "Could not upload video",resource: null));
+}
 
 Future<FileUploadResponse> uploadFile({required String token,required File file  })async
 {
@@ -310,10 +330,10 @@ try {
 }
 Future<SubscriberListModal> getChannelSubcribers({required String token,required int channelId})async
 {
- 
+ logger.i("Channel id: $channelId");
 
 try {
-  Response<Map<String,dynamic>> response = await get('$baseURL$createchannel$channelId',headers: {"Authorization":"Bearer $token"});
+  Response<Map<String,dynamic>> response = await get('$baseURL$channelsubscribers$channelId',headers: {"Authorization":"Bearer $token"});
      logger.e(response.body);
      if(response.statusCode==200 || response.statusCode==201)
      {

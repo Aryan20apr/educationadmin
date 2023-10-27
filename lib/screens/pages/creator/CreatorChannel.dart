@@ -88,7 +88,7 @@ final _formKey = GlobalKey<FormState>();
                         if (fileName.isNotEmpty) {
                           // Implement your logic to upload the PDF file with the chosen name
                           // For example: File(selectedPDF.path).copy('$yourFilePath/$fileName.pdf');
-                          Navigator.of(context).pop();
+                         
                         }
                       },
                       child: const Text("Upload"),

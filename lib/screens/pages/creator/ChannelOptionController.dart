@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:educationadmin/Modals/FileUploadResponseModal.dart';
 import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/Modals/VideoUploadResponse.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
@@ -56,4 +59,32 @@ Future<void> uploadVideo({required VideoRequestModal videoRequestModal})async
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
 }
+
+Future<void> uploadFile({required String path,required String title,required bool isPaid, required int channeId})async
+{
+  
+String? token=await authenticationManager.getToken();
+FileUploadResponse fileUploadResponse=await networkService.uploadFile(token: token!, file: File(path));
+if(fileUploadResponse.data!=null&&fileUploadResponse.data!=null)
+{
+  VideoRequestModal fileRequestModal= VideoRequestModal(title:title,link: fileUploadResponse.data!.url,isPaid:isPaid.toString(),type: 'file',channelId: channeId );
+   VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadFileData(token: token, videoRequestModal: fileRequestModal);
+  if(videoUploadResponseModal.data!.resource!=null)
+  {
+    Get.back();
+    Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
+  }
+  else
+  {
+    Get.back();
+    Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
+  }
+}
+else
+{
+  Get.back();
+    Get.showSnackbar(const GetSnackBar(message: 'Could not upload file',duration: Duration(seconds:3 ),));
+}
+}
+
 }
