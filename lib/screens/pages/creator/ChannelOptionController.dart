@@ -65,7 +65,7 @@ Future<void> uploadVideo({required VideoRequestModal videoRequestModal})async
 
 Future<void> uploadFile({required title,required int channeId})async
 {
-  
+  Get.back();
 String? token=await authenticationManager.getToken();
 FileUploadResponse fileUploadResponse=await networkService.uploadFile(token: token!, file: File(filePath.value));
 if(fileUploadResponse.data!=null&&fileUploadResponse.data!=null)
@@ -74,18 +74,18 @@ if(fileUploadResponse.data!=null&&fileUploadResponse.data!=null)
    VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadFileData(token: token, videoRequestModal: fileRequestModal);
   if(videoUploadResponseModal.data!.resource!=null)
   {
-    Get.back();
+    
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
   else
   {
-    Get.back();
+    
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
 }
 else
 {
-  Get.back();
+    
     Get.showSnackbar(const GetSnackBar(message: 'Could not upload file',duration: Duration(seconds:3 ),));
 }
 }

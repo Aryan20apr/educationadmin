@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
-
+import 'package:logger/logger.dart';
 
 
 
@@ -22,7 +22,8 @@ class MainWrapper extends StatefulWidget {
 class _MainWrapperState extends State<MainWrapper> {
    final MainWrapperController _mainWrapperController =
       Get.put(MainWrapperController());
-
+ final List<int> tabHistory = [0]; // Initialize with the first tab (index 0).
+ Logger logger=Logger();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,36 +35,39 @@ class _MainWrapperState extends State<MainWrapper> {
           
           padding:  EdgeInsets.symmetric( vertical: Get.bottomBarHeight),
           child: Obx(
-            () => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _bottomAppBarItem(
-                  icon: FontAwesomeIcons.house,
-                  page: 0,
-                  context,
-                  label: "Home",
-                ),
-                _bottomAppBarItem(
-                    icon: FontAwesomeIcons.compass,
-                    page: 1,
+            () => WillPopScope(
+              onWillPop: _onBackPressed,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _bottomAppBarItem(
+                    icon: FontAwesomeIcons.house,
+                    page: 0,
                     context,
-                    label: "Explore"),
-                _bottomAppBarItem(
-                    icon: FontAwesomeIcons.solidMessage,
-                    page: 2,
-                    context,
-                    label: "Messages"),
-                 _bottomAppBarItem(
-                    icon: FontAwesomeIcons.tv,
-                    page: 3,
-                    context,
-                    label: "Studio"),    
-                _bottomAppBarItem(
-                    icon: FontAwesomeIcons.user,
-                    page: 4,
-                    context,
-                    label: "Profile"),
-              ],
+                    label: "Home",
+                  ),
+                  _bottomAppBarItem(
+                      icon: FontAwesomeIcons.compass,
+                      page: 1,
+                      context,
+                      label: "Explore"),
+                  _bottomAppBarItem(
+                      icon: FontAwesomeIcons.solidMessage,
+                      page: 2,
+                      context,
+                      label: "Messages"),
+                   _bottomAppBarItem(
+                      icon: FontAwesomeIcons.tv,
+                      page: 3,
+                      context,
+                      label: "Studio"),    
+                  _bottomAppBarItem(
+                      icon: FontAwesomeIcons.user,
+                      page: 4,
+                      context,
+                      label: "Profile"),
+                ],
+              ),
             ),
           ),
         ),
@@ -72,7 +76,11 @@ class _MainWrapperState extends State<MainWrapper> {
         padEnds: false,
         controller: _mainWrapperController.pageController,
         physics: const BouncingScrollPhysics(),
-        onPageChanged: _mainWrapperController.animateToTab,
+        onPageChanged: (index){
+          logger.e("Adding $index");
+          tabHistory.add(index);
+          _mainWrapperController.animateToTab(index);
+        },
         children: [..._mainWrapperController.pages],
       ),
     );
@@ -109,5 +117,20 @@ class _MainWrapperState extends State<MainWrapper> {
         ),
       ),
     );
+  }
+
+
+  Future<bool> _onBackPressed() {
+    if (tabHistory.isNotEmpty) {
+      // If there is tab history, pop the last tab and switch to it.
+      logger.e("Current tab list is ${tabHistory.toString()}");
+      int currentTab = tabHistory.removeLast();
+      int lastTab=tabHistory.removeLast();
+      _mainWrapperController.goToTab(lastTab);
+      return Future.value(false);
+    } else {
+      // If there is no more tab history, allow the back button to exit the application.
+      return Future.value(true);
+    }
   }
 }

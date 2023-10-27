@@ -249,6 +249,7 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
     TextEditingController controller=TextEditingController();
     controller.text=fileName;
     await showDialog(
+      barrierDismissible: false,
                 context: context,
                 builder: (context) =>  Dialog(
       shape: RoundedRectangleBorder(
@@ -263,7 +264,7 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const Text(
-                  "Reanme video",
+                  "Reanme file",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -293,7 +294,7 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
                     ),
                     minimumSize: const Size(200, 50), // Adjust button size as needed
                   ),
-                  child: const Text('Rename Video'),
+                  child: const Text('Rename file'),
                 ),
               ],
             ),
@@ -364,11 +365,11 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
                 {
                   if(snapshot.data==false)
                   {
-                    return const Center(child: Text('Could not obtain videos'),);
+                    return const Center(child: Text('Could not obtain files'),);
                   }
                   else
                   {
-                    if(channelsController.videoData.value.data!.videos!.isNotEmpty)
+                    if(channelsController.fileData.value.data!.files!.isNotEmpty)
                     {
                        List<Files>? files=channelsController.fileData.value.data!.files;
                         return Obx(
@@ -591,6 +592,7 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
     TextEditingController controller=TextEditingController();
     controller.text=fileName;
     await showDialog(
+      barrierDismissible: false,
                 context: context,
                 builder: (context) =>  Dialog(
       shape: RoundedRectangleBorder(
