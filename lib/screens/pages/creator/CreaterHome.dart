@@ -144,6 +144,9 @@ class _CreaterHomeState extends State<CreaterHome> {
                         itemCount: createrChannelsController.channelData.value.channels?.length,
                         itemBuilder: (context, index) {
                           return VideoCard(
+                            onReturn: ()async{
+                              await  createrChannelsController.getChannels();
+                            },
                             channel:createrChannelsController.channelData.value.channels![index],
                             onPressed: () async{
                                     // Handle Delete
@@ -205,8 +208,10 @@ class VideoCard extends StatelessWidget {
   final Color gradientEndColor;
   final VoidCallback? onTap;
   final Channels channel;
+  final Function() onReturn;
   final Function() onPressed;
   const VideoCard({super.key, 
+  required this.onReturn,
     required this.channel,
     required this.onPressed,
     required this.accentColor,
@@ -304,7 +309,8 @@ class VideoCard extends StatelessWidget {
       },
       onSelected: (value) async{
         if (value == 'edit') {
-          Get.to(()=>EditChannel(channel:channel));
+        await  Get.to(()=>EditChannel(channel:channel));
+          onReturn;
           print('Edit selected');
         } else if (value == 'delete') {
           // Handle Delete option
@@ -336,7 +342,7 @@ class VideoCard extends StatelessWidget {
             TextButton(
               onPressed: () {
                
-                Navigator.of(context).pop();
+                Get.back();
               },
               child: const Text('Cancel'),
             ),

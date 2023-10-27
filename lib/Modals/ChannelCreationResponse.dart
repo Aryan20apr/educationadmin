@@ -64,7 +64,7 @@ class Channel {
   String? _name;
   bool? _isCompletelyPaid;
   String? _thumbnail;
-  Null? _description;
+  String? _description;
   int? _price;
   int? _createdBy;
 
@@ -75,7 +75,7 @@ class Channel {
       String? name,
       bool? isCompletelyPaid,
       String? thumbnail,
-      Null? description,
+      String? description,
       int? price,
       int? createdBy}) {
     if (id != null) {
@@ -120,8 +120,8 @@ class Channel {
       _isCompletelyPaid = isCompletelyPaid;
   String? get thumbnail => _thumbnail;
   set thumbnail(String? thumbnail) => _thumbnail = thumbnail;
-  Null? get description => _description;
-  set description(Null? description) => _description = description;
+  String? get description => _description;
+  set description(String? description) => _description = description;
   int? get price => _price;
   set price(int? price) => _price = price;
   int? get createdBy => _createdBy;
