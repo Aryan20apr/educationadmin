@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:circular_menu/circular_menu.dart';
 import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/screens/pages/creator/ChannelOptionController.dart';
-import 'package:educationadmin/screens/pages/creator/ChannelWidgets.dart';
+import 'package:educationadmin/screens/pages/creator/DescriptionTab.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +11,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Modals/ChannelListModal.dart';
+import 'FilesTab.dart';
+import 'SubscribersTab.dart';
+import 'VideosTab.dart';
 
 class CreatorChannel extends StatefulWidget {
   const CreatorChannel({super.key,required this.channel});

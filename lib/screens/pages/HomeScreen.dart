@@ -37,22 +37,29 @@ class DemoScreen extends StatelessWidget {
                   return Obx(
                     ()=> Row(
                       children: [
-                        CircleAvatar(
-                          radius: Get.width*0.1,
-                          backgroundImage:const NetworkImage(
-                              'https://via.placeholder.com/100x100'),
-                          child:CachedNetworkImage(
-                                            colorBlendMode: BlendMode.darken,
-                                            imageUrl: userDetailsManager.image.value,
-                                            placeholder: (context, url) =>
-                                                Image.asset('assets/default_image.png'),
-                                            errorWidget: (context, url, error) =>
-                                                Image.asset('assets/default_image.png'),
-                                           
-                                            fit: BoxFit.fitWidth,
-                                            errorListener: (error) =>
-                                                Image.asset('assets/default_image.png'),
-                                          ), // Replace with the user's image URL
+                        ClipOval(
+                          child: CircleAvatar(
+                            radius: Get.width*0.1,
+                            // backgroundImage:const NetworkImage(
+                            //     'https://via.placeholder.com/100x100'),
+                            child:CachedNetworkImage(
+                              colorBlendMode: BlendMode.darken,
+                                              imageUrl: userDetailsManager.image.value,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.fill,
+                              width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
+                              height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.fill,
+                              width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
+                              height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            fit: BoxFit.cover,
+                                            ), // Replace with the user's image URL
+                          ),
                         ),
                         SizedBox(width: Get.width*0.05),
                         Column(
