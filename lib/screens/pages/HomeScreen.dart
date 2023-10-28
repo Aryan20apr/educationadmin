@@ -1,5 +1,5 @@
 import 'package:educationadmin/utils/Controllers/UserController.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -34,47 +34,61 @@ class DemoScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: LayoutBuilder(
                 builder: (context,usercardconstra) {
-                  return Row(
-                    children: [
-                      CircleAvatar(
-                        radius: Get.width*0.1,
-                        backgroundImage:const NetworkImage(
-                            'https://via.placeholder.com/100x100'), // Replace with the user's image URL
-                      ),
-                      SizedBox(width: Get.width*0.05),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Obx(
-                            ()=> Text(
-                              '${userDetailsManager.username}', // Replace with the user's name
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                                color: textColor,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: Get.height*0.01),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                size: 12.sp,
-                                color: accentColor,
-                              ),
-                              SizedBox(width: 4.0),
-                              Text(
-                                '123K Followers', // Replace with user-related details
+                  return Obx(
+                    ()=> Row(
+                      children: [
+                        CircleAvatar(
+                          radius: Get.width*0.1,
+                          backgroundImage:const NetworkImage(
+                              'https://via.placeholder.com/100x100'),
+                          child:CachedNetworkImage(
+                                            colorBlendMode: BlendMode.darken,
+                                            imageUrl: userDetailsManager.image.value,
+                                            placeholder: (context, url) =>
+                                                Image.asset('assets/default_image.png'),
+                                            errorWidget: (context, url, error) =>
+                                                Image.asset('assets/default_image.png'),
+                                           
+                                            fit: BoxFit.fitWidth,
+                                            errorListener: (error) =>
+                                                Image.asset('assets/default_image.png'),
+                                          ), // Replace with the user's image URL
+                        ),
+                        SizedBox(width: Get.width*0.05),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Obx(
+                              ()=> Text(
+                                '${userDetailsManager.username}', // Replace with the user's name
                                 style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
                                   color: textColor,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                            ),
+                            SizedBox(height: Get.height*0.01),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  size: 12.sp,
+                                  color: accentColor,
+                                ),
+                                SizedBox(width: 4.0),
+                                Text(
+                                  '123K Followers', // Replace with user-related details
+                                  style: TextStyle(
+                                    color: textColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   );
                 }
               ),

@@ -8,6 +8,7 @@ import 'package:educationadmin/Modals/ChannelListModal.dart';
 import 'package:educationadmin/Modals/EditResourceModal.dart';
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:educationadmin/Modals/FileUploadResponseModal.dart';
+import 'package:educationadmin/Modals/ImageUploadResponse.dart';
 import 'package:educationadmin/Modals/LoginModal.dart';
 import 'package:educationadmin/Modals/PhoneVerificationModal.dart';
 import 'package:educationadmin/Modals/SignupResponseModal.dart';
@@ -23,7 +24,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:dio/dio.dart' as dio;
 import '../../Modals/SingnupModal.dart';
-
 
 /// LoginService responsible to communicate with web-server
 /// via authenticaton related APIs
@@ -49,6 +49,8 @@ class NetworkService extends GetConnect {
   final String uploadpdf="resources/upload/pdf";
   final String editresource="resources/edit/";
   final String deleteResource="resources/delete/";
+  final String uploadprofileimage="auth/upload";
+
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
@@ -374,6 +376,35 @@ Future<GeneralResponse> deleteresource({required String token,required int resou
 }
 }
 
+Future<ImageUploadResponse> uploadProfileImage({required String token,required XFile? file})async
+{
+ var formData = dio.FormData.fromMap({
+  
+  'file': await dio.MultipartFile.fromFile(file!.path,filename: file.name),
+  
+    
+});
+
+
+
+
+   try {
+    //Response<Map<String,dynamic>> response=await post('$baseURL$createchannel', formData,contentType:"multipart/form-data",headers: {"Authorization":"Bearer $token"} );
+    dio.Response<Map<String,dynamic>> response = await dio.Dio().post('$baseURL$uploadprofileimage', data: formData,options: dio.Options(contentType: "multipart/form-data",headers:{"Authorization":"Bearer $token"}));
+    print(response.data);
+    if (response.statusCode == 200||response.statusCode==201) {
+      print('Success: ${response.data}');
+      return ImageUploadResponse.fromJson(response.data!);
+    } else {
+      return ImageUploadResponse();
+    }
+  } catch (e) {
+    print('Error: $e');
+   
+  }
+   return ImageUploadResponse();
+}
+
 }
 
 
@@ -402,11 +433,12 @@ class GeneralResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['msg'] = _msg;
     data['status'] = _status;
     return data;
   }
+
 
 
   

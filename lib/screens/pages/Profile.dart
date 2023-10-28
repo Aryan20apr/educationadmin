@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../authentication/LoginScreen.dart';
 import '../../utils/Controllers/AuthenticationController.dart';
+import '../common/UpdatePeofileScreen.dart';
 
 void main() {
   runApp(ProfileScreen());
@@ -71,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               ElevatedCard(const Icon(Icons.edit), 'Edit Profile', () {
-                // Handle edit profile
+                Get.to(()=> ProfileUpdateScreen());
               }),
               ElevatedCard(const Icon(Icons.file_download), 'Downloads', () {
                 // Handle downloads
@@ -80,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                 // Handle change password
               }),
               ElevatedCard(const Icon(Icons.camera_alt), 'Update Profile Picture', () {
-                // Handle update profile picture
+              
               }),
               ElevatedCard(const Icon(Icons.exit_to_app), 'Logout', () {
                 AuthenticationManager authenticationManager=Get.put(AuthenticationManager());

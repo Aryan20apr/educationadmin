@@ -21,8 +21,8 @@ class MainWrapperController extends GetxController {
   List<Widget> pages = [
     DemoScreen(),
     const ExploreScreen(),
-    const ChatScreen(),
-     CreaterHome(),
+     ChatScreen(),
+   const  CreaterHome(),
    ProfileScreen(),
   ];
 
