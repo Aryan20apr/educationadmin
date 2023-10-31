@@ -1,0 +1,4 @@
+enum ListType {
+  Explore,
+  Creator,
+}

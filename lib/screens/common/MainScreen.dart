@@ -78,7 +78,13 @@ class _MainWrapperState extends State<MainWrapper> {
         physics: const BouncingScrollPhysics(),
         onPageChanged: (index){
           logger.e("Adding $index");
-          tabHistory.add(index);
+          if(index==0)
+          {tabHistory.clear();
+          tabHistory.add(index);}
+          else
+          {
+            tabHistory.add(index);
+          }
           _mainWrapperController.animateToTab(index);
         },
         children: [..._mainWrapperController.pages],
@@ -124,7 +130,7 @@ class _MainWrapperState extends State<MainWrapper> {
     if (tabHistory.isNotEmpty) {
       // If there is tab history, pop the last tab and switch to it.
       logger.e("Current tab list is ${tabHistory.toString()}");
-      int currentTab = tabHistory.removeLast();
+      tabHistory.removeLast();
       int lastTab=tabHistory.removeLast();
       _mainWrapperController.goToTab(lastTab);
       return Future.value(false);

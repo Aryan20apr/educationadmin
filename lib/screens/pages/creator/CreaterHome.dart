@@ -1,6 +1,7 @@
 
 
 import 'dart:developer';
+import 'package:educationadmin/screens/common/ChannelDetails.dart';
 import 'package:educationadmin/screens/pages/creator/EditChannelScreen.dart';
 import 'package:logger/logger.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../Modals/ChannelListModal.dart';
+import '../../../utils/Flag.dart';
 
 class CreaterHome extends StatefulWidget {
 
@@ -144,6 +146,7 @@ class _CreaterHomeState extends State<CreaterHome> {
                         itemCount: createrChannelsController.channelData.value.channels?.length,
                         itemBuilder: (context, index) {
                           return VideoCard(
+                            flag: ListType.Creator,
                             onReturn: ()async{
                               await  createrChannelsController.getChannels();
                             },
@@ -208,6 +211,7 @@ class VideoCard extends StatelessWidget {
   final Color gradientEndColor;
   final VoidCallback? onTap;
   final Channels channel;
+  final ListType flag;
   final Function() onReturn;
   final Function() onPressed;
   const VideoCard({super.key, 
@@ -218,6 +222,7 @@ class VideoCard extends StatelessWidget {
     required this.gradientStartColor,
     required this.gradientEndColor,
     this.onTap,
+    required this.flag
   });
 
   @override
@@ -243,7 +248,14 @@ class VideoCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
+            if(flag==ListType.Creator)
             Get.to(() => CreatorChannel(channel: channel,));
+            else
+            {
+               Get.to(() => ChannelDetails(
+                 channel: channel,
+              ));
+            }
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,30 +295,7 @@ class VideoCard extends StatelessWidget {
                 ),
                 trailing: PopupMenuButton<String>(
       icon: const Icon(Icons.more_vert, color: Colors.white), // Icon color is green
-      itemBuilder: (context) {
-        return <PopupMenuEntry<String>>[
-          const PopupMenuItem<String>(
-            value: 'edit',
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.edit, color: Colors.green), // Edit icon is green
-                SizedBox(width: 8),
-                Text('Edit', style: TextStyle(color: Colors.green)),
-              ],
-            ),
-          ),
-          const PopupMenuItem<String>(
-            value: 'delete',
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.delete, color: Colors.green), // Delete icon is green
-                SizedBox(width: 8),
-                Text('Delete', style: TextStyle(color: Colors.green)),
-              ],
-            ),
-          ),
-        ];
-      },
+      itemBuilder: flag==ListType.Creator? getCreatorItem:getExploreItem,
       onSelected: (value) async{
         if (value == 'edit') {
         await  Get.to(()=>EditChannel(channel:channel));
@@ -318,6 +307,10 @@ class VideoCard extends StatelessWidget {
         await  _showDeleteConfirmationDialog(context);
        
         }
+        else if(value=='subscribe')
+        {
+
+        }
       },
     ),
               ),
@@ -327,6 +320,45 @@ class VideoCard extends StatelessWidget {
       ),
     );
   }
+  List<PopupMenuEntry<String>> getExploreItem(context) {
+      return <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'subscribe',
+          child: Row(
+            children: <Widget>[
+               // Edit icon is green
+              
+              Text('Subscribe', style: TextStyle(color: Colors.green)),
+            ],
+          ),
+        ),
+       
+      ];
+    }
+  List<PopupMenuEntry<String>> getCreatorItem(context) {
+      return <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'edit',
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.edit, color: Colors.green), // Edit icon is green
+              SizedBox(width: 8),
+              Text('Edit', style: TextStyle(color: Colors.green)),
+            ],
+          ),
+        ),
+        const PopupMenuItem<String>(
+          value: 'delete',
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.delete, color: Colors.green), // Delete icon is green
+              SizedBox(width: 8),
+              Text('Delete', style: TextStyle(color: Colors.green)),
+            ],
+          ),
+        ),
+      ];
+    }
 
   Future<void> _showDeleteConfirmationDialog(BuildContext context)async {
     await showDialog(

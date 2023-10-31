@@ -3,13 +3,15 @@ import 'package:get/get.dart';
 
 import '../../authentication/LoginScreen.dart';
 import '../../utils/Controllers/AuthenticationController.dart';
+import '../../utils/Controllers/UserController.dart';
 import '../common/UpdatePeofileScreen.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 void main() {
   runApp(ProfileScreen());
 }
 
 class ProfileScreen extends StatelessWidget {
+  final UserDetailsManager userDetailsManager = Get.find<UserDetailsManager>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,34 +42,56 @@ class ProfileScreen extends StatelessWidget {
                 child: Container(
                   color: Colors.transparent, // Set username section background color to white
                   padding: const EdgeInsets.all(16.0),
-                  child: const Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 50.0,
-                        backgroundImage: NetworkImage('https://via.placeholder.com/150x150'), // Replace with the user's image URL
-                      ),
-                      SizedBox(width: 16.0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'User Name', // Replace with the user's name
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black, // Set username text color to black
+                  child: Obx(
+                    ()=>  Row(
+                      children: <Widget>[
+                         ClipOval(
+                          child: CircleAvatar(
+                            radius: Get.width*0.1,
+                            // backgroundImage:const NetworkImage(
+                            //     'https://via.placeholder.com/100x100'),
+                            child:CachedNetworkImage(
+                              colorBlendMode: BlendMode.darken,
+                                              imageUrl: userDetailsManager.image.value,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.fill,
+                              width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
+                              height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
                             ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                            '123K Followers', // Replace with user-related details
-                            style: TextStyle(
-                              color: Colors.black, // Set user details text color to black
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.fill,
+                              width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
+                              height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
                             ),
+                            fit: BoxFit.cover,
+                                            ), // Replace with the user's image URL
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        SizedBox(width: 16.0),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              userDetailsManager.username.value, // Replace with the user's name
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black, // Set username text color to black
+                              ),
+                            ),
+                            SizedBox(height: 4.0),
+                            Text(
+                              '123K Followers', // Replace with user-related details
+                              style: TextStyle(
+                                color: Colors.black, // Set user details text color to black
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

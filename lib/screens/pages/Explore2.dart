@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:educationadmin/authentication/viewmodal/ExploreViewModal.dart';
+import 'package:educationadmin/utils/Flag.dart';
 
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../utils/ColorConstants.dart';
 import '../common/ChannelDetails.dart';
+import 'creator/CreaterHome.dart';
 
 
 class ExploreScreen extends StatefulWidget {
@@ -51,104 +54,50 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   if (exploreViewModal.channelData.value.channels == null) {
                     return const Center(child: Text('Could not obtain channels'));
                   }
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      return SizedBox(
-                        height: Get.height * 0.5,
-                        width: Get.width * 0.95,
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Get.to(() => ChannelDetails(
-                                        channel: exploreViewModal
-                                            .channelData.value.channels![index],
-                                      ));
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                                    color: cardBackgroundColor, // Set card background color
-                                  ),
-                                  margin: const EdgeInsets.all(10),
-                                  child: Column(
-                                    children: [
-                                      // Title and subtitle
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                '${exploreViewModal.channelData.value.channels![index].name}',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14.sp,
-                                                  color: textColor, // Set text color
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Text(
-                                              'Created by ${exploreViewModal.channelData.value.channels![index].createdBy}',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 12.sp,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      // Network image
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: CachedNetworkImage(
-                                          colorBlendMode: BlendMode.darken,
-                                          imageUrl: '${exploreViewModal.channelData.value.channels![index].thumbnail}',
-                                          placeholder: (context, url) =>
-                                              Image.asset('assets/default_image.png'),
-                                          errorWidget: (context, url, error) =>
-                                              Image.asset('assets/default_image.png'),
-                                          height: constraints.maxHeight * 0.5,
-                                          width: constraints.maxHeight * 0.95,
-                                          fit: BoxFit.fitWidth,
-                                          errorListener: (error) =>
-                                              Image.asset('assets/default_image.png'),
-                                        ),
-                                      ),
-
-                                      // Text
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Price: ₹${exploreViewModal.channelData.value.channels![index].price != 0 ? exploreViewModal.channelData.value.channels![index].price : 'Free'}',
-                                            style: TextStyle(
-                                              color: primaryColor, // Set text color
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                  
+                      return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: exploreViewModal.channelData.value.channels!.length,
+                      itemBuilder: (context, index) {
+                        return VideoCard(
+                          flag:ListType.Explore,
+                      onReturn: ()async{
+                        //await  createrChannelsController.getChannels();
+                      },
+                      channel:exploreViewModal.channelData.value.channels![index],
+                      onPressed: () async{
+                              // Handle Delete
+                               // Handle Cancel
+                        //       CreaterChannelsController controller=Get.put(CreaterChannelsController());
+                        // bool result=    await controller.deleteChannel(channelId:createrChannelsController.channelData.value.channels![index].id!);
+                        //       if(result)
+                        //       {
+                              //   Get.back();
+                              //   Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
+                                
+                              //   // setState(() {
+                              //   await  createrChannelsController.getChannels();
+                              //   // });
+                              // }
+                              // else{
+                              //   Get.back();
+                              //   Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
+                              // }
+                           
+                           
+                              
+                              // // Perform the delete operation
+                              // print('Item deleted');
+                            },
+                      accentColor: ColorConstants.accentColor,
+                      gradientStartColor: ColorConstants.primaryColor,
+                      gradientEndColor: ColorConstants.secondaryColor,
+                        );
+                      },
                       );
-                    },
-                    itemCount: exploreViewModal.channelData.value.channels!.length,
-                  );
+                    
+                    
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else {
@@ -162,6 +111,110 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 }
+
+// class ChannelListWidget extends StatelessWidget {
+//   const ChannelListWidget({
+//     super.key,
+//     required this.exploreViewModal,
+//     required this.cardBackgroundColor,
+//     required this.textColor,
+//     required this.primaryColor,
+//   });
+
+//   final ExploreViewModal exploreViewModal;
+//   final Color cardBackgroundColor;
+//   final Color textColor;
+//   final Color primaryColor;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: GestureDetector(
+//         onTap: () {
+//           Get.to(() => ChannelDetails(
+//                 channel: exploreViewModal
+//                     .channelData.value.channels![index],
+//               ));
+//         },
+//         child: Container(
+//           decoration: BoxDecoration(
+//             shape: BoxShape.rectangle,
+//             borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+//             color: cardBackgroundColor, // Set card background color
+//           ),
+//           margin: const EdgeInsets.all(10),
+//           child: Column(
+//             children: [
+//               // Title and subtitle
+//               Padding(
+//                 padding: const EdgeInsets.all(10.0),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Align(
+//                       alignment: Alignment.centerLeft,
+//                       child: Text(
+//                         '${exploreViewModal.channelData.value.channels![index].name}',
+//                         style: TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 14.sp,
+//                           color: textColor, // Set text color
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(height: 5),
+//                     Text(
+//                       'Created by ${exploreViewModal.channelData.value.channels![index].createdBy}',
+//                       style: TextStyle(
+//                         color: Colors.grey,
+//                         fontSize: 12.sp,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+
+//               // Network image
+//               Padding(
+//                 padding: const EdgeInsets.all(8.0),
+//                 child: CachedNetworkImage(
+//                   colorBlendMode: BlendMode.darken,
+//                   imageUrl: '${exploreViewModal.channelData.value.channels![index].thumbnail}',
+//                   placeholder: (context, url) =>
+//                       Image.asset('assets/default_image.png'),
+//                   errorWidget: (context, url, error) =>
+//                       Image.asset('assets/default_image.png'),
+//                   height: constraints.maxHeight * 0.5,
+//                   width: constraints.maxHeight * 0.95,
+//                   fit: BoxFit.fitWidth,
+//                   errorListener: (error) =>
+//                       Image.asset('assets/default_image.png'),
+//                 ),
+//               ),
+
+//               // Text
+//               Padding(
+//                 padding: const EdgeInsets.all(10.0),
+//                 child: Align(
+//                   alignment: Alignment.centerLeft,
+//                   child: Text(
+//                     'Price: ₹${exploreViewModal.channelData.value.channels![index].price != 0 ? exploreViewModal.channelData.value.channels![index].price : 'Free'}',
+//                     style: TextStyle(
+//                       color: primaryColor, // Set text color
+//                       fontWeight: FontWeight.w500,
+//                       fontSize: 12.sp,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class ProgressIndicatorWidget extends StatelessWidget {
   const ProgressIndicatorWidget({

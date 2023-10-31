@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             GestureDetector(
                               onTap: (){
-                                Get.to(()=>DemoScreen());
+                                Get.to(()=>HomeScreen());
                               },
                               child: CircleAvatar(
                                 radius: containerConstraints.maxHeight * 0.2,

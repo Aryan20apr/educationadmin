@@ -5,17 +5,21 @@ import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 class CreateChannel extends StatefulWidget {
+  const CreateChannel({super.key});
+
   @override
-  _CreateChannelState createState() => _CreateChannelState();
+  CreateChannelState createState() => CreateChannelState();
 }
 
-class _CreateChannelState extends State<CreateChannel> {
-  TextEditingController _channelNameController = TextEditingController();
-  TextEditingController _channelPriceController = TextEditingController();
+class CreateChannelState extends State<CreateChannel> {
+  final TextEditingController _channelNameController = TextEditingController();
+  final TextEditingController _channelPriceController = TextEditingController();
   final ImagePickerController controller = Get.put(ImagePickerController());
   bool _isChannelPaid = false;
 
@@ -52,107 +56,174 @@ class _CreateChannelState extends State<CreateChannel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Channel"),
+        title:  Text("Create Channel",style:TextStyle(color: Colors.black,fontSize: 14.sp,fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal:16.0),
           child: Form(
             key: _formKey, // Associate the form key with the form widget
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text("Channel Name"),
-                TextFormField(
-                  controller: _channelNameController,
-                         validator: (value) {
-                    final alphanumeric = RegExp(r'^[a-zA-Z0-9\s]+$');
-                    if (value!.isEmpty) {
-                      return 'Channel name is required';
-                    }
-                    if (!alphanumeric.hasMatch(value)) {
-                      return 'Channel name must be alphanumeric';
-                    }
-                    return null;
-                  },
-      
-                ),
-                const SizedBox(height: 16),
-                const Text("Thumbnail Image"),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Obx(
-                        () => controller.imagePath.isNotEmpty
-                            ? Image.file(
-                                File(controller.imagePath.value),
-                                width: 200,
-                                height: 200,
-                              )
-                            : const Icon(Icons.camera_alt, size: 100, color: Colors.grey),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          controller.pickImage();
-                        },
-                        child: const Text("Pick an Image"),
-                      ),
-                    ],
+               ClipPath(
+                clipper: WaveClipperTwo(reverse: true),
+                 child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.greenAccent.shade100,
+                    //borderRadius: BorderRadius.all(Radius.circular(20))
                   ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: <Widget>[
-                    const Text("Is Channel Paid?"),
-                    Switch(
-                      value: _isChannelPaid,
-                      onChanged: (value) {
-                        setState(() {
-                          _isChannelPaid = value;
-                          _channelPriceController.clear(); // Clear the price when changing the switch.
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                _isChannelPaid
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          const Text("Price (in Rupees)"),
+                   child: Padding(
+                     padding: const EdgeInsets.all(16.0),
+                     child: Column(
+                       children: [
+                        SizedBox(height: Get.height*0.08,),
+                         Text("Channel Name",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold),),
                           TextFormField(
-                            controller: _channelPriceController,
-                             validator: (value) {
-                              final digitOnly = RegExp(r'^\d+$');
-                              if (_isChannelPaid && value!.isEmpty) {
-                                return 'Price is required for paid channels';
+                            decoration: InputDecoration(
+                              hintText: 'Enter your channel name',
+                              hintStyle: TextStyle(color: Colors.grey,fontSize: 12.sp,fontWeight: FontWeight.w300)
+                            ),
+                            controller: _channelNameController,
+                                   validator: (value) {
+                              final alphanumeric = RegExp(r'^[a-zA-Z0-9\s]+$');
+                              if (value!.isEmpty) {
+                                return 'Channel name is required';
                               }
-                              if (_isChannelPaid && !digitOnly.hasMatch(value!)) {
-                                return 'Price must be a digit';
+                              if (!alphanumeric.hasMatch(value)) {
+                                return 'Channel name must be alphanumeric';
                               }
                               return null;
                             },
+                         
                           ),
+                       ],
+                     ),
+                   ),
+                 ),
+               ),
+                 //SizedBox(height: Get.height*0.05),
+                 ClipPath(
+                  clipper: SideCutClipper(),
+                   child: Container(
+                    decoration: BoxDecoration(
+                    color: Colors.greenAccent.shade100,
+                   // borderRadius: BorderRadius.all(Radius.circular(20))
+                                 ),
+                     child: Padding(
+                       padding: const EdgeInsets.all(16.0),
+                       child: Column(
+                         children: [
+                           Text("Thumbnail Image",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
+                                     Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Obx(
+                                  () => controller.imagePath.isNotEmpty
+                                      ? Image.file(
+                                          File(controller.imagePath.value),
+                                          width: Get.height*0.2,
+                                          height: Get.width*0.8,
+                                        )
+                                      : Icon(Icons.camera_alt, size: Get.height*0.15, color: Colors.grey),
+                                ),
+                                 SizedBox(height: Get.height*0.02),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    controller.pickImage();
+                                  },
+                                  child:const  Text("Pick an Image"),
+                                ),
+                              ],
+                            ),
+                                     ),
+                         ],
+                       ),
+                     ),
+                   ),
+                 ),
+                 //SizedBox(height: Get.height*0.05),
+                ClipPath(
+                  clipper: WaveClipperTwo(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                    color: Colors.greenAccent.shade100,
+                   // borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 25.0),
+                            child: Row(
+                              children: <Widget>[
+                                 Text("Is Channel Paid?",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
+                                Switch(
+                                  value: _isChannelPaid,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isChannelPaid = value;
+                                      _channelPriceController.clear(); // Clear the price when changing the switch.
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          _isChannelPaid? SizedBox(height: Get.height*0.04):SizedBox(height: 0.0,),
+                          _isChannelPaid
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                     Text("Price (in ₹)",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
+                                    TextFormField(
+                                      
+                            decoration: InputDecoration(
+                              hintText: 'Enter your channel name',
+                              hintStyle: TextStyle(color: Colors.grey,fontSize: 12.sp,fontWeight: FontWeight.w300)
+                            ),
+                                      controller: _channelPriceController,
+                                       validator: (value) {
+                                        final digitOnly = RegExp(r'^\d+$');
+                                        if (_isChannelPaid && value!.isEmpty) {
+                                          return 'Price is required for paid channels';
+                                        }
+                                        if (_isChannelPaid && !digitOnly.hasMatch(value!)) {
+                                          return 'Price must be a digit';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: Get.height*0.08,)
+                                  ],
+                                )
+                              : const SizedBox(),
                         ],
-                      )
-                    : const SizedBox(),
-                const SizedBox(height: 16),
-                Obx(
-                  ()=> controller.isLoading.value==false? ElevatedButton(
-                  
-                    onPressed: _createChannel,
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("Create Channel"),
+                      ),
                     ),
-                  ):ElevatedButton(
+                  ),
+                ),
+                 //SizedBox(height: Get.height*0.1),
+                Obx(
+                  ()=> controller.isLoading.value==false? Center(
+                    child: ElevatedButton(
                     
-                    onPressed: (){},
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
+                      onPressed: _createChannel,
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Create Channel"),
+                      ),
+                    ),
+                  ):Center(
+                    child: ElevatedButton(
+                      
+                      onPressed: (){},
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                   ),
                 ),
@@ -164,7 +235,26 @@ class _CreateChannelState extends State<CreateChannel> {
     );
   }
 }
+class ConcaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    double concavity = 20; // Adjust the concavity as needed
 
+    var path = Path()
+      ..lineTo(0, size.height)
+      ..lineTo(0, concavity)
+      ..quadraticBezierTo(size.width / 2, concavity * 2, size.width, concavity)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
 class ImagePickerController extends GetxController {
   RxString imagePath = ''.obs;
   RxString channelName="".obs;

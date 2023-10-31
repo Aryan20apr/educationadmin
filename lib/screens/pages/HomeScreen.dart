@@ -1,20 +1,32 @@
 import 'package:educationadmin/utils/Controllers/UserController.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+class HomeScreen extends StatefulWidget {
 
-class DemoScreen extends StatelessWidget {
+   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
  final UserDetailsManager userDetailsManager = Get.find<UserDetailsManager>();
 
-   DemoScreen({super.key});
+  final InfiniteScrollController infiniteScrollController=InfiniteScrollController();
+PageController pageController = PageController(
+  initialPage: 1, // Start from the middle item
+);
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Color(0xFF3D5AFE); // Primary Color - Indigo
-    final accentColor = Color(0xFFFF8F00); // Accent Color - Amber
-    final secondaryColor = Color(0xFF00C853); // Secondary Color - Green
-    final textColor = Color(0xFF212121); // Text Color - Black
-    final cardBackgroundColor = Color(0xFFE6F0FF); // Light blue gradient background
+    const primaryColor = Color(0xFF3D5AFE); // Primary Color - Indigo
+    const accentColor = Color(0xFFFF8F00); // Accent Color - Amber
+    const secondaryColor = Color(0xFF00C853); // Secondary Color - Green
+    const textColor = Color(0xFF212121); // Text Color - Black
+    const cardBackgroundColor = Color(0xFFE6F0FF); // Light blue gradient background
 
     return Scaffold(
       body: ListView(
@@ -83,8 +95,8 @@ class DemoScreen extends StatelessWidget {
                                   size: 12.sp,
                                   color: accentColor,
                                 ),
-                                SizedBox(width: 4.0),
-                                Text(
+                                const SizedBox(width: 4.0),
+                               const Text(
                                   '123K Followers', // Replace with user-related details
                                   style: TextStyle(
                                     color: textColor,
@@ -103,12 +115,13 @@ class DemoScreen extends StatelessWidget {
           ),
           Card(
             elevation: 4.0,
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
             child: InkWell(
               onTap: () {
                 // Handle Subscribed Channels card tap
               },
               child: Container(
+               
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.centerLeft,
@@ -117,7 +130,7 @@ class DemoScreen extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -131,23 +144,92 @@ class DemoScreen extends StatelessWidget {
                       ),
                       SizedBox(height: Get.height*0.02),
                       Container(
-                        height: Get.height*0.17,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return SubscribedChannelCard(
-                              channelName: 'Channel $index',
-                              gradientStartColor: primaryColor,
-                              gradientEndColor: secondaryColor,
-                              onTap: () {
-                                // Handle subscribed channel card tap
-                              },
-                            );
-                          },
+                         height: Get.height*0.3,
+                width: Get.width*0.95,
+                child: 
+Container(
+  height: Get.height*0.3,
+  child:   CarouselSlider.builder(
+  
+    options: CarouselOptions(
+  
+        height: Get.height*0.25,
+  
+        aspectRatio: 16/9,
+  
+        viewportFraction: 0.85,
+  
+        initialPage: 0,
+  
+        enableInfiniteScroll: true,
+  
+        reverse: false,
+  
+        autoPlay: true,
+  
+        autoPlayInterval: const Duration(seconds: 3),
+  
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+  
+        autoPlayCurve: Curves.fastOutSlowIn,
+  
+        enlargeCenterPage: true,
+  
+        enlargeFactor: 0.3,
+  
+       //
+  
+        scrollDirection: Axis.horizontal,
+  
+     ),
+  
+    itemCount: 15,
+  
+    itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
+  
+      Container(
+  
+        height: Get.height * 0.25,
+  
+        decoration: const BoxDecoration(
+  
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+  
+          image: DecorationImage(
+  
+            image: NetworkImage('https://via.placeholder.com/400x200'),
+  
+            fit: BoxFit.cover,
+  
+          ),
+  
+          
+  
+        ),
+  
+        child: CachedNetworkImage(
+  
+          colorBlendMode: BlendMode.darken,
+  
+          imageUrl: 'https://via.placeholder.com/400x200',
+  
+          placeholder: (context, url) => Image.asset('assets/default_image.png'),
+  
+          errorWidget: (context, url, error) => Image.asset('assets/default_image.png'),
+  
+          fit: BoxFit.cover,
+  
+          errorListener: (error) => Image.asset('assets/default_image.png'),
+  
+        ),
+  
+      ),
+  
+  //                         
+  
                         ),
-                      ),
-                    ],
+)
+                  )],
                   ),
                 ),
               ),
@@ -157,11 +239,11 @@ class DemoScreen extends StatelessWidget {
             
             decoration: BoxDecoration(
               color: Colors.white, // Background color of the bottom sheet
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey[300]!,
-                  offset: Offset(0, -2),
+                  offset: const Offset(0, -2),
                   blurRadius: 3.0,
                 ),
               ],
@@ -169,7 +251,7 @@ class DemoScreen extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -187,7 +269,7 @@ class DemoScreen extends StatelessWidget {
               ),
                 ListView.builder(
           shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           itemCount: 10,
           itemBuilder: (context, index) {
                 return VideoCard(
@@ -210,6 +292,14 @@ class DemoScreen extends StatelessWidget {
       ),
     );
   }
+  double calculateElevation(double position) {
+  const maxElevation = 1.0; // Maximum elevation
+  const minElevation = 0.0; // Minimum elevation
+  const elevationFactor = 0.02; // Adjust this factor to control the rate of elevation change
+
+  final elevation = maxElevation - (position.abs() * elevationFactor);
+  return elevation.clamp(minElevation, maxElevation);
+}
 }
 
 class SubscribedChannelCard extends StatelessWidget {
@@ -231,7 +321,7 @@ class SubscribedChannelCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: [
             Container(
@@ -260,7 +350,7 @@ class SubscribedChannelCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text(
               channelName,
               style: TextStyle(
@@ -311,7 +401,7 @@ class VideoCard extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            margin: EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
               gradient: LinearGradient(
@@ -322,7 +412,7 @@ class VideoCard extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey[300]!,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                   blurRadius: 3.0,
                 ),
               ],
@@ -360,7 +450,7 @@ class VideoCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  trailing: Icon(Icons.more_vert, color: Colors.white),
+                  trailing: const Icon(Icons.more_vert, color: Colors.white),
                 ),
               ],
             ),

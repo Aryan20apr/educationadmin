@@ -1,12 +1,14 @@
 
 import 'package:educationadmin/screens/pages/creator/CreaterHome.dart';
-import 'package:educationadmin/screens/pages/Explore.dart';
+
 import 'package:educationadmin/screens/pages/HomeScreen.dart';
 import 'package:educationadmin/screens/pages/Messages.dart';
 import 'package:educationadmin/screens/pages/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+
+import '../../screens/pages/Explore2.dart';
 
 
 
@@ -19,7 +21,7 @@ class MainWrapperController extends GetxController {
   RxBool isDarkTheme = false.obs;
 
   List<Widget> pages = [
-    DemoScreen(),
+    HomeScreen(),
     const ExploreScreen(),
      ChatScreen(),
    const  CreaterHome(),
