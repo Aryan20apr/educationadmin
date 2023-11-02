@@ -130,9 +130,16 @@ on Exception catch (_) {
 
 Future<ChannelListModal> getAllChannelList({String? token}) async
 {
+  try {
   Response<Map<String,dynamic>> response = await get('$baseURL$channels',headers: {"Authorization":"Bearer $token"});
     logger.e(response.body);
-   return ChannelListModal.fromJson(response.body!);
+     return ChannelListModal.fromJson(response.body!);
+} on Exception catch (e) {
+  e.printError();
+return ChannelListModal();
+  // TODO
+}
+  
   }
 Future<ChannelListModal> getCreatorList({String? token}) async
 {

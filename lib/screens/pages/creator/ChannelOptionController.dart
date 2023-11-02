@@ -49,18 +49,30 @@ class ChannelOptionsController extends GetxController
 }
 Future<void> uploadVideo({required VideoRequestModal videoRequestModal})async
 {
+  isLoading.value=true;
+   isLoading.value=false;
+  Get.back();
   String? token=await authenticationManager.getToken();
+  try {
   VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadVideo(token: token!, videoRequestModal: videoRequestModal);
+   
+ 
+  
   if(videoUploadResponseModal.data!.resource!=null)
   {
-    Get.back();
+   
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
   else
   {
-    Get.back();
+    
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
+} on Exception catch (e) {
+  e.printError();
+  Get.showSnackbar( const GetSnackBar(message:'Could not upload video',duration: Duration(seconds: 3),));
+}
+
 }
 
 Future<void> uploadFile({required title,required int channeId})async

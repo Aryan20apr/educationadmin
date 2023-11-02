@@ -17,7 +17,7 @@ class DefaultCarousel extends StatelessWidget {
     
           aspectRatio: 16/9,
     
-          viewportFraction: 0.85,
+          viewportFraction: 0.80,
     
           initialPage: 0,
     

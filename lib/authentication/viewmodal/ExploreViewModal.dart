@@ -11,17 +11,26 @@ class ExploreViewModal extends GetxController{
   final NetworkService networkService=Get.find<NetworkService>();
 final channelData=Data().obs;
 
-  Future<void> getChannels() async
+  Future<bool> getChannels() async
   {
     NetworkChecker networkChecker=NetworkChecker();
     bool check=await networkChecker.checkConnectivity();
-    if(check==false)
-    return ;
+    if(check==false) {
+      return false;
+    }
     String? token=await _authmanager.getToken();
     if(token!=null)
     {
      ChannelListModal channelListModal=await   networkService.getAllChannelList(token: token);
-     channelData.value=channelListModal.data!;
+     if(channelListModal.data!=null) {
+       channelData.value=channelListModal.data!;
+       return true;
+     }
+     else
+     {
+      return false;
+     }
     }
+    return false;
   }
 }

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:logger/logger.dart';
 import '../../../Modals/ChannelListModal.dart';
 import 'FilesTab.dart';
 import 'SubscribersTab.dart';
@@ -30,7 +30,8 @@ class _CreatorChannelState extends State<CreatorChannel> {
        TextEditingController fileNameController = TextEditingController();
        TextEditingController videoTitleTextEditingController=TextEditingController();
        TextEditingController videoUrlcontroller=TextEditingController();
-
+        Logger logger=Logger();
+        
   //File? selectedPDF;
 final _formKey = GlobalKey<FormState>();
   Future<File?> requestPermissionAndPickPDFFile() async {
@@ -106,9 +107,7 @@ final _formKey = GlobalKey<FormState>();
                             String fileName = fileNameController.text;
                             if (fileName.isNotEmpty) {
                             await channelOptionsController.uploadFile(title:fileName, channeId: widget.channel.id!);
-                             setState(() {
-                               
-                             });
+                            
                             }
                           },
                           child: const Text("Upload"),
@@ -122,7 +121,7 @@ final _formKey = GlobalKey<FormState>();
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.back();
               },
               child: const Text("Cancel"),
             ),
@@ -180,27 +179,32 @@ final _formKey = GlobalKey<FormState>();
                 Row(
                   children: <Widget>[
                     const Text('Paid Video:'),
-                    Switch(
-                      value: false, // Set the initial value as needed
-                      onChanged: (value) {
-                        // Handle the switch state change
-                        channelOptionsController.isVideoPaid.value=value;
-                      },
+                    Obx(
+                      ()=> Switch(
+                        value: channelOptionsController.isVideoPaid.value, // Set the initial value as needed
+                        onChanged: (value) {
+                          
+                          // Handle the switch state change
+                          channelOptionsController.isVideoPaid.value=value;
+                        },
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                   validateFieldsAndUpload();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                Obx(
+                  ()=>channelOptionsController.isLoading.value==false? ElevatedButton(
+                    onPressed: () {
+                     validateFieldsAndUpload();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      minimumSize: const Size(200, 50), // Adjust button size as needed
                     ),
-                    minimumSize: const Size(200, 50), // Adjust button size as needed
-                  ),
-                  child: const Text('Upload Video'),
+                    child: const Text('Upload Video'),
+                  ):const ButtonProgressWidget(),
                 ),
               ],
             ),
@@ -352,6 +356,18 @@ final _formKey = GlobalKey<FormState>();
   }
 
    
+}
+
+class ButtonProgressWidget extends StatelessWidget {
+  const ButtonProgressWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(onPressed: 
+    (){}, child:const CircularProgressIndicator());
+  }
 }
 
 

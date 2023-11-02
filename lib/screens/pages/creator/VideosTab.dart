@@ -29,7 +29,9 @@ List<Videos> videos=[];
   // Add this function to handle the pull-to-refresh
   void _onRefresh() async {
     await channelsController.getChannelVideos(channelId: widget.channelId);
-    videos=channelsController.videoData.value.data!.videos??[];
+    setState(() {
+      videos=channelsController.videoData.value.data!.videos??[];
+    });
     _refreshController.refreshCompleted(); // Complete the refresh
      _refreshController.loadComplete();
   }

@@ -166,7 +166,14 @@ FutureBuilder<bool>(
    else
    {
     if(snapshot.data==true) {
-      return CarouselSlider.builder(
+     
+     if(snapshot.data==false)
+
+     {
+       return const DefaultCarousel();
+     }
+     else
+      {return CarouselSlider.builder(
     
       options: CarouselOptions(
     
@@ -174,7 +181,7 @@ FutureBuilder<bool>(
     
           aspectRatio: 16/9,
     
-          viewportFraction: 0.95,
+          viewportFraction: 0.75,
     
           initialPage: 0,
     
@@ -212,27 +219,35 @@ FutureBuilder<bool>(
           },
           child: ClipRRect(
              borderRadius: BorderRadius.circular(10.0),
-            child: CachedNetworkImage(
-              width: double.infinity,
-            colorBlendMode: BlendMode.darken,
-              
-            imageUrl: homeScreenController.allChannelData.value.channels![itemIndex].thumbnail!,
-              
-            placeholder: (context, url) => Image.asset('assets/default_image.png'),
-              
-            errorWidget: (context, url, error) => Image.asset('assets/default_image.png'),
-              
-            fit: BoxFit.cover,
-              
-            errorListener: (error) => Image.asset('assets/default_image.png'),
-              
+            child: Container(
+              decoration: BoxDecoration(
+                 border: Border.all(
+              color: Colors.greenAccent, // Set the border color to black
+              width: 4.0, // Adjust the border width as needed
+            ),
+              ),
+              child: CachedNetworkImage(
+                width: double.infinity,
+              colorBlendMode: BlendMode.darken,
+                
+              imageUrl: homeScreenController.allChannelData.value.channels![itemIndex].thumbnail!,
+                
+              placeholder: (context, url) => Image.asset('assets/default_image.png'),
+                
+              errorWidget: (context, url, error) => Image.asset('assets/default_image.png'),
+                
+              fit: BoxFit.cover,
+                
+              errorListener: (error) => Image.asset('assets/default_image.png'),
+                
+              ),
             ),
           ),
         ),
     
     //                         
     
-                        );
+                        );}
     }
     else
     {
@@ -288,7 +303,7 @@ FutureBuilder<bool>(
                       return const ProgressIndicatorWidget();
                     }
                     
-                    else {
+                    else if(snapshot.hasData){
                       if(snapshot.data==false)
                       {
                           return const Center(child: Text('Could not obtain channels for you'),);
@@ -321,6 +336,10 @@ FutureBuilder<bool>(
                     
                   }
                     
+                    }
+                    else
+                    {
+                       return const Center(child: Text('Could not obtain channels for you'),);
                     }
                   }
                 )
