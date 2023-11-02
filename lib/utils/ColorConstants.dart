@@ -18,6 +18,9 @@ class ColorConstants {
     static Color secondaryColor = const Color(0xFF00C853); // Secondary Color - Green
     static Color textColor = const Color(0xFF212121); // Text Color - Black
     static Color cardBackgroundColor = const Color(0xFFE6F0FF); // Light blue gradient background
+
+
+
 }
 
 Color hexToColor(String hex) {

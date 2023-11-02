@@ -32,11 +32,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Explore Courses',
+          'Explore Channels',
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.bold,
-            color: primaryColor, // Set app bar title color
+            color: Colors.black, // Set app bar title color
           ),
         ),
         backgroundColor: Colors.white, // Set app bar background color to white
