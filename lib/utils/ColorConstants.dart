@@ -29,3 +29,12 @@ Color hexToColor(String hex) {
   return Color(int.parse(hex.substring(1), radix: 16) +
       (hex.length == 7 ? 0xFF000000 : 0x00000000));
 }
+
+class CustomColors {
+  static const Color primaryColor = Color(0xFF4ECDC4); // #4ECDC4
+  static const Color secondaryColor = Color(0xFFF7FFF7); // #F7FFF7
+  static const Color accentColor = Color(0xFFFFE1A8); // #FFE1A8
+  static const Color primaryColorDark=Color(0xff00201E);
+  static const Color tileColour=Color(0xff00504C);
+  static const Color createrColour=Color(0xff1F7976);
+}

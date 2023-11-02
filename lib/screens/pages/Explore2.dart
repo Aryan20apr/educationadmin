@@ -30,6 +30,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final cardBackgroundColor = const Color(0xFFE6F0FF); // Light blue gradient background
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           'Explore Channels',
@@ -39,7 +40,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             color: Colors.black, // Set app bar title color
           ),
         ),
-        backgroundColor: Colors.white, // Set app bar background color to white
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor, // Set app bar background color to white
         elevation: 0, // Remove app bar elevation
       ),
       body: CustomScrollView(
@@ -224,13 +225,11 @@ class ProgressIndicatorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SizedBox(
-            height: Get.height * 0.05,
-            child: const CircularProgressIndicator(),
-          ),
+      child: Center(
+        child: SizedBox(
+          
+          child:  CircularProgressIndicator(color:  
+                        Theme.of(context).primaryColorDark,),
         ),
       ),
     );

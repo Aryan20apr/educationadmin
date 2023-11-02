@@ -15,18 +15,19 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const  BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-             Color(0xFFF5FDF0), // Extremely Light Greenish-Yellow Shade 1
-              Color(0xFFF2FBE3), // Extremely Light Greenish-Yellow Shade 2
-              Color(0xFFEFF9D6), // Extremely Light Greenish-Yellow Shade 3
-              Color(0xFFECF7C9), // Extremely Light Greenish-Yellow Shade 4
-            ],
-            stops: [0.1, 0.4, 0.7, 0.9],
-          ),
+      decoration:   BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor
+          // gradient: LinearGradient(
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          //   colors: [
+          //    Color(0xFFF5FDF0), // Extremely Light Greenish-Yellow Shade 1
+          //     Color(0xFFF2FBE3), // Extremely Light Greenish-Yellow Shade 2
+          //     Color(0xFFEFF9D6), // Extremely Light Greenish-Yellow Shade 3
+          //     Color(0xFFECF7C9), // Extremely Light Greenish-Yellow Shade 4
+          //   ],
+          //   stops: [0.1, 0.4, 0.7, 0.9],
+          // ),
         ),
       child: Scaffold(
         backgroundColor: Colors.transparent,

@@ -1,5 +1,6 @@
 
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Controllers/ChanneResourcelController.dart';
 import 'package:educationadmin/utils/Controllers/FileDownloadStatusController.dart';
 import 'package:flutter/material.dart';
@@ -65,18 +66,18 @@ class _FileResourcesTabState extends State<FileResourcesTab> {
                     style: ListTileStyle.list,
                     enableFeedback: true,
                     shape: RoundedRectangleBorder(borderRadius:  BorderRadius.circular(20)),
-                    tileColor: Colors.purple.shade100,
+                    tileColor: CustomColors.tileColour,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                           leading: Container(
                   padding: const EdgeInsets.only(right: 12.0),
                   decoration: const BoxDecoration(
                       border: Border(
                           right: BorderSide(width: 1.0, color: Colors.white24))),
-                  child: const Icon(Icons.picture_as_pdf, color: Colors.white),
+                  child: const Icon(Icons.picture_as_pdf, color: CustomColors.accentColor),
                           ),
                           title: Text(
                   "${files[index].title}",
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
                           ),
                           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
                       
@@ -89,7 +90,7 @@ class _FileResourcesTabState extends State<FileResourcesTab> {
                           trailing: Obx(()=>(fileController.isDownloading.value? LoadingAnimationWidget.threeArchedCircle(color: Colors.white, size: Get.width*0.05):IconButton(onPressed: () {
                            fileController.isDownloaded.value==false?fileController.downloadFile(file:files[index]): fileController.deleteFile(name:files[index].title!);
                           }
-                          ,icon: Obx(() => Icon(fileController.isDownloaded.value? Icons.check_circle_outline_rounded:Icons.download, color: Colors.white,),)))),
+                          ,icon: Obx(() => Icon(fileController.isDownloaded.value? Icons.check_circle_outline_rounded:Icons.download, color: CustomColors.accentColor,),)))),
                 )
                 );
               },

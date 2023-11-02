@@ -1,6 +1,7 @@
 
 
 import 'package:educationadmin/Modals/ChannelListModal.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,7 @@ bool _isSearchBarOpen = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title:  Text(widget.channel.name!),
       ),
@@ -62,7 +63,7 @@ bool _isSearchBarOpen = false;
                     borderRadius: BorderRadius.circular(20)),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                 child: TabBar(
-                  indicatorPadding: EdgeInsets.all(0),
+                  indicatorPadding:const EdgeInsets.all(0),
                   
                   onTap: (index){
                     setState(() {
@@ -72,9 +73,9 @@ bool _isSearchBarOpen = false;
                   labelPadding: EdgeInsets.zero,
                   unselectedLabelColor: Colors.black,
                   labelColor: Colors.black,
-                  indicatorColor: Colors.purple.shade100,
+                  indicatorColor: CustomColors.accentColor,
                   splashBorderRadius: BorderRadius.circular(20),
-                  indicator: BoxDecoration(                    color: Colors.purple.shade100,
+                  indicator: BoxDecoration(                    color: CustomColors.accentColor,
                       borderRadius:BorderRadius.circular(20)
                   ),
                   controller: tabController,

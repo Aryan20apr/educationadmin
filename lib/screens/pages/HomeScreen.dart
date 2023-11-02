@@ -43,6 +43,7 @@ void initState()
   Widget build(BuildContext context) {
     
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: ListView(
         children: [
           InkWell(
@@ -132,12 +133,13 @@ void initState()
             margin: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
             child: Container(
              
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [ColorConstants.cardBackgroundColor, Colors.grey[100]!],
-                ),
+              decoration: const BoxDecoration(
+                color: CustomColors.secondaryColor,
+                // gradient: LinearGradient(
+                //   begin: Alignment.centerLeft,
+                //   end: Alignment.centerRight,
+                //   colors: [ColorConstants.cardBackgroundColor, Colors.grey[100]!],
+                // ),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -222,7 +224,7 @@ FutureBuilder<bool>(
             child: Container(
               decoration: BoxDecoration(
                  border: Border.all(
-              color: Colors.greenAccent, // Set the border color to black
+              color: Theme.of(context).primaryColorDark, // Set the border color to black
               width: 4.0, // Adjust the border width as needed
             ),
               ),
@@ -263,88 +265,90 @@ FutureBuilder<bool>(
               ),
             ),
           ),
-          Container(
-            
-            decoration: BoxDecoration(
-              color: Colors.white, // Background color of the bottom sheet
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[300]!,
-                  offset: const Offset(0, -2),
-                  blurRadius: 3.0,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    
-                    'For You',
-                     // Add the "For You" heading
-                    style: TextStyle(
+          Expanded(
+            child: Container(
+              
+              decoration: BoxDecoration(
+               color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[300]!,
+                    offset: const Offset(0, -2),
+                    blurRadius: 3.0,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
                       
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: ColorConstants.textColor,
+                      'For You',
+                       // Add the "For You" heading
+                      style: TextStyle(
+                        
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: ColorConstants.textColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-                FutureBuilder<bool>(
-                  future:isFetchedUser,
-                  builder: (context,snapshot) {
-                    if(snapshot.connectionState==ConnectionState.waiting)
-                    {
-                      return const ProgressIndicatorWidget();
-                    }
-                    
-                    else if(snapshot.hasData){
-                      if(snapshot.data==false)
+                  FutureBuilder<bool>(
+                    future:isFetchedUser,
+                    builder: (context,snapshot) {
+                      if(snapshot.connectionState==ConnectionState.waiting)
                       {
-                          return const Center(child: Text('Could not obtain channels for you'),);
+                        return const Center(child: ProgressIndicatorWidget());
+                      }
+                      
+                      else if(snapshot.hasData){
+                        if(snapshot.data==false)
+                        {
+                            return const Center(child: Text('Could not obtain channels for you'),);
+                        }
+                        else
+                        {return ListView.builder(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            itemCount: homeScreenController.channelData.value.channels!.length,
+            itemBuilder: (context, index) {
+                      return HomeVideoCard(
+                        onTap: (){
+                          Get.to(()=>ChannelDetails(channel: 
+                       homeScreenController.channelData.value.channels![index],
+                ));
+                        },
+                        thumbnailUrl: homeScreenController.channelData.value.channels![index].thumbnail!,
+                        title: homeScreenController.channelData.value.channels![index].name!,
+                        channelName: 'Channel Name',
+                        viewsCount: '1M Subscribers',
+                        duration: '10:00',
+                        avatarUrl: 'https://via.placeholder.com/40x40',
+                        accentColor:  ColorConstants.accentColor,
+                        gradientStartColor: ColorConstants.primaryColor,
+                        gradientEndColor: ColorConstants.secondaryColor,
+                      );
+                      }
+                        );
+                        
+                      
+                    }
+                      
                       }
                       else
-                      {return ListView.builder(
-          shrinkWrap: true,
-          physics: const ClampingScrollPhysics(),
-          itemCount: homeScreenController.channelData.value.channels!.length,
-          itemBuilder: (context, index) {
-                    return HomeVideoCard(
-                      onTap: (){
-                        Get.to(()=>ChannelDetails(channel: 
-                     homeScreenController.channelData.value.channels![index],
-              ));
-                      },
-                      thumbnailUrl: homeScreenController.channelData.value.channels![index].thumbnail!,
-                      title: homeScreenController.channelData.value.channels![index].name!,
-                      channelName: 'Channel Name',
-                      viewsCount: '1M Subscribers',
-                      duration: '10:00',
-                      avatarUrl: 'https://via.placeholder.com/40x40',
-                      accentColor:  ColorConstants.accentColor,
-                      gradientStartColor: ColorConstants.primaryColor,
-                      gradientEndColor: ColorConstants.secondaryColor,
-                    );
+                      {
+                         return const Center(child: Text('Could not obtain channels for you'),);
+                      }
                     }
-                      );
-                      
-                    
-                  }
-                    
-                    }
-                    else
-                    {
-                       return const Center(child: Text('Could not obtain channels for you'),);
-                    }
-                  }
-                )
-
-              ],
+                  )
+          
+                ],
+              ),
             ),
           ),
         ],

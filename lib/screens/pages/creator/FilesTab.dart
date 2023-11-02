@@ -2,9 +2,11 @@ import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:educationadmin/screens/common/PdfView.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannelsController.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:sizer/sizer.dart';
 class FilesTab extends StatefulWidget {
   const FilesTab({
     super.key,
@@ -155,21 +157,31 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
                                   itemCount: channelsController.fileData.value.data!.files!.length, // Adjust the number of file items
                                   itemBuilder: (context, index) {
                                     return Card(
+                                      color: CustomColors.tileColour,
                                       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                       elevation: 4,
                                       child: ListTile(
                                         onTap: () { Get.to(()=>PdfView(file: files![index]));},
                                         contentPadding: const EdgeInsets.all(10),
-                                        leading: Image.network(
-                                          'https://img.freepik.com/free-photo/clipboard-with-checklist-paper-note-icon-symbol-purple-background-3d-rendering_56104-1491.jpg?w=826&t=st=1698135465~exp=1698136065~hmac=cadd6ad00463dcae2be4df14c42d6b256a018d075562de67de8327ad7cadd052', // Replace with the actual file thumbnail URL
-                                          width: 80, // Adjust the thumbnail size as needed
-                                        ),
+                                        leading: CachedNetworkImage(
+                              colorBlendMode: BlendMode.darken,
+                                              imageUrl: 'https://img.freepik.com/free-photo/clipboard-with-checklist-paper-note-icon-symbol-purple-background-3d-rendering_56104-1491.jpg?w=826&t=st=1698135465~exp=1698136065~hmac=cadd6ad00463dcae2be4df14c42d6b256a018d075562de67de8327ad7cadd052',
+                            placeholder: (context, url) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover,
+                              // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            fit: BoxFit.cover,
+                                            ),
                                         title: Text(
                                           '${files![index].title}',
-                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                          style:  TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold,color: CustomColors.secondaryColor),
                                         ),
-                                        subtitle:  Text(
-                                            '${files![index].description}'), // You can display file size or other information here
+                                        // You can display file size or other information here
                                         trailing: PopupMenuButton<String>(
                               icon: const Icon(Icons.more_vert, color: Colors.white), // Icon color is green
                               itemBuilder: (context) {

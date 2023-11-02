@@ -29,10 +29,11 @@ class _MainWrapperState extends State<MainWrapper> {
     return Scaffold(
       
       bottomNavigationBar: BottomAppBar(
-        elevation: 0,
+       
+        
         notchMargin: 10,
         child: Container(
-          
+          //color: Theme.of(context).appBarTheme.backgroundColor,
           padding:  EdgeInsets.symmetric( vertical: Get.bottomBarHeight),
           child: Obx(
             () => WillPopScope(
@@ -97,14 +98,14 @@ class _MainWrapperState extends State<MainWrapper> {
     return ZoomTapAnimation(
       onTap: () => _mainWrapperController.goToTab(page),
       child: Container(
-        color: Colors.transparent,
+        
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
               color: _mainWrapperController.currentPage == page
-                  ? ColorConstants.appColors
+                  ? CustomColors.primaryColor
                   : Colors.grey,
               size: 2.5.h,
             ),

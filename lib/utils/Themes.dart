@@ -1,4 +1,6 @@
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sizer/sizer.dart';
 
@@ -28,31 +30,42 @@ static final submittedPinTheme = defaultPinTheme.copyWith(
 );
 
  static ThemeData lightTheme = ThemeData(
-  useMaterial3: true,
-   scaffoldBackgroundColor: Colors.white,//const Color(0xffECE2D0),
-        primaryColor: const Color(0xffE78F8E),
-        primaryColorDark: const Color(0xff8B8BAE),
+ useMaterial3: true,
+   scaffoldBackgroundColor: const Color(0xFFF7FFF7),//const Color(0xffECE2D0),
+        primaryColor: const Color(0xFF4ECDC4),
+        
+        primaryColorDark: const Color(0xff00201E),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Colors.white
+    backgroundColor: Color(0xFFF7FFF7)
   ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.white,
-    foregroundColor: Colors.black,
+    elevation: 2,
+    systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: CustomColors.primaryColor,systemNavigationBarColor: Colors.white ),
+    backgroundColor: CustomColors.secondaryColor,
+    foregroundColor: CustomColors.primaryColor,
     
   )
  );
  static ThemeData darkTheme = ThemeData(
   useMaterial3: true,
-   scaffoldBackgroundColor:Colors.white, //const Color(0xffECE2D0),
-        primaryColor: const Color(0xffE78F8E),
-        primaryColorDark: const Color(0xff8B8BAE),
+   scaffoldBackgroundColor:const Color(0xFFF7FFF7), //const Color(0xffECE2D0),
+          primaryColor: const Color(0xFF4ECDC4),
+        
+        primaryColorDark: const Color(0xff00201E),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-    backgroundColor: Colors.white
+    backgroundColor:  Color(0xFFF7FFF7)
   ),
-   appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.white,
-    foregroundColor: Colors.black,
+  appBarTheme: const AppBarTheme(
+   systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: CustomColors.primaryColor,systemNavigationBarColor: Colors.white ),
+      backgroundColor: CustomColors.secondaryColor,
+    foregroundColor: CustomColors.primaryColor,
+    elevation: 2,
     
+  ),
+  bottomAppBarTheme: BottomAppBarTheme(
+    
+    shadowColor: Colors.grey.shade300,
+    elevation: 2,
   )
  );
 }

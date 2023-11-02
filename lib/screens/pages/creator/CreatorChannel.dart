@@ -1,9 +1,10 @@
 import 'dart:io';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:circular_menu/circular_menu.dart';
 import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/screens/pages/creator/ChannelOptionController.dart';
 import 'package:educationadmin/screens/pages/creator/DescriptionTab.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -264,6 +265,7 @@ final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: CircularMenu(
         alignment: Alignment.bottomRight,
         toggleButtonColor:
@@ -300,11 +302,11 @@ final _formKey = GlobalKey<FormState>();
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                foregroundColor: Colors.white,
+                foregroundColor: CustomColors.secondaryColor,
                 expandedHeight: Get.height * 0.25,
                 pinned: true,
                 floating: false,
-                backgroundColor: Colors.red, // YouTube red color
+                backgroundColor: CustomColors.createrColour, // YouTube red color
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
@@ -312,12 +314,25 @@ final _formKey = GlobalKey<FormState>();
                     style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        color: CustomColors.secondaryColor),
                   ),
-                  background: Image.network(
-                    'https://img.freepik.com/free-photo/multi-color-fabric-texture-samples_1373-434.jpg?t=st=1698132567~exp=1698133167~hmac=4cefa7b45b26f445d5823b41320e1c572ef6a98f6313f54ce351f818b03cc26e',
+                  background: CachedNetworkImage(
+                              colorBlendMode: BlendMode.darken,
+                                              imageUrl: widget.channel.thumbnail!,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover,
+                              // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            fit: BoxFit.cover,
+                                            ),/*Image.network(
+                    widget.channel.thumbnail!,
                     fit: BoxFit.cover,
-                  ),
+                  ),*/
                 ),
               ),
               SliverPersistentHeader(

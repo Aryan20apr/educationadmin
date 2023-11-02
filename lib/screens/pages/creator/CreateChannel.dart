@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:flutter/material.dart';
@@ -66,18 +67,18 @@ class CreateChannelState extends State<CreateChannel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-               ClipPath(
-                clipper: WaveClipperTwo(reverse: true),
+               Padding(
+                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                  child: Container(
                   decoration: BoxDecoration(
                     color: Colors.greenAccent.shade100,
-                    //borderRadius: BorderRadius.all(Radius.circular(20))
+                    borderRadius: BorderRadius.all(Radius.circular(20))
                   ),
                    child: Padding(
                      padding: const EdgeInsets.all(16.0),
                      child: Column(
                        children: [
-                        SizedBox(height: Get.height*0.08,),
+                        SizedBox(height: Get.height*0.04,),
                          Text("Channel Name",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold),),
                           TextFormField(
                             decoration: InputDecoration(
@@ -103,12 +104,12 @@ class CreateChannelState extends State<CreateChannel> {
                  ),
                ),
                  //SizedBox(height: Get.height*0.05),
-                 ClipPath(
-                  clipper: SideCutClipper(),
+                 Padding(
+                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                    child: Container(
                     decoration: BoxDecoration(
                     color: Colors.greenAccent.shade100,
-                   // borderRadius: BorderRadius.all(Radius.circular(20))
+                   borderRadius: BorderRadius.all(Radius.circular(20))
                                  ),
                      child: Padding(
                        padding: const EdgeInsets.all(16.0),
@@ -126,10 +127,11 @@ class CreateChannelState extends State<CreateChannel> {
                                           width: Get.height*0.2,
                                           height: Get.width*0.8,
                                         )
-                                      : Icon(Icons.camera_alt, size: Get.height*0.15, color: Colors.grey),
+                                      : Icon(Icons.camera_alt, size: Get.height*0.15, color: CustomColors.secondaryColor),
                                 ),
                                  SizedBox(height: Get.height*0.02),
                                 ElevatedButton(
+                                   style: ElevatedButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
                                   onPressed: () {
                                     controller.pickImage();
                                   },
@@ -144,12 +146,12 @@ class CreateChannelState extends State<CreateChannel> {
                    ),
                  ),
                  //SizedBox(height: Get.height*0.05),
-                ClipPath(
-                  clipper: WaveClipperTwo(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical:8.0),
                   child: Container(
                     decoration: BoxDecoration(
                     color: Colors.greenAccent.shade100,
-                   // borderRadius: BorderRadius.all(Radius.circular(20))
+                   borderRadius: BorderRadius.all(Radius.circular(20))
                   ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -208,12 +210,15 @@ class CreateChannelState extends State<CreateChannel> {
                  //SizedBox(height: Get.height*0.1),
                 Obx(
                   ()=> controller.isLoading.value==false? Center(
-                    child: ElevatedButton(
-                    
-                      onPressed: _createChannel,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Create Channel"),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:16.0),
+                      child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(minimumSize: Size(Get.width*0.7, Get.height*0.05),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
+                        onPressed: _createChannel,
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text("Create Channel"),
+                        ),
                       ),
                     ),
                   ):Center(

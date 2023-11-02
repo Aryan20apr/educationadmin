@@ -2,7 +2,9 @@ import 'dart:developer';
 
 
 
+
 import 'package:educationadmin/authentication/LoginScreen.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
@@ -62,11 +64,11 @@ class FirstScreen extends StatelessWidget {
 
   Scaffold waitingView() {
     return  Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: CustomColors.secondaryColor,
         body:  Center(
       child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(child: SizedBox(height: Get.height*0.05,child: CircularProgressIndicator())),
+        padding:const  EdgeInsets.all(16.0),
+        child: Center(child: SizedBox(height: Get.height*0.05,child:const CircularProgressIndicator())),
       ),
     ));
   }

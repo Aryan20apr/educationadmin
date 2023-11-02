@@ -3,6 +3,7 @@
 
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
 import 'package:educationadmin/screens/common/VideoScreen.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 
 import 'package:educationadmin/utils/Controllers/ChanneResourcelController.dart';
 import 'package:flutter/material.dart';
@@ -159,7 +160,7 @@ class _VideoResourcesTabState extends State<VideoResourcesTab> {
                       style: ListTileStyle.list,
                       enableFeedback: true,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                      tileColor: Colors.purple.shade100,
+                      tileColor: CustomColors.tileColour,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                       leading: Container(
                         padding: const EdgeInsets.only(right: 12.0),
@@ -167,22 +168,22 @@ class _VideoResourcesTabState extends State<VideoResourcesTab> {
                           borderRadius: BorderRadius.circular(10.0),
                           gradient: _buildTileGradient(), // Use the custom gradient
                         ),
-                        child: const Icon(Icons.picture_as_pdf, color: Colors.white),
+                        child: const Icon(Icons.picture_as_pdf, color: CustomColors.secondaryColor),
                       ),
                       title: Text(
                         "${videos![index].title}",
-                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                        style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
                       ),
                       subtitle: Row(
                         children: <Widget>[
-                          const Icon(Icons.linear_scale, color: Colors.yellowAccent),
+                          const Icon(Icons.linear_scale, color: CustomColors.accentColor),
                           Text(
-                            videos![index].description ?? "",
-                            style: const TextStyle(color: Colors.black),
+                            videos[index].description ?? "",
+                            style: const TextStyle(color: CustomColors.secondaryColor),
                           )
                         ],
                       ),
-                      trailing: Icon(Icons.arrow_circle_right_outlined),
+                      trailing: Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
                     ),
                   );
                 },

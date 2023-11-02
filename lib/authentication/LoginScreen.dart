@@ -32,7 +32,7 @@ late TextEditingController passwordController;
   Widget build(BuildContext context) {
     final AuthenticationViewModal authenticationViewModel = Get.put(AuthenticationViewModal());
     return  Scaffold(
-    
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: ()=> FocusScope.of(context).unfocus(),
@@ -102,6 +102,8 @@ late TextEditingController passwordController;
                         authenticationViewModel.login(password: passwordController.text, phone: phoneNumberController.text);
                       },
                       style: ElevatedButton.styleFrom(
+                          backgroundColor:  Theme.of(context).primaryColor,
+                          foregroundColor:  Theme.of(context).primaryColorDark,
                         maximumSize: Size(constraints.maxWidth*0.8,constraints.maxHeight*0.2),
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
@@ -109,6 +111,7 @@ late TextEditingController passwordController;
                         ),
                       ),
                       child: Container(
+                        
                         width: double.infinity,
                         alignment: Alignment.center,
                         child: Obx(()=>authenticationViewModel.isLoading.value?  const CircularProgressIndicator.adaptive():  Text(
@@ -116,6 +119,7 @@ late TextEditingController passwordController;
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
+                            
                           ),
                         ),)
                       ),
@@ -128,10 +132,10 @@ late TextEditingController passwordController;
                           style: TextStyle(fontSize:12.sp,fontWeight: FontWeight.w300),
                         ),
                         TextButton(
-                          style: TextButton.styleFrom(textStyle: TextStyle(fontSize:12.sp,fontWeight: FontWeight.bold)), onPressed: () { 
+                          style: TextButton.styleFrom(foregroundColor:  Theme.of(context).primaryColorDark,textStyle: TextStyle(color:  Theme.of(context).primaryColorDark,fontSize:12.sp,fontWeight: FontWeight.bold)), onPressed: () { 
                             Get.to(()=>const PhoneVerification());
                            },
-                          child:const Text('Sign up'),
+                          child:const Text('Sign up',),
                         ),
                         ]
                     ),

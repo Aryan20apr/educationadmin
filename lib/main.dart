@@ -16,7 +16,7 @@ void main() async{
    WidgetsFlutterBinding.ensureInitialized();
    
   runApp(  DevicePreview(
-    enabled: !kReleaseMode,
+    enabled: kReleaseMode,
     builder: (context) => const MyApp(), // Wrap your app
   ),);
 }

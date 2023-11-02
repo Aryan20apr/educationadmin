@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '../../../utils/ColorConstants.dart';
 class VideosTab extends StatefulWidget {
   const VideosTab({
     super.key,
@@ -73,20 +76,37 @@ List<Videos> videos=[];
                                      itemCount: channelsController.videoData.value.data!.videos!.length, // Adjust the number of video items
                                      itemBuilder: (context, index) {
                                        return Card(
+                                        color: CustomColors.tileColour,
+                                        shape:const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                          elevation: 4,
                                          child: ListTile(
+                                          
+                                          style:ListTileStyle.list,
+                                          //tileColor:CustomColors.tileColour,
                                            onTap: () {
                                               Get.to(() => YouTubePlayerScreen(video: videos[index]));
                                            },
                                            contentPadding: const EdgeInsets.all(10),
-                                           leading: Image.network(
-                                               'https://img.freepik.com/free-photo/multi-color-fabric-texture-samples_1373-434.jpg?t=st=1698132567~exp=1698133167~hmac=4cefa7b45b26f445d5823b41320e1c572ef6a98f6313f54ce351f818b03cc26e'),
+                                           leading: CachedNetworkImage(
+                              colorBlendMode: BlendMode.darken,
+                                              imageUrl: 'https://img.freepik.com/free-photo/multi-color-fabric-texture-samples_1373-434.jpg?t=st=1698132567~exp=1698133167~hmac=4cefa7b45b26f445d5823b41320e1c572ef6a98f6313f54ce351f818b03cc26e',
+                            placeholder: (context, url) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover,
+                              // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            fit: BoxFit.cover,
+                                            ),
                                            title: Text(
                                              '${videos[index].title}',
-                                             style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
+                                             style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold,color: CustomColors.secondaryColor),
                                            ),
-                                           subtitle: const Text('Video Views: 10K'),
+                                           
                                            trailing: PopupMenuButton<String>(
                                  icon: const Icon(Icons.more_vert, color: Colors.white), // Icon color is green
                                  itemBuilder: (context) {
@@ -95,9 +115,9 @@ List<Videos> videos=[];
                                        value: 'edit',
                                        child: Row(
                                          children: <Widget>[
-                                           Icon(Icons.edit, color: Colors.green), // Edit icon is green
+                                           Icon(Icons.edit, color: CustomColors.primaryColorDark), // Edit icon is green
                                            SizedBox(width: 8),
-                                           Text('Edit', style: TextStyle(color: Colors.green)),
+                                           Text('Edit', style: TextStyle(color: CustomColors.primaryColorDark)),
                                          ],
                                        ),
                                      ),
@@ -105,9 +125,9 @@ List<Videos> videos=[];
                                        value: 'delete',
                                        child: Row(
                                          children: <Widget>[
-                                           Icon(Icons.delete, color: Colors.green), // Delete icon is green
+                                           Icon(Icons.delete, color: CustomColors.primaryColorDark), // Delete icon is green
                                            SizedBox(width: 8),
-                                           Text('Delete', style: TextStyle(color: Colors.green)),
+                                           Text('Delete', style: TextStyle(color: CustomColors.primaryColorDark)),
                                          ],
                                        ),
                                      ),

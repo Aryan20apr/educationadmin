@@ -41,8 +41,9 @@ class _CreaterHomeState extends State<CreaterHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: ColorConstants.secondaryColor,
+        backgroundColor: CustomColors.accentColor,
         foregroundColor: Colors.white,
         onPressed: () {
           Get.to(()=> CreateChannel())!.then((value) => setState((){
@@ -248,9 +249,9 @@ class VideoCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            if(flag==ListType.Creator)
-            Get.to(() => CreatorChannel(channel: channel,));
-            else
+            if(flag==ListType.Creator) {
+              Get.to(() => CreatorChannel(channel: channel,));
+            } else
             {
                Get.to(() => ChannelDetails(
                  channel: channel,
