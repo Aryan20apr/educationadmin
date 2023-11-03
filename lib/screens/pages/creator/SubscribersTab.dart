@@ -50,6 +50,7 @@ class _SubscribersTabState extends State<SubscribersTab> {
               return const Center(child: Text("No subscribers"));
             } else {
               return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.consumerList.value.consumers!.length, // Adjust the number of subscribers
           
             itemBuilder: (context, index) {

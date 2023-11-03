@@ -39,6 +39,7 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

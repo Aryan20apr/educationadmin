@@ -5,7 +5,7 @@ import 'package:educationadmin/screens/pages/widgets/DefaultCarousel.dart';
 import 'package:educationadmin/utils/Controllers/HomeScreenController.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:infinite_carousel/infinite_carousel.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -27,7 +27,7 @@ final HomeScreenController homeScreenController=Get.put(HomeScreenController());
 
 Future<bool>? isFetchedUser;
 Future<bool>? isFetchedAll;
-  final InfiniteScrollController infiniteScrollController=InfiniteScrollController();
+  
 PageController pageController = PageController(
   initialPage: 1, // Start from the middle item
 );
@@ -265,90 +265,88 @@ FutureBuilder<bool>(
               ),
             ),
           ),
-          Expanded(
-            child: Container(
-              
-              decoration: BoxDecoration(
-               color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey[300]!,
-                    offset: const Offset(0, -2),
-                    blurRadius: 3.0,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
+          Container(
+            
+            decoration: BoxDecoration(
+             color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[300]!,
+                  offset: const Offset(0, -2),
+                  blurRadius: 3.0,
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    
+                    'For You',
+                     // Add the "For You" heading
+                    style: TextStyle(
                       
-                      'For You',
-                       // Add the "For You" heading
-                      style: TextStyle(
-                        
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: ColorConstants.textColor,
-                      ),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.textColor,
                     ),
                   ),
                 ),
-                  FutureBuilder<bool>(
-                    future:isFetchedUser,
-                    builder: (context,snapshot) {
-                      if(snapshot.connectionState==ConnectionState.waiting)
-                      {
-                        return const Center(child: ProgressIndicatorWidget());
-                      }
-                      
-                      else if(snapshot.hasData){
-                        if(snapshot.data==false)
-                        {
-                            return const Center(child: Text('Could not obtain channels for you'),);
-                        }
-                        else
-                        {return ListView.builder(
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            itemCount: homeScreenController.channelData.value.channels!.length,
-            itemBuilder: (context, index) {
-                      return HomeVideoCard(
-                        onTap: (){
-                          Get.to(()=>ChannelDetails(channel: 
-                       homeScreenController.channelData.value.channels![index],
-                ));
-                        },
-                        thumbnailUrl: homeScreenController.channelData.value.channels![index].thumbnail!,
-                        title: homeScreenController.channelData.value.channels![index].name!,
-                        channelName: 'Channel Name',
-                        viewsCount: '1M Subscribers',
-                        duration: '10:00',
-                        avatarUrl: 'https://via.placeholder.com/40x40',
-                        accentColor:  ColorConstants.accentColor,
-                        gradientStartColor: ColorConstants.primaryColor,
-                        gradientEndColor: ColorConstants.secondaryColor,
-                      );
-                      }
-                        );
-                        
-                      
+              ),
+                FutureBuilder<bool>(
+                  future:isFetchedUser,
+                  builder: (context,snapshot) {
+                    if(snapshot.connectionState==ConnectionState.waiting)
+                    {
+                      return const Center(child: ProgressIndicatorWidget());
                     }
-                      
+                    
+                    else if(snapshot.hasData){
+                      if(snapshot.data==false)
+                      {
+                          return const Center(child: Text('Could not obtain channels for you'),);
                       }
                       else
-                      {
-                         return const Center(child: Text('Could not obtain channels for you'),);
-                      }
+                      {return ListView.builder(
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          itemCount: homeScreenController.channelData.value.channels!.length,
+          itemBuilder: (context, index) {
+                    return HomeVideoCard(
+                      onTap: (){
+                        Get.to(()=>ChannelDetails(channel: 
+                     homeScreenController.channelData.value.channels![index],
+              ));
+                      },
+                      thumbnailUrl: homeScreenController.channelData.value.channels![index].thumbnail!,
+                      title: homeScreenController.channelData.value.channels![index].name!,
+                      channelName: 'Channel Name',
+                      viewsCount: '1M Subscribers',
+                      duration: '10:00',
+                      avatarUrl: 'https://via.placeholder.com/40x40',
+                      accentColor:  ColorConstants.accentColor,
+                      gradientStartColor: ColorConstants.primaryColor,
+                      gradientEndColor: ColorConstants.secondaryColor,
+                    );
                     }
-                  )
+                      );
+                      
+                    
+                  }
+                    
+                    }
+                    else
+                    {
+                       return const Center(child: Text('Could not obtain channels for you'),);
+                    }
+                  }
+                )
           
-                ],
-              ),
+              ],
             ),
           ),
         ],

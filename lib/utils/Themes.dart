@@ -44,6 +44,11 @@ static final submittedPinTheme = defaultPinTheme.copyWith(
     backgroundColor: CustomColors.secondaryColor,
     foregroundColor: CustomColors.primaryColor,
     
+  ),
+   bottomAppBarTheme: BottomAppBarTheme(
+    color:CustomColors.secondaryColor,
+    shadowColor: Colors.grey.shade300,
+    elevation: 2,
   )
  );
  static ThemeData darkTheme = ThemeData(
@@ -63,7 +68,7 @@ static final submittedPinTheme = defaultPinTheme.copyWith(
     
   ),
   bottomAppBarTheme: BottomAppBarTheme(
-    
+    color:CustomColors.secondaryColor,
     shadowColor: Colors.grey.shade300,
     elevation: 2,
   )

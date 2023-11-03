@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 import '../../screens/common/MainScreen.dart';
+import '../../utils/ColorConstants.dart';
 
 class AuthenticationViewModal extends GetxController {
 
@@ -49,7 +50,8 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
        isLoading.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
-          middleText: 'Register Error',
+        backgroundColor: CustomColors.secondaryColor,
+          middleText: 'Could not login',
           textConfirm: 'OK',
           confirmTextColor: Colors.white,
           onConfirm: () {

@@ -72,6 +72,7 @@ List<Videos> videos=[];
                         videos=channelsController.videoData.value.data!.videos??[];
                          return Obx(
                            ()=> ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
                                      addAutomaticKeepAlives: true,
                                      itemCount: channelsController.videoData.value.data!.videos!.length, // Adjust the number of video items
                                      itemBuilder: (context, index) {
