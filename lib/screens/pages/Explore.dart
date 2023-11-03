@@ -64,7 +64,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 {
                   if(exploreViewModal.channelData.value.channels==null)
                     {
-                      return Center(child: Text('Could not obtain channels'));
+                      return const Center(child: Text('Could not obtain channels'));
                     }
                    return ListView.builder(
                   itemBuilder: 
@@ -78,15 +78,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Material(
                                             elevation: 20.0,
-                                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                                            borderRadius: const BorderRadius.all(Radius.circular(20)),
                                             child: InkWell(
                                               onTap: (){
                                                 Get.to(()=> ChannelDetails(channel: exploreViewModal.channelData.value.channels![index],));
                                               },
                                               child: Container(
-                                                 decoration: BoxDecoration( shape: BoxShape.rectangle,borderRadius: BorderRadius.all(Radius.circular(20.0))
+                                                 decoration: const BoxDecoration( shape: BoxShape.rectangle,borderRadius: BorderRadius.all(Radius.circular(20.0))
                                                  ),
-                                                  margin: EdgeInsets.all(10),
+                                                  margin: const EdgeInsets.all(10),
                                                   child: Column(
                                                     children: [
                                                       // Title and subtitle
@@ -102,7 +102,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                                
                                                               ),
                                                             ),
-                                                            SizedBox(height: 5),
+                                                            const SizedBox(height: 5),
                                                             Text(
                                                               'Created by ${exploreViewModal.channelData.value.channels![index].createdBy}' ,
                                                              

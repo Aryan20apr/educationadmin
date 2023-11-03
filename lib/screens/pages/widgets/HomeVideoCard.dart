@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 class HomeVideoCard extends StatelessWidget {
   final String thumbnailUrl;
   final String title;
@@ -55,13 +56,47 @@ class HomeVideoCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(8.0)),
-                  child: Image.network(thumbnailUrl, height: Get.height*0.25, width: double.infinity, fit: BoxFit.cover),
-                ),
+                  child: CachedNetworkImage(
+                  height: Get.height*0.25,
+                  width: double.infinity,
+                              colorBlendMode: BlendMode.darken,
+                                              imageUrl: thumbnailUrl,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/default_image.png',
+                              fit: BoxFit.cover,
+                              // Set the height to match the diameter of the CircleAvatar
+                            ),
+                            fit: BoxFit.cover,
+                                            ),
+              ),
+                
                 SizedBox(height: Get.height*0.005),
                 ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(avatarUrl),
+                  leading:    ClipOval(
+                  child: CircleAvatar(
+                    radius: 28,
+                    child: CachedNetworkImage(
+                                      colorBlendMode: BlendMode.darken,
+                                                      imageUrl: '',
+                                    placeholder: (context, url) => ClipOval(
+                                      child: Image.asset(
+                                        'assets/profileicon.jpeg',
+                                        fit: BoxFit.cover // Set the height to match the diameter of the CircleAvatar
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) => Image.asset(
+                                      'assets/profileicon.jpeg',
+                                      fit: BoxFit.cover,
+                                      // Set the height to match the diameter of the CircleAvatar
+                                    ),
+                                    fit: BoxFit.cover,
+                                                    ),
                   ),
+                ),
                   title: Text(
                     title,
                     style: TextStyle(

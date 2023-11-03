@@ -16,7 +16,7 @@ class CreaterChannelsController extends GetxController{
 
   final AuthenticationManager _authmanager = Get.find<AuthenticationManager>();
   final NetworkService networkService=Get.find<NetworkService>();
-final channelData=channellist.Data().obs;
+final Rx<channellist.Data> channelData=channellist.Data().obs;
 
 
 AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();

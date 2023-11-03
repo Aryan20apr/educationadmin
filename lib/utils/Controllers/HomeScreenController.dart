@@ -11,8 +11,8 @@ class HomeScreenController extends GetxController
  final AuthenticationManager _authmanager = Get.find<AuthenticationManager>();
   final NetworkService networkService=Get.find<NetworkService>();
   final UserDetailsManager userDetailsManager=Get.find<UserDetailsManager>();
-final channelData=Data().obs;
-final allChannelData=Data().obs;
+final Rx<Data> channelData=Data().obs;
+final Rx<Data> allChannelData=Data().obs;
 
   Future<bool> getChannels() async
   {

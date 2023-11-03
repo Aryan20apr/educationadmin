@@ -9,7 +9,7 @@ class ExploreViewModal extends GetxController{
 
   final AuthenticationManager _authmanager = Get.find<AuthenticationManager>();
   final NetworkService networkService=Get.find<NetworkService>();
-final channelData=Data().obs;
+final Rx<Data> channelData=Data().obs;
 
   Future<bool> getChannels() async
   {
