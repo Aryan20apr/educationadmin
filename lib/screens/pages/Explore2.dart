@@ -125,8 +125,8 @@ void initState()
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: const ProgressIndicatorWidget(),
+                          padding:  EdgeInsets.all(8.0),
+                          child:  ProgressIndicatorWidget(),
                         );
                       } else if (snapshot.connectionState == ConnectionState.done) {
                         if (exploreViewModal.channelData.value.channels == null) {
@@ -183,8 +183,8 @@ void initState()
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else {
                         return const Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: const ProgressIndicatorWidget(),
+                          padding:  EdgeInsets.all(8.0),
+                          child:  ProgressIndicatorWidget(),
                         );
                       }
                     },

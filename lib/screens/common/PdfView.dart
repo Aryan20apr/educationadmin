@@ -130,13 +130,13 @@ class _PdfViewState extends State<PdfView> with WidgetsBindingObserver{
   }
    @override
   void dispose() {
-    fileController.deleteTempFile(name:widget.file!.title!) ;
+    fileController.deleteTempFile(name:widget.file!.title!,createdAt:widget.file!.createdAt!) ;
     
     super.dispose();
   } 
   Future<File> getFileBytes() async
   {
-    return await fileController.getDecryptedFile(name: widget.file!.title!);
+    return await fileController.getDecryptedFile(name: widget.file!.title!,createdAt:widget.file!.createdAt!);
     
   }
 }

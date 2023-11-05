@@ -21,8 +21,8 @@ class FileDownloadStatusController extends GetxController
    final iv=IV.fromBase64("lbG7rdAT+6tD3j6TqMh05w==");
     final key=Key.fromSecureRandom(32);
   Logger logger=Logger();
-  final isDownloaded=false.obs;
-  final isDownloading=false.obs;
+  RxBool isDownloaded=false.obs;
+ RxBool isDownloading=false.obs;
   final String AES_KEY="Eur91rZ/EKnHbkijT65vK2DKPxoRpASD60SlHkJdXK0=";
 
   void changeDownloadStatus(bool status)
@@ -30,11 +30,11 @@ class FileDownloadStatusController extends GetxController
     isDownloaded.value=status;
   }
 
-  Future<void> checkFileDownloadStatus({required String filename}) async
+  Future<void> checkFileDownloadStatus({required String filename,required String createdAt}) async
   {
       final directory = await getApplicationDocumentsDirectory();
     final filesDirectory = Directory('${directory.path}/files');
-    String filePath='${filesDirectory.path}/$filename.pdf';
+    String filePath='${filesDirectory.path}/${filename}_$createdAt.pdf';
     File encryptedfile=File(filePath);
     bool present= await encryptedfile.exists();
 
@@ -71,7 +71,7 @@ class FileDownloadStatusController extends GetxController
     final filesDirectory = await Directory('${directory.path}/files').create(recursive: true);
     
 
-    String filePath='${filesDirectory.path}/${file.title!}.pdf';
+    String filePath='${filesDirectory.path}/${file.title!}_${file.createdAt}.pdf';
 
    
     logger.i("Length of key is ${key.length} and key is ${key.bytes}");
@@ -112,11 +112,11 @@ class FileDownloadStatusController extends GetxController
 
  
 
-Future<File> getDecryptedFile({required String name}) async
+Future<File> getDecryptedFile({required String name,required String createdAt}) async
 {
      final directory = await getApplicationDocumentsDirectory();
     final filesDirectory = Directory('${directory.path}/files');
-    String filePath='${filesDirectory.path}/$name.pdf';
+    String filePath='${filesDirectory.path}/${name}_$createdAt.pdf';
     File encryptedfile=File(filePath );
     bool isPresent=await encryptedfile.exists();
     logger.i("File at path $filePath is present $isPresent");
@@ -140,7 +140,7 @@ Future<File> getDecryptedFile({required String name}) async
 
     //return encryptedfile;
 
-     final decryptedFilePath = '${filesDirectory.path}/${name}_decrypted.pdf';
+     final decryptedFilePath = '${filesDirectory.path}/${name}_${createdAt}_decryptedfile.pdf';
      final decryptedFile = File(decryptedFilePath);
     
 
@@ -152,14 +152,14 @@ Future<File> getDecryptedFile({required String name}) async
  Future<dynamic> download({required String url}) async
 {
   try{
-    String token=url.substring(url.indexOf("token")+7,url.indexOf("_gl"));
-    String alt=url.substring( url.indexOf("alt=")+5,url.indexOf("token="));
-    String gl=url.substring(url.indexOf("_gl=")+5);
-    Map<String,String> query={
-      "token":token,
-      "alt":alt,
-      "_gl":gl
-    };
+    // String token=url. substring(url.indexOf("token")+7,url.indexOf("_gl"));
+    // String alt=url.substring( url.indexOf("alt=")+5,url.indexOf("token="));
+    // String gl=url.substring(url.indexOf("_gl=")+5);
+    // Map<String,String> query={
+    //   "token":token,
+    //   "alt":alt,
+    //   "_gl":gl
+    // };
     // Response response =await Dio().get(url.substring(0,url.indexOf("?")),options: Options(responseType: ResponseType.bytes,
     //         followRedirects: false,contentType: "application/pdf"),queryParameters: query);
     // logger.i(response.data);
@@ -174,21 +174,21 @@ Future<File> getDecryptedFile({required String name}) async
     logger.e(e.toString());
   }
 }
-void deleteTempFile({required String name}) async
+void deleteTempFile({required String name,required String createdAt}) async
 {
   final directory = await getApplicationDocumentsDirectory();
     final filesDirectory = Directory('${directory.path}/files');
-    final decryptedFilePath = '${filesDirectory.path}/${name}_decrypted.pdf';
+    final decryptedFilePath = '${filesDirectory.path}/${name}_${createdAt}_decrypted.pdf';
     final decryptedFile = File(decryptedFilePath);
     if(await decryptedFile.exists())
     decryptedFile.delete(recursive: false);
 }
-void deleteFile({required String name}) async
+void deleteFile({required String name,required String createdAt}) async
 {
 
   final directory = await getApplicationDocumentsDirectory();
     final filesDirectory = Directory('${directory.path}/files');
-    String filePath='${filesDirectory.path}/$name.pdf';
+    String filePath='${filesDirectory.path}/${name}_$createdAt.pdf';
     File encryptedfile=File(filePath );
     encryptedfile.delete(recursive: false);
     changeDownloadStatus(false);

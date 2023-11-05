@@ -1,5 +1,6 @@
 
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
+import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Controllers/ChanneResourcelController.dart';
 import 'package:educationadmin/utils/Controllers/FileDownloadStatusController.dart';
@@ -54,10 +55,10 @@ void onRefresh() async {
                
                  if(snapshot.connectionState==ConnectionState.waiting)
                 {
-               return  Center(
+               return  const Center(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(child: SizedBox(height: Get.height*0.05,child: const CircularProgressIndicator())),
+            padding: EdgeInsets.all(16.0),
+            child: Center(child: ProgressIndicatorWidget()),
           ),
             );
                 }
@@ -78,8 +79,8 @@ void onRefresh() async {
                   itemBuilder: (context, index) {
                     
                     List<Files>? files=data.files;
-                    FileDownloadStatusController fileController=Get.put(FileDownloadStatusController(),tag: files![index].title);
-                    fileController.checkFileDownloadStatus(filename:files[index].title!);
+                    FileDownloadStatusController fileController=Get.put(FileDownloadStatusController(),tag: files![index].link);
+                    fileController.checkFileDownloadStatus(filename:files[index].title!,createdAt: files[index].createdAt!);
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical:8.0),
                       child: ListTile(
@@ -111,7 +112,7 @@ void onRefresh() async {
                       ],
                               ),
                               trailing: Obx(()=>(fileController.isDownloading.value? LoadingAnimationWidget.threeArchedCircle(color: Colors.white, size: Get.width*0.05):IconButton(onPressed: () {
-                               fileController.isDownloaded.value==false?fileController.downloadFile(file:files[index]): fileController.deleteFile(name:files[index].title!);
+                               fileController.isDownloaded.value==false?fileController.downloadFile(file:files[index]): fileController.deleteFile(name:files[index].title!,createdAt: files[index].createdAt!);
                               }
                               ,icon: Obx(() => Icon(fileController.isDownloaded.value? Icons.check_circle_outline_rounded:Icons.download, color: CustomColors.accentColor,),)))),
                     )

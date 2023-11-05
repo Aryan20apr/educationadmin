@@ -11,6 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+
+import 'ImagePickerController.dart';
 class CreateChannel extends StatefulWidget {
   const CreateChannel({super.key});
 
@@ -240,73 +242,3 @@ class CreateChannelState extends State<CreateChannel> {
     );
   }
 }
-class ConcaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    double concavity = 20; // Adjust the concavity as needed
-
-    var path = Path()
-      ..lineTo(0, size.height)
-      ..lineTo(0, concavity)
-      ..quadraticBezierTo(size.width / 2, concavity * 2, size.width, concavity)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
-  }
-}
-class ImagePickerController extends GetxController {
-  RxString imagePath = ''.obs;
-  RxString channelName="".obs;
-  RxInt channelPrice=0.obs;
-  RxBool isChannelPaid=false.obs;
-  RxBool isLoading=false.obs;
-  void pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      imagePath.value = pickedFile.path;
-    }
-  }
-  
-  Future<void> createChannel() async{
-    isLoading.value=true;
-    NetworkService networkService=NetworkService();
-    AuthenticationManager authmanager=Get.put(AuthenticationManager());
-     String? token=await authmanager.getToken();
-     Logger().e("Is channel completely paid ${isChannelPaid}");
-    CreateChannelResponseModal modal=await networkService.createChannel(token:token,file: XFile(imagePath.value), isCompletelyPaid: isChannelPaid.value, name: channelName.value, price: channelPrice.value);
-    if(modal.data!=null)
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel Created Successfully',duration: Duration(seconds: 3),));
-    }
-    else
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel Could not be created',duration: Duration(seconds: 3)));
-    }
-    isLoading.value=false;
-  }
-  Future<void> updateChannel(int channelId) async{
-    isLoading.value=true;
-    NetworkService networkService=NetworkService();
-    AuthenticationManager authmanager=Get.put(AuthenticationManager());
-     String? token=await authmanager.getToken();
-     Logger().e("Is channel completely paid ${isChannelPaid}");
-    CreateChannelResponseModal modal=await networkService.editChannel(token:token,file:imagePath.value.isNotEmpty? XFile(imagePath.value):null,  name: channelName.value, channelid: channelId);
-    if(modal.data!=null)
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel Updated Successfully',duration: Duration(seconds: 3),));
-    }
-    else
-    {
-      Get.showSnackbar(const GetSnackBar(message: 'Channel could not be updated',duration: Duration(seconds: 3)));
-    }
-    isLoading.value=false;
-  }
-} 

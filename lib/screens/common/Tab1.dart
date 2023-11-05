@@ -3,6 +3,7 @@
 
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
 import 'package:educationadmin/screens/common/VideoScreen.dart';
+import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 
 import 'package:educationadmin/utils/Controllers/ChanneResourcelController.dart';
@@ -55,10 +56,10 @@ void onRefresh() async {
             future: isFetched,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(child: SizedBox(height: Get.height * 0.05, child: const CircularProgressIndicator())),
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(child: ProgressIndicatorWidget()),
                   ),
                 );
               } else if (snapshot.hasError) {

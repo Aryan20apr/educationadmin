@@ -47,50 +47,57 @@ bool _isSearchBarOpen = false;
       appBar: AppBar(
         title:  Text(widget.channel.name!),
       ),
-      body: Padding(
-        padding:const EdgeInsets.symmetric(horizontal: 20),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              SizedBox(height: Get.height*0.05),
-              Container(
-                
-                // height: 50,
-                width: Get.width*0.8,
-                decoration: BoxDecoration(
-                    color:Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(20)),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: TabBar(
-                  indicatorPadding:const EdgeInsets.all(0),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: [
+          
+            Container(
+              color: CustomColors.secondaryColor.withOpacity(1),
+              width: Get.width,
+              child: Padding(
+                padding: const EdgeInsets.only(left:10.0,right: 10.0,top: 10.0),
+                child: Container(
                   
-                  onTap: (index){
-                    setState(() {
-                      tabController.index=index;
-                    });
-                  },
-                  labelPadding: EdgeInsets.zero,
-                  unselectedLabelColor: Colors.black,
-                  labelColor: Colors.black,
-                  indicatorColor: CustomColors.accentColor,
-                  splashBorderRadius: BorderRadius.circular(20),
-                  indicator: BoxDecoration(                    color: CustomColors.accentColor,
-                      borderRadius:BorderRadius.circular(20)
+                  // height: 50,
+                  
+                  decoration: BoxDecoration(
+                      color:Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20)),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: TabBar(
+                    indicatorPadding:const EdgeInsets.all(0),
+                    
+                    onTap: (index){
+                      setState(() {
+                        tabController.index=index;
+                      });
+                    },
+                    labelPadding: EdgeInsets.zero,
+                    unselectedLabelColor: Colors.black,
+                    labelColor: Colors.black,
+                    indicatorColor: CustomColors.accentColor,
+                    splashBorderRadius: BorderRadius.circular(20),
+                    indicator: BoxDecoration(                    color: CustomColors.accentColor,
+                        borderRadius:BorderRadius.circular(20)
+                    ),
+                    controller: tabController,
+                    tabs: const [
+                      Tab(
+                         child: Center(child: Text('Videos')),
+                      ),
+                      Tab(
+                        child: Center(child: Text('Resources')),
+                      ),
+                        
+                    ],
                   ),
-                  controller: tabController,
-                  tabs: const [
-                    Tab(
-                       child: Center(child: Text('Videos')),
-                    ),
-                    Tab(
-                      child: Center(child: Text('Resources')),
-                    ),
-                      
-                  ],
                 ),
               ),
-              Expanded(
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left:10.0,right: 10.0,bottom: 10.0,),
                 child: TabBarView(
                   controller: tabController,
                   children: [
@@ -105,9 +112,9 @@ bool _isSearchBarOpen = false;
                     ),
                   ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
