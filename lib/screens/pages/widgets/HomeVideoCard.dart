@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import '../../../utils/ColorConstants.dart';
 class HomeVideoCard extends StatelessWidget {
   final String thumbnailUrl;
   final String title;
@@ -38,11 +40,12 @@ class HomeVideoCard extends StatelessWidget {
             margin: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
-              gradient: LinearGradient(
-                colors: [gradientStartColor, gradientEndColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+              color: CustomColors.primaryColorDark,
+              // gradient: LinearGradient(
+              //   colors: [gradientStartColor, gradientEndColor],
+              //   begin: Alignment.topCenter,
+              //   end: Alignment.bottomCenter,
+              // ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey[300]!,
@@ -102,23 +105,23 @@ class HomeVideoCard extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12.sp,
-                      color: Colors.white,
+                      color: CustomColors.accentColor
                     ),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(channelName, style:const TextStyle(color: Colors.white)),
+                      Text(channelName, style:const TextStyle(color: CustomColors.accentColor)),
                       Row(
                         children: [
-                          Text(viewsCount, style:const TextStyle(color: Colors.white)),
+                          Text(viewsCount, style:const TextStyle(color: CustomColors.accentColor)),
                          const SizedBox(width: 8.0),
-                          Text(duration, style: const TextStyle(color: Colors.white)),
+                          Text(duration, style: const TextStyle(color: CustomColors.accentColor)),
                         ],
                       ),
                     ],
                   ),
-                  trailing: const Icon(Icons.more_vert, color: Colors.white),
+                  trailing: const Icon(Icons.more_vert, color: CustomColors.accentColor),
                 ),
               ],
             ),

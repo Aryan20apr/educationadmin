@@ -31,8 +31,9 @@ class _VideosTabState extends State<VideosTab> {
 List<Videos> videos=[];
   // Add this function to handle the pull-to-refresh
   void _onRefresh() async {
-    await channelsController.getChannelVideos(channelId: widget.channelId);
+    bool result= await channelsController.getChannelVideos(channelId: widget.channelId);
     setState(() {
+      isFetched=Future.delayed(Duration.zero,()=>result);
       videos=channelsController.videoData.value.data!.videos??[];
     });
     _refreshController.refreshCompleted(); // Complete the refresh

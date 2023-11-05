@@ -95,8 +95,14 @@ bool _isSearchBarOpen = false;
                   controller: tabController,
                   children: [
                     
-                     VideoResourcesTab(channelId: widget.channel.id!,),
-                    FileResourcesTab(channelId: widget.channel.id!,),
+                     Padding(
+                       padding: const EdgeInsets.only(top:8.0),
+                       child: VideoResourcesTab(channelId: widget.channel.id!,),
+                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top:8.0),
+                      child: FileResourcesTab(channelId: widget.channel.id!,),
+                    ),
                   ],
                 ),
               )

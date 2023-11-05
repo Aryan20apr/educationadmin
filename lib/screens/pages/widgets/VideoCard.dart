@@ -2,6 +2,7 @@ import 'package:educationadmin/Modals/ChannelListModal.dart';
 import 'package:educationadmin/screens/common/ChannelDetails.dart';
 import 'package:educationadmin/screens/pages/creator/CreatorChannel.dart';
 import 'package:educationadmin/screens/pages/creator/EditChannelScreen.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Flag.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,11 +35,12 @@ class VideoCard extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        gradient: LinearGradient(
-          colors: [gradientStartColor, gradientEndColor],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+        color: CustomColors.primaryColorDark,
+        // gradient: LinearGradient(
+        //   colors: [gradientStartColor, gradientEndColor],
+        //   begin: Alignment.topCenter,
+        //   end: Alignment.bottomCenter,
+        // ),
         boxShadow: [
           BoxShadow(
             color: Colors.grey[300]!,
@@ -111,7 +113,7 @@ class VideoCard extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 12.sp,
-                    color: Colors.white,
+                    color: CustomColors.accentColor,
                   ),
                 ),
                 subtitle: Column(
@@ -121,7 +123,7 @@ class VideoCard extends StatelessWidget {
                     Row(
                       children: [
                         Text('₹${channel.price??""}',
-                            style: const TextStyle(color: Colors.white)),
+                            style: const TextStyle(  color: CustomColors.accentColor,)),
                         const SizedBox(width: 8.0),
                        
                       ],
@@ -129,7 +131,7 @@ class VideoCard extends StatelessWidget {
                   ],
                 ),
                 trailing: PopupMenuButton<String>(
-      icon: const Icon(Icons.more_vert, color: Colors.white), // Icon color is green
+      icon: const Icon(Icons.more_vert,   color: CustomColors.accentColor,), // Icon color is green
       itemBuilder: flag==ListType.Creator? getCreatorItem:getExploreItem,
       onSelected: (value) async{
         if (value == 'edit') {

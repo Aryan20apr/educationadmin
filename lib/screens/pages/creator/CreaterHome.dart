@@ -67,161 +67,163 @@ isChannelFetched=Future.delayed(Duration.zero,()=>result);
           highlightElevation: 50,
           child:const Icon(Icons.add),
         ),
-        body: SmartRefresher(
-          controller: refreshController,
-          onRefresh: onRefresh,
-          child: ListView(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.tealAccent,
-                      Colors.teal
-                    ], // Light gradient background
-                  ),
-                ),
-                padding: const EdgeInsets.all(16.0),
-                child: LayoutBuilder(
-                  builder: (context, usercardconstra) {
-                    return Row(
-                      children: [
-                        SizedBox(width: Get.width * 0.05),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return <Widget>[
+               SliverAppBar(
+                collapsedHeight:   MediaQuery.of(context).size.height * .10,
+                expandedHeight:   MediaQuery.of(context).size.height * .10, // Adjust the height as needed
+                floating: false,
+                pinned: false,
+                flexibleSpace:  Container(
+                  height:   MediaQuery.of(context).size.height * .10,
+                width:   MediaQuery.of(context).size.height * .10, 
+                    decoration: const BoxDecoration(
+                      color: CustomColors.primaryColorDark
+                      // gradient: LinearGradient(
+                      //   begin: Alignment.topCenter,
+                      //   end: Alignment.bottomCenter,
+                      //   colors: [
+                      //     Colors.tealAccent,
+                      //     Colors.teal
+                      //   ], // Light gradient background
+                      // ),
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                    child: LayoutBuilder(
+                      builder: (context, usercardconstra) {
+                        return Row(
                           children: [
-                            Text(
-                              'Your Channels', // Replace with the user's name
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                                color: ColorConstants.textColor,
-                              ),
-                            ),
-                            SizedBox(height: Get.height * 0.01),
-                            Row(
+                            SizedBox(width: Get.width * 0.05),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.check_circle,
-                                  size: 12.sp,
-                                  color: ColorConstants.accentColor,
-                                ),
-                                const SizedBox(width: 4.0),
                                 Text(
-                                  '123K Total Followers', // Replace with user-related details
+                                  'Your Channels', // Replace with the user's name
                                   style: TextStyle(
-                                    color: ColorConstants.textColor,
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: CustomColors.accentColor
                                   ),
                                 ),
+                                SizedBox(height: Get.height * 0.01),
+                               
                               ],
                             ),
                           ],
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white, // Background color of the bottom sheet
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(16.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[300]!,
-                      offset: const Offset(0, -2),
-                      blurRadius: 3.0,
-                    ),
-                  ],
-                ),
-                child: FutureBuilder<bool>(
-                  future: isChannelFetched,
-                  builder: (context,snapshot) {
-                    if(ConnectionState.waiting==snapshot.connectionState)
-                    {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: const ProgressIndicatorWidget(),
                         );
-                    }
-                    else if(ConnectionState.done==snapshot.connectionState)
-                    {
-                      if(snapshot.data==false)
+                      },
+                    ),
+                  ),
+              )
+            ];
+          },
+          body: SmartRefresher(
+            controller: refreshController,
+            onRefresh: onRefresh,
+            child: ListView(
+              children: [
+               
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Background color of the bottom sheet
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(16.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[300]!,
+                        offset: const Offset(0, -2),
+                        blurRadius: 3.0,
+                      ),
+                    ],
+                  ),
+                  child: FutureBuilder<bool>(
+                    future: isChannelFetched,
+                    builder: (context,snapshot) {
+                      if(ConnectionState.waiting==snapshot.connectionState)
                       {
-                        return const Center(child: Text('Could not obtain channels'),);
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const ProgressIndicatorWidget(),
+                          );
                       }
-                      else
+                      else if(ConnectionState.done==snapshot.connectionState)
                       {
-                        if(createrChannelsController.channelData.value.channels!.isNotEmpty)
+                        if(snapshot.data==false)
                         {
-                          return Column(
-                      children: [
-                        Obx(
-                          ()=> ListView.builder(
-                            shrinkWrap: true,
-                            physics: const ClampingScrollPhysics(),
-                            itemCount: createrChannelsController.channelData.value.channels?.length,
-                            itemBuilder: (context, index) {
-                              return VideoCard(
-                                flag: ListType.Creator,
-                                onReturn: ()async{
-                                  await  createrChannelsController.getChannels();
-                                },
-                                channel:createrChannelsController.channelData.value.channels![index],
-                                onPressed: () async{
-                                        // Handle Delete
-                                         // Handle Cancel
-                                        CreaterChannelsController controller=Get.put(CreaterChannelsController());
-                                  bool result=    await controller.deleteChannel(channelId:createrChannelsController.channelData.value.channels![index].id!);
-                                        if(result)
-                                        {
-                                          Get.back();
-                                          Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
-                                          
-                                          // setState(() {
-                                          await  createrChannelsController.getChannels();
-                                          // });
-                                        }
-                                        else{
-                                          Get.back();
-                                          Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
-                                        }
-                                     
-                                     
-                                        
-                                        // Perform the delete operation
-                                        print('Item deleted');
-                                      },
-                                accentColor: ColorConstants.accentColor,
-                                gradientStartColor: ColorConstants.primaryColor,
-                                gradientEndColor: ColorConstants.secondaryColor,
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    );
+                          return const Center(child: Text('Could not obtain channels'),);
                         }
                         else
                         {
-                          return const Center(child: Text('No channels available'),);
+                          if(createrChannelsController.channelData.value.channels!.isNotEmpty)
+                          {
+                            return Column(
+                        children: [
+                          Obx(
+                            ()=> ListView.builder(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              itemCount: createrChannelsController.channelData.value.channels?.length,
+                              itemBuilder: (context, index) {
+                                return VideoCard(
+                                  flag: ListType.Creator,
+                                  onReturn: ()async{
+                                    await  createrChannelsController.getChannels();
+                                  },
+                                  channel:createrChannelsController.channelData.value.channels![index],
+                                  onPressed: () async{
+                                          // Handle Delete
+                                           // Handle Cancel
+                                          CreaterChannelsController controller=Get.put(CreaterChannelsController());
+                                    bool result=    await controller.deleteChannel(channelId:createrChannelsController.channelData.value.channels![index].id!);
+                                          if(result)
+                                          {
+                                            Get.back();
+                                            Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
+                                            
+                                            // setState(() {
+                                            await  createrChannelsController.getChannels();
+                                            // });
+                                          }
+                                          else{
+                                            Get.back();
+                                            Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
+                                          }
+                                       
+                                       
+                                          
+                                          // Perform the delete operation
+                                          print('Item deleted');
+                                        },
+                                  accentColor: ColorConstants.accentColor,
+                                  gradientStartColor: ColorConstants.primaryColor,
+                                  gradientEndColor: ColorConstants.secondaryColor,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                          }
+                          else
+                          {
+                            return const Center(child: Text('No channels available'),);
+                          }
                         }
                       }
+                      else
+                      {
+                        return const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: ProgressIndicatorWidget(),
+                        );
+                      }
                     }
-                    else
-                    {
-                      return const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: ProgressIndicatorWidget(),
-                      );
-                    }
-                  }
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

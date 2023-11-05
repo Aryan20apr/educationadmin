@@ -22,15 +22,15 @@ class ChannelResourceController extends GetxController
 
   
   AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
-  final fileData=FileResourcesData().obs;
-  final videoData=VideoResourcesData().obs;
+   Rx<FileResourcesData> fileData=FileResourcesData().obs;
+   Rx<VideoResourcesData> videoData=VideoResourcesData().obs;
  
   NetworkService networkService=Get.find<NetworkService>();
 
 
   
 
-  Future<void> getChannelFiles({required int channelId}) async
+  Future<bool> getChannelFiles({required int channelId}) async
   {
       NetworkChecker networkchecker=NetworkChecker();
       bool check=await networkchecker.checkConnectivity();
@@ -42,14 +42,15 @@ class ChannelResourceController extends GetxController
           duration: Duration(seconds: 5),
         ));
         Logger().i("Get snackbar displayed");
-        return;}
+        return false;}
      fileData.value= await networkService.getChannelFiles(token:await authenticationManager.getToken(),channelId: channelId);
+      return false;
       }
    
 
   
 
-  Future<void> getChannelVideos({required int channelId}) async
+  Future<bool> getChannelVideos({required int channelId}) async
   {
     NetworkChecker networkchecker=NetworkChecker();
       bool check=await networkchecker.checkConnectivity();
@@ -61,8 +62,8 @@ class ChannelResourceController extends GetxController
           duration: Duration(seconds: 5),
         ));
         Logger().i("Get snackbar displayed");
-        return;}
+        return false;}
     videoData.value= await networkService.getChannelVideo(token:await authenticationManager.getToken(),channelId: channelId);
-
+    return true;
   }
 }

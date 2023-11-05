@@ -13,7 +13,7 @@ class HomeScreenController extends GetxController
   final UserDetailsManager userDetailsManager=Get.find<UserDetailsManager>();
 final Rx<Data> channelData=Data().obs;
 final Rx<Data> allChannelData=Data().obs;
-
+final RxInt currentPage=0.obs;
   Future<bool> getChannels() async
   {
     NetworkChecker networkChecker=NetworkChecker();

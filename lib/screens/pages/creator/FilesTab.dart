@@ -129,9 +129,10 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
     );
   }
 void onRefresh() async {
-    await channelsController.getChannelFiles(channelId: widget.channelId);
+   bool result= await channelsController.getChannelFiles(channelId: widget.channelId);
     setState(() {
       files=channelsController.fileData.value.data!.files??[];
+      isFetched=Future.delayed(Duration.zero,()=>result);
     });
     _refreshController.refreshCompleted(); // Complete the refresh
      _refreshController.loadComplete();

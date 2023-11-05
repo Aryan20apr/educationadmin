@@ -28,10 +28,11 @@ class _SubscribersTabState extends State<SubscribersTab> {
   Future<bool>? isFetched;
 List<Consumers> subscribers=[];
 void onRefresh() async {
-    await controller.getChannelSubscribers
+   bool result= await controller.getChannelSubscribers
     (channelId: widget.channelId);
     setState(() {
       subscribers=controller.consumerList.value.consumers??[];
+      isFetched=Future.delayed(Duration.zero,()=>result);
     });
     _refreshController.refreshCompleted(); // Complete the refresh
      _refreshController.loadComplete();
@@ -70,6 +71,7 @@ void onRefresh() async {
 
                 return Obx(
                   ()=> ListView.builder(
+                    shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                               itemCount: controller.consumerList.value.consumers!.length, // Adjust the number of subscribers
                             
