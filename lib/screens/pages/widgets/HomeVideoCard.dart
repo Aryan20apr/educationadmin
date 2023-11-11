@@ -7,9 +7,8 @@ import '../../../utils/ColorConstants.dart';
 class HomeVideoCard extends StatelessWidget {
   final String thumbnailUrl;
   final String title;
-  final String channelName;
-  final String viewsCount;
-  final String duration;
+  final int price;
+  
   final String avatarUrl;
   final Color accentColor;
   final Color gradientStartColor;
@@ -19,9 +18,7 @@ class HomeVideoCard extends StatelessWidget {
   HomeVideoCard({
     required this.thumbnailUrl,
     required this.title,
-    required this.channelName,
-    required this.viewsCount,
-    required this.duration,
+    required this.price,
     required this.avatarUrl,
     required this.accentColor,
     required this.gradientStartColor,
@@ -109,18 +106,19 @@ class HomeVideoCard extends StatelessWidget {
                     ),
                   ),
                   subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(channelName, style:const TextStyle(color: CustomColors.accentColor)),
-                      Row(
-                        children: [
-                          Text(viewsCount, style:const TextStyle(color: CustomColors.accentColor)),
-                         const SizedBox(width: 8.0),
-                          Text(duration, style: const TextStyle(color: CustomColors.accentColor)),
-                        ],
-                      ),
-                    ],
-                  ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text('₹ $price',
+                            style: const TextStyle(
+                              color: CustomColors.accentColor,
+                            )),
+                        const SizedBox(width: 8.0),
+                      ],
+                    ),
+                  ],
+                ),
                   trailing: const Icon(Icons.more_vert, color: CustomColors.accentColor),
                 ),
               ],

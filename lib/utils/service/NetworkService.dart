@@ -66,21 +66,25 @@ TODO: "Handle signup error ";
     }
   }
 
- Future<SignupResponseModal?> login(LoginModal model) async {
+ Future<SignupResponseModal> login(LoginModal model) async {
     Response<Map<String,dynamic>> response = await post('$baseURL$signin', model.toJson());
     logger.e(response.body.toString());
     if(response.body!=null)
     {
     if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
       return SignupResponseModal.fromJson(response.body!);
+  
     }
+      else if(response.body!["statusCode"]==Status.failed)
+      {
+      return SignupResponseModal(msg: response.body!["msg"]);}
+      // ignore: curly_braces_in_flow_control_structures
+      else 
+      {return SignupResponseModal(msg: "Could not login");}
     }
      else {
-
-
-TODO: "Handle signup error ";
-      return null; 
-      //return SignupErrorModal.fromJson(response.body!);
+     
+      return SignupResponseModal(msg: "Could not login");
     }
   }
 
@@ -146,7 +150,12 @@ Future<ChannelListModal> getCreatorList({String? token}) async
   try {
   Response<Map<String,dynamic>> response = await get('$baseURL$creatorChannels',headers: {"Authorization":"Bearer $token"});
     logger.e(response.body);
-   return ChannelListModal.fromJson(response.body!);
+    if(response.body!=null) {
+      return ChannelListModal.fromJson(response.body!);
+    }
+    else {
+      return ChannelListModal();
+    }
 } on Exception catch (e) {
   e.printError();
   return ChannelListModal();

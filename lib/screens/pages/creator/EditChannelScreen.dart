@@ -117,6 +117,8 @@ class EditChannelState extends State<EditChannel> {
                               ),
                               const SizedBox(height: 16),
                               ElevatedButton(
+                                                     style: ElevatedButton.styleFrom(minimumSize: Size(Get.width*0.4, Get.height*0.05),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
+
                                 onPressed: () {
                                   controller.pickImage();
                                 },

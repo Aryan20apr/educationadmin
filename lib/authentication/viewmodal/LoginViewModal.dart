@@ -34,10 +34,10 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
  Future<void> login({ String? email,required String password,required phone}) async {
     isLoading.value=true;
     LoginModal loginModal=LoginModal( password:password, phone:phone);
-    final SignupResponseModal? response = await _authenticationService
+    final SignupResponseModal response = await _authenticationService
         .login(loginModal);
 
-    if (response != null) {
+    if (response!.data!=null) {
       /// Set isLogin to true
       _authManager.login(response.data!);
 
@@ -50,13 +50,17 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
        isLoading.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
+        title: 'Login error',
         backgroundColor: CustomColors.secondaryColor,
-          middleText: 'Could not login',
+          middleText: response.msg!,
           textConfirm: 'OK',
           confirmTextColor: Colors.white,
-          onConfirm: () {
+          confirm: ElevatedButton(onPressed: (){
             Get.back();
-          });
+
+          },style: ElevatedButton.styleFrom(backgroundColor: CustomColors.primaryColor,foregroundColor:  CustomColors.secondaryColor), child:  const Text('Ok')),
+      
+          ); 
     }
   }
 
