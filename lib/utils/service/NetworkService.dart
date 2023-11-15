@@ -10,6 +10,7 @@ import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:educationadmin/Modals/FileUploadResponseModal.dart';
 import 'package:educationadmin/Modals/ImageUploadResponse.dart';
 import 'package:educationadmin/Modals/LoginModal.dart';
+import 'package:educationadmin/Modals/PasswordResetResponse.dart';
 import 'package:educationadmin/Modals/PhoneVerificationModal.dart';
 import 'package:educationadmin/Modals/SignupResponseModal.dart';
 import 'package:educationadmin/Modals/SubsciberModal.dart';
@@ -23,6 +24,7 @@ import 'package:get/get_connect.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:dio/dio.dart' as dio;
+import '../../Modals/GeneralResponse.dart';
 import '../../Modals/SingnupModal.dart';
 
 /// LoginService responsible to communicate with web-server
@@ -50,6 +52,7 @@ class NetworkService extends GetConnect {
   final String editresource="resources/edit/";
   final String deleteResource="resources/delete/";
   final String uploadprofileimage="auth/upload";
+  final String resetpassword="auth/forgot/password";
 
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
@@ -426,41 +429,33 @@ Future<ImageUploadResponse> uploadProfileImage({required String token,required X
    return ImageUploadResponse();
 }
 
+
+Future<PasswordResetResponse> resetPassword({required String phone,required String password})async{
+
+  Map<String,dynamic> body={
+    "phone": phone,
+    "password": password
+};
+  try {
+  Response<Map<String,dynamic>> response=await post("$baseURL$resetpassword",body);
+  logger.e(response.body);
+  if(response.body!=null) {
+
+    return PasswordResetResponse.fromJson(response.body!);
+  }
+  else
+  {
+    return PasswordResetResponse();
+  }
+} on Exception catch (e) {
+  
+  e.printError();
+  return PasswordResetResponse();
+}
+
+}
+
 }
 
 
  
-class GeneralResponse {
-  String? _msg;
-  bool? _status;
-
-  GeneralResponse({String? msg, bool? status}) {
-    if (msg != null) {
-      _msg = msg;
-    }
-    if (status != null) {
-      _status = status;
-    }
-  }
-
-  String? get msg => _msg;
-  set msg(String? msg) => _msg = msg;
-  bool? get status => _status;
-  set status(bool? status) => _status = status;
-
-  GeneralResponse.fromJson(Map<String, dynamic> json) {
-    _msg = json['msg'];
-    _status = json['status'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['msg'] = _msg;
-    data['status'] = _status;
-    return data;
-  }
-
-
-
-  
-}

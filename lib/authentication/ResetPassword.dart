@@ -92,7 +92,7 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                   ),
                                   child: TextFormField(
                                     controller: passwordController,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.text,
                                     decoration: const InputDecoration(
                                       hintText: 'Enter new password',
                                       hintStyle: TextStyle(color: Colors.grey),
@@ -121,7 +121,7 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                   ),
                                   child: TextFormField(
                                     controller: passwordController2,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.text,
                                     decoration: const InputDecoration(
                                       hintText: 'Re-enter new password',
                                       hintStyle: TextStyle(color: Colors.grey),
@@ -144,11 +144,12 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                           
                                 ElevatedButton(
                                   onPressed: () async {
-                                   
+                                   FocusManager.instance.primaryFocus?.unfocus();
                                   bool validate=  _formKey.currentState!.validate();
                                   if(validate) {
-                                    _authenticationViewModel.changePassword(
+                                  await  _authenticationViewModel.changePassword(
                                         phonenumber:widget.phone,password: passwordController.text,verificationType: VerificationType.ForgotPassword);
+                                    Get.offAll(const LoginScreen());
                                   }
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -171,10 +172,10 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                         () => _authenticationViewModel
                                                 .isLoading.value
                                             ? const ProgressIndicatorWidget()
-                                            : const Text(
-                                                'Get OTP',
+                                            :  Text(
+                                                'Reset Password',
                                                 style: TextStyle(
-                                                  fontSize: 18.0,
+                                                  fontSize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),

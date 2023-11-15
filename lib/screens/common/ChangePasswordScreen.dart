@@ -1,6 +1,7 @@
 import 'package:educationadmin/authentication/LoginScreen.dart';
 import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
+import 'package:educationadmin/screens/pages/Profile.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 
 import 'package:educationadmin/widgets/CircularWidget.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:sizer/sizer.dart';
+
+import '../../utils/Flag.dart';
 
 class ChangePassword extends StatefulWidget {
  ChangePassword({super.key,});
@@ -98,7 +101,7 @@ class _ChangePassword extends State<ChangePassword> {
                                   ),
                                   child: TextFormField(
                                     controller: passwordController,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.text,
                                     decoration: const InputDecoration(
                                       hintText: 'Enter new password',
                                       hintStyle: TextStyle(color: Colors.grey),
@@ -127,7 +130,7 @@ class _ChangePassword extends State<ChangePassword> {
                                   ),
                                   child: TextFormField(
                                     controller: passwordController2,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: TextInputType.text,
                                     decoration: const InputDecoration(
                                       hintText: 'Re-enter new password',
                                       hintStyle: TextStyle(color: Colors.grey),
@@ -153,8 +156,9 @@ class _ChangePassword extends State<ChangePassword> {
                                    
                                   bool validate=  _formKey.currentState!.validate();
                                   if(validate) {
-                                    // _authenticationViewModel.changePassword(
-                                    //     phonenumber:widget.phone,password: passwordController.text,verificationType: VerificationType.ForgotPassword);
+                                  await  _authenticationViewModel.changePassword(
+                                        password: passwordController.text,verificationType: VerificationType.ResetPassword);
+                                  Get.offAll(()=>ProfileScreen());
                                   }
                                   },
                                   style: ElevatedButton.styleFrom(

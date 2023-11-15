@@ -10,6 +10,7 @@ import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:get/get.dart';
 
 import '../../../Modals/FileResourcesModal.dart';
+import '../../../Modals/GeneralResponse.dart';
 import '../../../Modals/VideoResourcesModal.dart';
 
 class CreaterChannelsController extends GetxController{

@@ -1,9 +1,11 @@
 
 import 'package:educationadmin/Modals/LoginModal.dart';
+import 'package:educationadmin/Modals/PasswordResetResponse.dart';
 import 'package:educationadmin/Modals/PhoneVerificationModal.dart';
 import 'package:educationadmin/Modals/SignupResponseModal.dart';
 import 'package:educationadmin/Modals/SingnupModal.dart';
 import 'package:educationadmin/Modals/UserModal.dart';
+import 'package:educationadmin/authentication/LoginScreen.dart';
 import 'package:educationadmin/authentication/OTPVerification.dart';
 import 'package:educationadmin/authentication/ResetPassword.dart';
 import 'package:educationadmin/authentication/SignupScreen.dart';
@@ -22,21 +24,21 @@ import '../../utils/ColorConstants.dart';
 class AuthenticationViewModal extends GetxController {
 
   final isLoading=false.obs;
-  late final NetworkService _authenticationService;
+  late final NetworkService networkService;
   late final AuthenticationManager _authManager;
 final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
  final NetworkService _networkService = Get.put(NetworkService());
   @override
   void onInit() {
     super.onInit();
-    _authenticationService = Get.put(NetworkService());
+    networkService = Get.put(NetworkService());
     _authManager = Get.put(AuthenticationManager());
   }
 
  Future<void> login({ String? email,required String password,required phone}) async {
     isLoading.value=true;
     LoginModal loginModal=LoginModal( password:password, phone:phone);
-    final SignupResponseModal response = await _authenticationService
+    final SignupResponseModal response = await networkService
         .login(loginModal);
 
     if (response!.data!=null) {
@@ -69,7 +71,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
   Future<void> registerUser({required String email,required String password,required phone,required String name}) async {
     isLoading.value=true;
     SignupModal signupModal=SignupModal(name:name, email:email, password:password, phone:phone);
-    final SignupResponseModal? response = await _authenticationService
+    final SignupResponseModal? response = await networkService
         .signUp(signupModal);
 
     if (response != null) {
@@ -96,7 +98,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
   Future<void> sendOtp({required String phone,required VerificationType verificationType}) async {
     isLoading.value=true;
     PhoneModal phonemodal=PhoneModal(number:phone);
-    final OTPModal? response = await _authenticationService
+    final OTPModal? response = await networkService
         .sendOTP(phone:phonemodal);
 
     if (response != null) {
@@ -169,8 +171,39 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
       }
   }
 
-  Future<void > changePassword({ required String phonenumber,required String password,required VerificationType verificationType})async
+  Future<void> changePassword({  String? phonenumber,required String password,required VerificationType verificationType})async
   {
+    isLoading.value=true;
+      
+     
+     if(verificationType==VerificationType.ForgotPassword)
+     {PasswordResetResponse passwordResetResponse=await networkService.resetPassword(phone: phonenumber!, password: password);
+      if(passwordResetResponse.data!=null&&passwordResetResponse.data!.status!)
+      {
+        Get.showSnackbar(const GetSnackBar(message:"Password changed successfully",duration: Duration(seconds: 3),));
+
+      }
+      else
+      {
+        Get.showSnackbar(const GetSnackBar(message:"Some error occured",duration: Duration(seconds: 3),));
+      }
+      }
+      else if(verificationType==VerificationType.ResetPassword)
+      {
+        PasswordResetResponse passwordResetResponse=await networkService.resetPassword(phone: _userdetails.phone.value, password: password);
+      if(passwordResetResponse.data!=null&&passwordResetResponse.data!.status!)
+      {
+        Get.showSnackbar(const GetSnackBar(message:"Password changed successfully",duration: Duration(seconds: 3),));
+
+      }
+      else 
+      {
+        Get.showSnackbar(const GetSnackBar(message:"Some error occured",duration: Duration(seconds: 3),));
+      }
+      
+
+      }
+      isLoading.value=false;
       
   }
 }

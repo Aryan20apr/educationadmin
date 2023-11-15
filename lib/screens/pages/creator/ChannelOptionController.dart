@@ -7,6 +7,8 @@ import 'package:educationadmin/Modals/VideoUploadResponse.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:get/get.dart';
+
+import '../../../Modals/GeneralResponse.dart';
 class ChannelOptionsController extends GetxController
 {
   final AuthenticationManager authenticationManager=Get.put(AuthenticationManager());

@@ -45,7 +45,7 @@ class OtpVerification extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                              Text('Enter the otp sent to  phone number',style: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),
+                              Text('Enter the otp sent to your registered phone number',style: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),
                               SizedBox(
                                 height: 10.h,
                               ),
