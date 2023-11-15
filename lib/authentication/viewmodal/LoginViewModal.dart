@@ -5,10 +5,12 @@ import 'package:educationadmin/Modals/SignupResponseModal.dart';
 import 'package:educationadmin/Modals/SingnupModal.dart';
 import 'package:educationadmin/Modals/UserModal.dart';
 import 'package:educationadmin/authentication/OTPVerification.dart';
+import 'package:educationadmin/authentication/ResetPassword.dart';
 import 'package:educationadmin/authentication/SignupScreen.dart';
 
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
+import 'package:educationadmin/utils/Flag.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -91,7 +93,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
     }
   }
 
-  Future<void> sendOtp({required String phone}) async {
+  Future<void> sendOtp({required String phone,required VerificationType verificationType}) async {
     isLoading.value=true;
     PhoneModal phonemodal=PhoneModal(number:phone);
     final OTPModal? response = await _authenticationService
@@ -103,7 +105,13 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
      await _authManager.saveOTP(response.data!.otp!);
        isLoading.value=false;
        Logger().e("Sent number is $phone");
-      Get.to(()=>OtpVerification(phoneNumber: phone,),arguments: {"phoneNumber":phone});
+       if(verificationType==VerificationType.Signup || verificationType==VerificationType.ForgotPassword) {
+         Get.to(()=>OtpVerification(phoneNumber: phone,verificationType: verificationType,),arguments: {"phoneNumber":phone});
+       }
+       else
+       {
+
+       }
       
      
     } else {
@@ -118,13 +126,25 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
           });
     }
   }
-  Future<void> verifyOTP(String otp,String phoneNumber) async {
+  Future<void> verifyOTP(String otp,String phoneNumber,{required VerificationType verificationType}) async {
       String? savedotp=await _authManager.getOTP();
       if(savedotp!=null)
       {
         if(otp==savedotp)
         {
-          Get.off(()=>SignupScreen(phoneNumber:phoneNumber));
+          if(verificationType==VerificationType.Signup) {
+            Get.off(()=>SignupScreen(phoneNumber:phoneNumber));
+          }
+          else if(verificationType==VerificationType.ForgotPassword)
+          {
+              Get.to(()=> RestForgotPassword(phone: phoneNumber));
+          }
+          else if(verificationType==VerificationType.ResetPassword)
+          {
+
+          }
+
+
         }
         else
         {
@@ -147,5 +167,10 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
             Get.back();
           });
       }
+  }
+
+  Future<void > changePassword({ required String phonenumber,required String password,required VerificationType verificationType})async
+  {
+      
   }
 }

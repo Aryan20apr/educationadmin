@@ -1,6 +1,7 @@
 import 'package:educationadmin/authentication/LoginScreen.dart';
 import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
+import 'package:educationadmin/utils/Flag.dart';
 import 'package:educationadmin/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -160,7 +161,7 @@ class _HomeScreenState extends State<PhoneVerification> {
                               ElevatedButton(
                                 onPressed: () async {
                                   _authenticationViewModel.sendOtp(
-                                      phone: phoneNumberController.text);
+                                      phone: phoneNumberController.text,verificationType: VerificationType.Signup);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:

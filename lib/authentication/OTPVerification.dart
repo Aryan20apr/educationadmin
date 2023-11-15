@@ -1,6 +1,9 @@
 
 
 import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
+import 'package:educationadmin/screens/pages/Explore2.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
+import 'package:educationadmin/utils/Flag.dart';
 import 'package:educationadmin/utils/Themes.dart';
 import 'package:educationadmin/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +14,9 @@ import 'package:pinput/pinput.dart';
 import 'package:sizer/sizer.dart';
 
 class OtpVerification extends StatelessWidget {
-   OtpVerification({super.key,required phoneNumber});
-   String? phoneNumber;
+   OtpVerification({super.key,required phoneNumber, required this.verificationType});
+ String? phoneNumber;
+ VerificationType verificationType;
    final AuthenticationViewModal _authenticationViewModel = Get.put(AuthenticationViewModal());
    TextEditingController? otpController= TextEditingController();
   @override
@@ -41,7 +45,7 @@ class OtpVerification extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                              Text('Enter the otp sent to your email or phone number',style: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),
+                              Text('Enter the otp sent to  phone number',style: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w500),textAlign: TextAlign.center,),
                               SizedBox(
                                 height: 10.h,
                               ),
@@ -62,10 +66,12 @@ class OtpVerification extends StatelessWidget {
                                ElevatedButton(
                       onPressed: () async{
                         Logger().e("Phone Number: $phoneNumber");
-                        _authenticationViewModel.verifyOTP(otpController!.text,Get.arguments["phoneNumber"]);
+                        _authenticationViewModel.verifyOTP(otpController!.text,Get.arguments["phoneNumber"],verificationType:verificationType);
                         
                       },
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.primaryColor,
+                        foregroundColor: CustomColors.primaryColorDark,
                         maximumSize: Size(constraints.maxWidth*0.8,constraints.maxHeight*0.2),
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
@@ -75,10 +81,11 @@ class OtpVerification extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         alignment: Alignment.center,
-                        child: Obx(()=>_authenticationViewModel.isLoading.value? const CircularProgressIndicator.adaptive(): const Text(
+                        child: Obx(()=>_authenticationViewModel.isLoading.value? const ProgressIndicatorWidget():Text(
                           'Verify OTP',
                           style: TextStyle(
-                            fontSize: 18.0,
+                            fontSize: 12.sp,
+                            color: CustomColors.primaryColorDark,
                             fontWeight: FontWeight.bold,
                           ),
                         ),)
@@ -92,7 +99,7 @@ class OtpVerification extends StatelessWidget {
                           style: TextStyle(fontSize:12.sp,fontWeight: FontWeight.w300),
                         ),
                         TextButton(
-                          style: TextButton.styleFrom(textStyle: TextStyle(fontSize:12.sp,fontWeight: FontWeight.bold)), onPressed: () { 
+                          style: TextButton.styleFrom(textStyle: TextStyle(fontSize:12.sp,fontWeight: FontWeight.bold,color: CustomColors.primaryColorDark)), onPressed: () { 
                            
                            },
                           child:const Text('Resend OTP'),

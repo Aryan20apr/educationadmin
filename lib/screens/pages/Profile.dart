@@ -1,3 +1,4 @@
+import 'package:educationadmin/screens/common/ChangePasswordScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -76,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               userDetailsManager.username.value, // Replace with the user's name
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black, // Set username text color to black
@@ -104,6 +105,7 @@ class ProfileScreen extends StatelessWidget {
               }),
               ElevatedCard(const Icon(Icons.lock), 'Change Password', () {
                 // Handle change password
+                Get.to(()=>ChangePassword());
               }),
               ElevatedCard(const Icon(Icons.camera_alt), 'Update Profile Picture', () {
               

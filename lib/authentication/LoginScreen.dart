@@ -1,7 +1,8 @@
 
 
 
-import 'package:educationadmin/authentication/EmailVerification.dart';
+import 'package:educationadmin/authentication/PhoneVerification.dart';
+import 'package:educationadmin/authentication/ForgotPasswordPhone.dart';
 import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
 import 'package:educationadmin/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
@@ -124,15 +125,31 @@ late TextEditingController passwordController;
                         ),)
                       ),
                     ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children:[ Text(
+                          'Forgot Passowrd?',
+                          style: TextStyle(fontSize:10.sp,fontWeight: FontWeight.w300),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(foregroundColor:  Theme.of(context).primaryColorDark,textStyle: TextStyle(color:  Theme.of(context).primaryColorDark,fontSize:10.sp,fontWeight: FontWeight.bold)), onPressed: () { 
+                            Get.to(()=>const ForgotPasswordPhoneVerification());
+                           },
+                          child:const Text('Reset',),
+                        ),
+                        ]
+                    ),
                  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children:[ Text(
                           'Don\'have an account?',
-                          style: TextStyle(fontSize:12.sp,fontWeight: FontWeight.w300),
+                          style: TextStyle(fontSize:10.sp,fontWeight: FontWeight.w300),
                         ),
                         TextButton(
-                          style: TextButton.styleFrom(foregroundColor:  Theme.of(context).primaryColorDark,textStyle: TextStyle(color:  Theme.of(context).primaryColorDark,fontSize:12.sp,fontWeight: FontWeight.bold)), onPressed: () { 
+                          style: TextButton.styleFrom(foregroundColor:  Theme.of(context).primaryColorDark,textStyle: TextStyle(color:  Theme.of(context).primaryColorDark,fontSize:10.sp,fontWeight: FontWeight.bold)), onPressed: () { 
                             Get.to(()=>const PhoneVerification());
                            },
                           child:const Text('Sign up',),
@@ -154,6 +171,8 @@ late TextEditingController passwordController;
       )
     );
   }
+ 
+
 }
 
 
