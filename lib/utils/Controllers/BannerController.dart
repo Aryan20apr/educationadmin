@@ -9,6 +9,7 @@ class BannerController extends GetxController
 {
   NetworkService networkService=Get.put(NetworkService());
   RxString imagePath=''.obs;
+  RxBool isLoading = false.obs;
   Future<void> pickImage() async {
     final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
@@ -17,7 +18,7 @@ class BannerController extends GetxController
     }
   }
   Future<void> uploadBannerImage() async{
-
+      isLoading.value=true;
     NetworkChecker networkChecker=NetworkChecker();
    bool isConnectionAvailible=await networkChecker.checkConnectivity();
    if(!isConnectionAvailible)
@@ -30,6 +31,7 @@ class BannerController extends GetxController
     AuthenticationManager authenticationManager=AuthenticationManager();
     String? token=await authenticationManager.getToken();
     BannersUploadResponse imageUploadResponse=await networkService.uploadBannerImage(token: token!, file: XFile(imagePath.value));
+    isLoading.value=false;
     if(imageUploadResponse.data!=null)
     {
       Get.showSnackbar(const GetSnackBar(message: 'Image uploaded successfully',duration: Duration(seconds: 3),));

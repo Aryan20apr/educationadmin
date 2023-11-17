@@ -7,11 +7,13 @@ import 'package:educationadmin/Modals/BannersResponse.dart';
 import 'package:educationadmin/Modals/BannersUploadResponse.dart';
 import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart';
+import 'package:educationadmin/Modals/CreateNoticeResponse.dart';
 import 'package:educationadmin/Modals/EditResourceModal.dart';
 import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:educationadmin/Modals/FileUploadResponseModal.dart';
 import 'package:educationadmin/Modals/ImageUploadResponse.dart';
 import 'package:educationadmin/Modals/LoginModal.dart';
+import 'package:educationadmin/Modals/NoticesResponse.dart';
 import 'package:educationadmin/Modals/PasswordResetResponse.dart';
 import 'package:educationadmin/Modals/PhoneVerificationModal.dart';
 import 'package:educationadmin/Modals/SignupResponseModal.dart';
@@ -58,7 +60,8 @@ class NetworkService extends GetConnect {
   final String resetpassword="auth/forgot/password";
   final String createbanner="banners/create";
   final String getbanners="banners";
-
+  final String getnotices="notice/get/notices";
+  final String createnotice="notice/create";
 
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
@@ -513,6 +516,51 @@ Future<BannersUploadResponse> uploadBannerImage({required String token,required 
    
   }
    return BannersUploadResponse();
+}
+Future<NoticesResponse> getNotices({required String token})async
+{
+  try {
+  Response response=await get("$baseURL$getnotices",headers:{"Authorization":"Bearer $token"});
+  if(response.body!=null)
+  {
+    return NoticesResponse.fromJson(response.body);
+  }
+  else
+  {
+    return NoticesResponse();
+  }
+} on Exception catch (e) {
+  e.printError();
+  return NoticesResponse();
+}
+  
+
+}
+
+Future<CreateNoticeResponse> createNotices({required String title,required String description,required int channelId,required String token})async
+{
+    Map<String,dynamic> body={
+      "title":title,
+      "description":description,
+      "channelId":channelId
+    };
+  try {
+  Response response=await post("$baseURL$createnotice",body,headers:{"Authorization":"Bearer $token"});
+  if(response.body!=null)
+  {
+    return CreateNoticeResponse.fromJson(response.body);
+  }
+  else
+  {
+    return CreateNoticeResponse();
+  }
+} on Exception catch (e) {
+  e.printError();
+  return CreateNoticeResponse();
+}
+  
+
+
 }
 }
 

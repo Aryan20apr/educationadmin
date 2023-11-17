@@ -1,4 +1,5 @@
 import 'package:educationadmin/screens/common/ChangePasswordScreen.dart';
+import 'package:educationadmin/screens/pages/creator/UploadBannerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -83,8 +84,8 @@ class ProfileScreen extends StatelessWidget {
                                 color: Colors.black, // Set username text color to black
                               ),
                             ),
-                            SizedBox(height: 4.0),
-                            Text(
+                         const   SizedBox(height: 4.0),
+const Text(
                               '123K Followers', // Replace with user-related details
                               style: TextStyle(
                                 color: Colors.black, // Set user details text color to black
@@ -100,8 +101,8 @@ class ProfileScreen extends StatelessWidget {
               ElevatedCard(const Icon(Icons.edit), 'Edit Profile', () {
                 Get.to(()=> ProfileUpdateScreen());
               }),
-              ElevatedCard(const Icon(Icons.file_download), 'Downloads', () {
-                // Handle downloads
+              ElevatedCard(const Icon(Icons.file_download), 'Upload Banner', () {
+                Get.to(()=>const UploadBanner());
               }),
               ElevatedCard(const Icon(Icons.lock), 'Change Password', () {
                 // Handle change password
