@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/widgets/DefaultCarousel.dart';
@@ -12,6 +12,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
+import 'package:educationadmin/Modals/BannersResponse.dart';
 import '../common/ChannelDetails.dart';
 import 'widgets/HomeVideoCard.dart';
 class HomeScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 final HomeScreenController homeScreenController=Get.put(HomeScreenController());
 final CarouselController _carouselController = CarouselController();
 Future<bool>? isFetchedUser;
-Future<bool>? isFetchedAll;
+Future<bool>? isBannersFetched;
   
 PageController pageController = PageController(
   initialPage: 1, // Start from the middle item
@@ -36,9 +37,9 @@ final RefreshController refreshController =
       RefreshController(initialRefresh: false);
 void onRefresh() async {
   bool userChannels= await  homeScreenController.getChannels();
- bool allchannels= await homeScreenController.getAllChannels();
+ bool banners= await homeScreenController.getBanners();
     setState(() {
-      isFetchedAll=Future.delayed(Duration.zero,()=>allchannels);
+      isBannersFetched=Future.delayed(Duration.zero,()=>banners);
       isFetchedUser=Future.delayed(Duration.zero,()=>userChannels);
     });
     refreshController.refreshCompleted(); // Complete the refresh
@@ -49,7 +50,7 @@ void initState()
 {
   super.initState();
   isFetchedUser=homeScreenController.getChannels();
-  isFetchedAll=homeScreenController.getAllChannels();
+  isBannersFetched=homeScreenController.getBanners();
 }
 
   @override
@@ -193,7 +194,7 @@ void initState()
                              
                       child: 
                           FutureBuilder<bool>(
-              future: isFetchedAll,
+              future: isBannersFetched,
               builder: (context,snapshot) {
                if(snapshot.connectionState==ConnectionState.waiting)
                {
@@ -248,15 +249,15 @@ void initState()
                     
                    ),
                     
-                  itemCount: homeScreenController.allChannelData.value.channels!.length,
+                  itemCount: homeScreenController.bannersList.value.banners!.length,
                     
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
                     
                     InkWell(
                       onTap: (){
-                       Get.to(()=>ChannelDetails(channel: 
-                           homeScreenController.allChannelData.value.channels![itemIndex],
-                      ));
+                      //  Get.to(()=>ChannelDetails(channel: 
+                      //      homeScreenController.allChannelData.value.channels![itemIndex],
+                      // ));
                       },
                       child: ClipRRect(
                          borderRadius: BorderRadius.circular(10.0),
@@ -271,7 +272,7 @@ void initState()
                             width: double.infinity,
                           colorBlendMode: BlendMode.darken,
                             
-                          imageUrl: homeScreenController.allChannelData.value.channels![itemIndex].thumbnail!,
+                          imageUrl: homeScreenController.bannersList.value.banners![itemIndex].image!,
                             
                           placeholder: (context, url) => Image.asset('assets/default_image.png'),
                             
@@ -292,7 +293,7 @@ void initState()
                   Row(
                      mainAxisAlignment: MainAxisAlignment.center,
                      children: List.generate(
-    homeScreenController.allChannelData.value.channels!.length,
+    homeScreenController.bannersList.value.banners!.length,
     (index) {
       return GestureDetector(
         onTap: () {

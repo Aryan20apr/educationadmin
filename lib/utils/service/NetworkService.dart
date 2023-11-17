@@ -3,6 +3,8 @@ import 'dart:io';
 
 
 
+import 'package:educationadmin/Modals/BannersResponse.dart';
+import 'package:educationadmin/Modals/BannersUploadResponse.dart';
 import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart';
 import 'package:educationadmin/Modals/EditResourceModal.dart';
@@ -19,6 +21,7 @@ import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
 import 'package:educationadmin/Modals/VideoUploadResponse.dart';
 import 'package:educationadmin/utils/status.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,6 +56,9 @@ class NetworkService extends GetConnect {
   final String deleteResource="resources/delete/";
   final String uploadprofileimage="auth/upload";
   final String resetpassword="auth/forgot/password";
+  final String createbanner="banners/create";
+  final String getbanners="banners";
+
 
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
@@ -168,8 +174,13 @@ Future<ChannelListModal> getUserChannelList({String? token,required int userid})
 {
   try {
   Response<Map<String,dynamic>> response = await get('$baseURL$userchannels',headers: {"Authorization":"Bearer $token"});
-    logger.e(response.body);
+    if(response.body!=null)
+    
    return ChannelListModal.fromJson(response.body!);
+   else
+   {
+    return ChannelListModal();
+   }
 } on Exception catch (e) {
   e.printError();
   return ChannelListModal();
@@ -455,6 +466,54 @@ Future<PasswordResetResponse> resetPassword({required String phone,required Stri
 
 }
 
+Future<BannersResponse> getBanners({required String jwt})async
+{
+  try {
+  Response<Map<String,dynamic>> response=await get("$baseURL$getbanners",headers:{"Authorization":"Bearer $jwt"});
+  logger.e(response.body);
+  if(response.body!=null) {
+
+    return BannersResponse.fromJson(response.body!);
+  }
+  else
+  {
+    return BannersResponse();
+  }
+} on Exception catch (e) {
+  
+  e.printError();
+  return BannersResponse();
+}
+}
+Future<BannersUploadResponse> uploadBannerImage({required String token,required XFile? file})async
+{
+ var formData = dio.FormData.fromMap({
+  
+  'file': await dio.MultipartFile.fromFile(file!.path,filename: file.name),
+  
+    
+});
+
+
+
+
+   try {
+    //Response<Map<String,dynamic>> response=await post('$baseURL$createchannel', formData,contentType:"multipart/form-data",headers: {"Authorization":"Bearer $token"} );
+    dio.Response<Map<String,dynamic>> response = await dio.Dio().post('$baseURL$createbanner', data: formData,options: dio.Options(contentType: "multipart/form-data",headers:{"Authorization":"Bearer $token"}));
+    print(response.data);
+    if (response.statusCode == 200||response.statusCode==201) {
+      print('Success: ${response.data}');
+      
+      return BannersUploadResponse.fromJson(response.data!);
+    } else {
+      return BannersUploadResponse();
+    }
+  } catch (e) {
+    print('Error: $e');
+   
+  }
+   return BannersUploadResponse();
+}
 }
 
 
