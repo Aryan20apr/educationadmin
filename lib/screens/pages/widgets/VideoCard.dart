@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'SubscriptionModalBottomSheet.dart';
+
 class VideoCard extends StatelessWidget {
   final Color accentColor;
   final Color gradientStartColor;
@@ -58,26 +60,32 @@ class VideoCard extends StatelessWidget {
                     channel: channel,
                   ));
             } else {
-              if (channel.isCompletelyPaid! || channel.price == 0) {
+              if (!channel.isCompletelyPaid! || channel.price == 0) {
                 Get.to(() => ChannelDetails(
                       channel: channel,
                     ));
               } else {
-                Get.defaultDialog(
-                  title: 'Attention',
-                  backgroundColor: CustomColors.secondaryColor,
-                  middleText: 'This content is not available free of cost.',
-                  //textConfirm: 'This content is not available free of cost',
-                  confirmTextColor: Colors.white,
-                  confirm: ElevatedButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: CustomColors.primaryColor,
-                          foregroundColor: CustomColors.secondaryColor),
-                      child: const Text('Ok')),
-                );
+                // Get.defaultDialog(
+                //   title: 'Attention',
+                //   backgroundColor: CustomColors.secondaryColor,
+                //   middleText: 'This content is not available free of cost.',
+                //   //textConfirm: 'This content is not available free of cost',
+                //   confirmTextColor: Colors.white,
+                //   confirm: ElevatedButton(
+                //       onPressed: () {
+                //         Get.back();
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //           backgroundColor: CustomColors.primaryColor,
+                //           foregroundColor: CustomColors.secondaryColor),
+                //       child: const Text('Ok')),
+                // );
+                 showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return SubscriptionModalBottomSheet();
+              },
+            );
               }
             }
           },

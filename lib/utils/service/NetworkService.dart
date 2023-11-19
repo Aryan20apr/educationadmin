@@ -521,6 +521,7 @@ Future<NoticesResponse> getNotices({required String token})async
 {
   try {
   Response response=await get("$baseURL$getnotices",headers:{"Authorization":"Bearer $token"});
+  logger.e(response.body);
   if(response.body!=null)
   {
     return NoticesResponse.fromJson(response.body);

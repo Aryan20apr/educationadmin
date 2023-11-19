@@ -10,19 +10,24 @@ class NoticesController extends GetxController
 {
 RxBool isLoading=false.obs;
 Rx<Data> notices=Data().obs;
+RxList<bool> isExpanded=RxList<bool>();
 NetworkService networkService=Get.put(NetworkService());
 AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
   Future<bool> getNotices()async
   {
     NetworkChecker networkChecker=NetworkChecker();
    bool isAvailable=await networkChecker.checkConnectivity();
-   if(!isAvailable)
+   if(isAvailable)
    {
       String? token=await authenticationManager.getToken();
       NoticesResponse response=await networkService.getNotices(token: token!);
       if(response.data!=null)
       {
+        int len=response.data!.notices!.length;
+        List<bool> list=List<bool>.filled(len, false);
+        isExpanded.value.assignAll(list);
           notices.value=response.data!;
+
       }
       else
       {
@@ -38,20 +43,21 @@ AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
   }
 
   Future<void> createNotice({required String title,required String description,required int channelId}) async
-  {
+  {isLoading.value=true;
     NetworkChecker networkChecker=NetworkChecker();
    bool isAvailable=await networkChecker.checkConnectivity();
-   if(!isAvailable)
+   if(isAvailable)
    {
       String? token=await authenticationManager.getToken();
       notice.CreateNoticeResponse  response=await networkService.createNotices(token: token!, title:title, description: description, channelId: channelId);
+      isLoading.value=false;
       if(response.data!=null)
       {
-         Get.showSnackbar(const GetSnackBar(title: "Notice created successfully",duration: Duration(seconds: 3),));
+         Get.showSnackbar(const GetSnackBar(message: "Notice created successfully",duration: Duration(seconds: 3),));
       }
       else
       {
-        Get.showSnackbar(const GetSnackBar(title: "Could not create notice",duration: Duration(seconds: 3),));
+        Get.showSnackbar(const GetSnackBar(message: "Could not create notice",duration: Duration(seconds: 3),));
       }
    
    }
@@ -61,5 +67,9 @@ AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
 
 
   }
+}
+void updateExpansion({required int index,required bool status})
+{
+isExpanded[index]=status;
 }
 }

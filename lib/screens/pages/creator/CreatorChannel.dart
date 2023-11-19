@@ -15,10 +15,12 @@ import '../../../Modals/ChannelListModal.dart';
 import 'FilesTab.dart';
 import 'SubscribersTab.dart';
 import 'VideosTab.dart';
+import 'NoticeBottomSheet.dart';
 
 class CreatorChannel extends StatefulWidget {
   const CreatorChannel({super.key,required this.channel});
  final Channels channel;
+
 
   @override
   State<CreatorChannel> createState() => _CreatorChannelState();
@@ -27,7 +29,7 @@ class CreatorChannel extends StatefulWidget {
 class _CreatorChannelState extends State<CreatorChannel> {
   final ChannelOptionsController channelOptionsController =
       Get.put(ChannelOptionsController());
-
+late  NoticeBottomSheet noticeBottomSheet;
        TextEditingController fileNameController = TextEditingController();
        TextEditingController videoTitleTextEditingController=TextEditingController();
        TextEditingController videoUrlcontroller=TextEditingController();
@@ -35,6 +37,12 @@ class _CreatorChannelState extends State<CreatorChannel> {
         
   //File? selectedPDF;
 final _formKey = GlobalKey<FormState>();
+
+@override
+void initState(){
+  noticeBottomSheet=NoticeBottomSheet();
+  super.initState();
+}
   Future<File?> requestPermissionAndPickPDFFile() async {
     PermissionStatus status = await Permission.storage.request();
     if (!status.isGranted) {
@@ -223,6 +231,8 @@ final _formKey = GlobalKey<FormState>();
   }
   void _handleOptionSelected(String option) {
     switch (option) {
+      case "New Notice":
+        noticeBottomSheet.showCreateNoticeBottomSheet(context: context, channeId: widget.channel.id!);
       case "Add Video":
         showAddVideoDialog(context);
         break;
@@ -264,106 +274,114 @@ final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      floatingActionButton: CircularMenu(
-        alignment: Alignment.bottomRight,
-        toggleButtonColor:
-            Colors.red, // Color of the central floating action button
-        toggleButtonSize:
-            Get.width * 0.1, // Size of the central floating action button
-        items: [
-          CircularMenuItem(
-            icon: Icons.video_library,
-            color: Colors.blue,
-            onTap: () {
-              _handleOptionSelected("Add Video");
-            },
-          ),
-          CircularMenuItem(
-            icon: Icons.attach_file,
-            color: Colors.green,
-            onTap: () {
-              _handleOptionSelected("Add File");
-            },
-          ),
-          CircularMenuItem(
-            icon: Icons.person_add,
-            color: Colors.orange,
-            onTap: () {
-              _handleOptionSelected("Add Subscriber");
-            },
-          ),
-        ],
-      ),
-      body: DefaultTabController(
-        length: 4,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                foregroundColor: CustomColors.secondaryColor,
-                expandedHeight: Get.height * 0.25,
-                pinned: true,
-                floating: false,
-                backgroundColor: CustomColors.createrColour, // YouTube red color
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text(
-                    "${widget.channel.name}",
-                    style: TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.bold,
-                        color: CustomColors.secondaryColor),
-                  ),
-                  background: CachedNetworkImage(
-                              colorBlendMode: BlendMode.darken,
-                                              imageUrl: widget.channel.thumbnail!,
-                            placeholder: (context, url) => Image.asset(
-                              'assets/default_image.png',
-                              fit: BoxFit.cover // Set the height to match the diameter of the CircleAvatar
-                            ),
-                            errorWidget: (context, url, error) => Image.asset(
-                              'assets/default_image.png',
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        floatingActionButton: CircularMenu(
+          alignment: Alignment.bottomRight,
+          toggleButtonColor:
+              Colors.red, // Color of the central floating action button
+          toggleButtonSize:
+              Get.width * 0.1, // Size of the central floating action button
+          items: [
+            CircularMenuItem(
+              icon: Icons.video_library,
+              color: Colors.blue,
+              onTap: () {
+                _handleOptionSelected("Add Video");
+              },
+            ),
+            CircularMenuItem(
+              icon: Icons.attach_file,
+              color: Colors.green,
+              onTap: () {
+                _handleOptionSelected("Add File");
+              },
+            ),
+            CircularMenuItem(
+              icon: Icons.person_add,
+              color: Colors.orange,
+              onTap: () {
+                _handleOptionSelected("Add Subscriber");
+              },
+            ),
+            CircularMenuItem(
+              icon: Icons.note_add_rounded,
+              color: Colors.purple,
+              onTap: () {
+                _handleOptionSelected("New Notice");
+              },)
+          ],
+        ),
+        body: DefaultTabController(
+          length: 4,
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  foregroundColor: CustomColors.secondaryColor,
+                  expandedHeight: Get.height * 0.25,
+                  pinned: true,
+                  floating: false,
+                  backgroundColor: CustomColors.createrColour, // YouTube red color
+                  flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: true,
+                    title: Text(
+                      "${widget.channel.name}",
+                      style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.secondaryColor),
+                    ),
+                    background: CachedNetworkImage(
+                                colorBlendMode: BlendMode.darken,
+                                                imageUrl: widget.channel.thumbnail!,
+                              placeholder: (context, url) => Image.asset(
+                                'assets/default_image.png',
+                                fit: BoxFit.cover // Set the height to match the diameter of the CircleAvatar
+                              ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/default_image.png',
+                                fit: BoxFit.cover,
+                                // Set the height to match the diameter of the CircleAvatar
+                              ),
                               fit: BoxFit.cover,
-                              // Set the height to match the diameter of the CircleAvatar
-                            ),
-                            fit: BoxFit.cover,
-                                            ),/*Image.network(
-                    widget.channel.thumbnail!,
-                    fit: BoxFit.cover,
-                  ),*/
-                ),
-              ),
-              SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(
-                  const TabBar(
-                    isScrollable: true,
-                    labelColor: Colors.red,
-                    indicatorColor: Colors.red, // YouTube red color
-                    tabs: [
-                      Tab(text: 'Videos'),
-                      Tab(text: 'Files'),
-                      Tab(text: 'Your subscribers'),
-                      Tab(text: 'About'),
-                    ],
+                                              ),/*Image.network(
+                      widget.channel.thumbnail!,
+                      fit: BoxFit.cover,
+                    ),*/
                   ),
                 ),
-                pinned: true,
-                floating: false,
-              ),
-            ];
-          },
-          body: TabBarView(
-            children: [
-              // Videos Tab Content
-              VideosTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!,),
-              // Files Tab Content
-              FilesTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!),
-              SubscribersTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!),
-              // About Tab Content
-              DescriptionTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!)
-            ],
+                SliverPersistentHeader(
+                  delegate: _SliverAppBarDelegate(
+                    const TabBar(
+                      isScrollable: true,
+                      labelColor: Colors.red,
+                      indicatorColor: Colors.red, // YouTube red color
+                      tabs: [
+                        Tab(text: 'Videos'),
+                        Tab(text: 'Files'),
+                        Tab(text: 'Your subscribers'),
+                        Tab(text: 'About'),
+                      ],
+                    ),
+                  ),
+                  pinned: true,
+                  floating: false,
+                ),
+              ];
+            },
+            body: TabBarView(
+              children: [
+                // Videos Tab Content
+                VideosTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!,),
+                // Files Tab Content
+                FilesTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!),
+                SubscribersTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!),
+                // About Tab Content
+                DescriptionTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!)
+              ],
+            ),
           ),
         ),
       ),
