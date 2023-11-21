@@ -35,7 +35,7 @@ class UploadBannerState extends State<UploadBanner> {
     
       if (controller.imagePath.value.isEmpty) {
         Get.showSnackbar(const GetSnackBar(
-          backgroundColor: Colors.green,
+          
           message: 'Image cannot be empty',
           duration: Duration(seconds: 3),
         ));
@@ -113,17 +113,17 @@ class UploadBannerState extends State<UploadBanner> {
                   child: Padding(
                     padding: const EdgeInsets.only(top:16.0),
                     child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(minimumSize: Size(Get.width*0.7, Get.height*0.05),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
+                    style: ElevatedButton.styleFrom(minimumSize: Size(Get.width*0.7, Get.height*0.07),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
                       onPressed: _uploadImage,
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text("Upload Channel"),
+                        child: Text("Upload Banner"),
                       ),
                     ),
                   ),
                 ):Center(
                   child: ElevatedButton(
-                    
+                     style: ElevatedButton.styleFrom(fixedSize: Size(Get.width*0.7, Get.height*0.07),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
                     onPressed: (){},
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),

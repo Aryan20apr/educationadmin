@@ -212,7 +212,11 @@ void initState()
                return const DefaultCarousel();
                  }
                  else
-              {return Column(
+              {
+                if(homeScreenController.bannersList.value.banners!.length==0) {
+                  return const DefaultCarousel();
+                } else {
+                  return Column(
                 children: [
                   CarouselSlider.builder(
                    carouselController: _carouselController, 
@@ -255,36 +259,29 @@ void initState()
                     
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
                     
-                    InkWell(
-                      onTap: (){
-                      //  Get.to(()=>ChannelDetails(channel: 
-                      //      homeScreenController.allChannelData.value.channels![itemIndex],
-                      // ));
-                      },
-                      child: ClipRRect(
-                         borderRadius: BorderRadius.circular(10.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                             border: Border.all(
-                          color: Theme.of(context).primaryColorDark, // Set the border color to black
-                          width: 4.0, // Adjust the border width as needed
+                    ClipRRect(
+                       borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                           border: Border.all(
+                        color: Theme.of(context).primaryColorDark, // Set the border color to black
+                        width: 4.0, // Adjust the border width as needed
+                      ),
                         ),
-                          ),
-                          child: CachedNetworkImage(
-                            width: double.infinity,
-                          colorBlendMode: BlendMode.darken,
-                            
-                          imageUrl: homeScreenController.bannersList.value.banners![itemIndex].image!,
-                            
-                          placeholder: (context, url) => Image.asset('assets/default_image.png'),
-                            
-                          errorWidget: (context, url, error) => Image.asset('assets/default_image.png'),
-                            
-                          fit: BoxFit.cover,
-                            
-                          errorListener: (error) => Image.asset('assets/default_image.png'),
-                            
-                          ),
+                        child: CachedNetworkImage(
+                          width: double.infinity,
+                        colorBlendMode: BlendMode.darken,
+                          
+                        imageUrl: homeScreenController.bannersList.value.banners![itemIndex].image!,
+                          
+                        placeholder: (context, url) => Image.asset('assets/default_image.png'),
+                          
+                        errorWidget: (context, url, error) => Image.asset('assets/default_image.png'),
+                          
+                        fit: BoxFit.cover,
+                          
+                        errorListener: (error) => Image.asset('assets/default_image.png'),
+                          
                         ),
                       ),
                     ),
@@ -325,7 +322,8 @@ void initState()
                   )
                 ],
                 
-              );}
+              );
+                }}
                 }
                 else
                 {

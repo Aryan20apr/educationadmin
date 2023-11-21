@@ -65,6 +65,7 @@ class NetworkService extends GetConnect {
   final String createnotice="notice/create";
   final String updateprofile="auth/profile/edit";
   final String deletenotice="notice/delete/";
+  final String deletebanner="banners/delete/";
 
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
@@ -591,6 +592,23 @@ Future<GeneralResponse2> deleteNotice({required int id,required String token})as
 {
   try {
   Response response=await delete("$baseURL$deletenotice$id",headers: {"Authorization":"Bearer $token"});
+  if(response.body!=null)
+  {
+    return GeneralResponse2.fromJson(response.body);
+  }
+  else
+  {
+    return GeneralResponse2();
+  }
+} on Exception catch (e) {
+  e.printError();
+}
+return GeneralResponse2();
+}
+Future<GeneralResponse2> deleteBanner({required int id,required String token})async
+{
+  try {
+  Response response=await delete("$baseURL$deletebanner$id",headers: {"Authorization":"Bearer $token"});
   if(response.body!=null)
   {
     return GeneralResponse2.fromJson(response.body);

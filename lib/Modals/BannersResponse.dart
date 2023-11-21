@@ -4,11 +4,11 @@ class BannersResponse {
   BannersResponse({this.data});
 
   BannersResponse.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -27,16 +27,16 @@ class Data {
     if (json['banners'] != null) {
       banners = <Banners>[];
       json['banners'].forEach((v) {
-        banners!.add(Banners.fromJson(v));
+        banners!.add(new Banners.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['msg'] = msg;
-    if (banners != null) {
-      data['banners'] = banners!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['msg'] = this.msg;
+    if (this.banners != null) {
+      data['banners'] = this.banners!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -44,17 +44,19 @@ class Data {
 
 class Banners {
   String? image;
+  int? id;
 
-  Banners({this.image});
+  Banners({this.image, this.id});
 
   Banners.fromJson(Map<String, dynamic> json) {
     image = json['image'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['image'] = image;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['image'] = this.image;
+    data['id'] = this.id;
     return data;
   }
 }
-

@@ -1,4 +1,5 @@
 import 'package:educationadmin/screens/common/ChangePasswordScreen.dart';
+import 'package:educationadmin/screens/pages/creator/AllBanners.dart';
 import 'package:educationadmin/screens/pages/creator/UploadBannerScreen.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,9 @@ const Text(
               }),
               ElevatedCard(Icons.file_download, 'Upload Banner', () {
                 Get.to(()=>const UploadBanner());
+              }),
+              ElevatedCard(Icons.file_download, 'All Banners', () {
+                Get.to(()=> MyBanners());
               }),
               ElevatedCard(Icons.lock, 'Change Password', () {
                 // Handle change password
