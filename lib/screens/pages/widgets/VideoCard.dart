@@ -83,7 +83,7 @@ class VideoCard extends StatelessWidget {
                  showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return SubscriptionModalBottomSheet();
+                return SubscriptionModalBottomSheet(channel:channel);
               },
             );
               }
@@ -158,7 +158,7 @@ class VideoCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                trailing: PopupMenuButton<String>(
+                trailing:flag==ListType.Creator? PopupMenuButton<String>(
                   icon: const Icon(
                     Icons.more_vert,
                     color: CustomColors.accentColor,
@@ -177,7 +177,9 @@ class VideoCard extends StatelessWidget {
                       await _showDeleteConfirmationDialog(context);
                     } else if (value == 'subscribe') {}
                   },
-                ),
+                ):ElevatedButton(style:ElevatedButton.styleFrom (elevation: 10,shape:const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.accentColor,foregroundColor: CustomColors.primaryColorDark,),onPressed:()  { 
+                  
+                 },child:Text('Subscribe',style: TextStyle(fontSize:12.sp),)),
               ),
             ],
           ),

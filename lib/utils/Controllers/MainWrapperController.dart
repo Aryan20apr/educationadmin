@@ -21,7 +21,7 @@ class MainWrapperController extends GetxController {
   RxBool isDarkTheme = false.obs;
 
   List<Widget> pages = [
-    HomeScreen(),
+    const HomeScreen(),
     const ExploreScreen(),
      ChatScreen(),
    const  CreaterHome(),

@@ -1,90 +1,207 @@
 import 'dart:io';
 
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
+class ProfileUpdateScreen extends StatefulWidget {
 
-class ProfileUpdateScreen extends StatelessWidget {
+  const ProfileUpdateScreen({super.key,});
+
+  @override
+  State<ProfileUpdateScreen> createState() => _ProfileUpdateScreenState();
+}
+
+class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
   final UserDetailsManager _profileController = Get.put(UserDetailsManager());
 
-  ProfileUpdateScreen({super.key,});
-
+ late TextEditingController usernameController;
+ late TextEditingController emailController;
+final _formKey = GlobalKey<FormState>();
+  @override
+  void initState()
+  {
+    usernameController=TextEditingController(text:_profileController.username.value);
+    emailController=TextEditingController(text: _profileController.email.value);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Update Profile"),
       ),
-      body: Center(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            double avatarSize = constraints.maxWidth * 0.4;
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    _profileController.pickImage();
-                  },
-                  child: Obx(() {
-                    return Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        Container(
-                          width: avatarSize,
-                          height: avatarSize,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.blue,
-                              width: 3.0,
+      body: SingleChildScrollView(
+        physics:const BouncingScrollPhysics(),
+        child: Center(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height-kBottomNavigationBarHeight,
+            width: MediaQuery.of(context).size.width,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                double avatarSize = constraints.maxWidth * 0.2;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        _profileController.pickImage();
+                      },
+                      child:  Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            Obx(
+                              ()=> ClipOval(
+                                child: CircleAvatar(
+                                  radius: avatarSize,
+                                  
+                                 
+                                  child: _profileController.imagePath.isNotEmpty
+                                        ? Image(image:  
+                                             FileImage(
+                                              File(_profileController.imagePath.value),
+                                            ),
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          )
+                                           
+                                          
+                                      :_profileController.image.value.isNotEmpty?
+                                      CachedNetworkImage(
+                                width: double.infinity,
+                                height: double.infinity,
+                                colorBlendMode: BlendMode.darken,
+                                                imageUrl: _profileController.image.value,
+                                                          placeholder: (context, url) => Image.asset(
+                                'assets/default_image.png',
+                                fit: BoxFit.fill,
+                                // width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
+                                // height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
+                                                          ),
+                                                          errorWidget: (context, url, error) => Image.asset(
+                                'assets/default_image.png',
+                                fit: BoxFit.fill,
+                                width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
+                                height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
+                                                          ),
+                                                          fit: BoxFit.cover,
+                                              ):const Icon(Icons.person)
+                                ),
+                              ),
                             ),
-                            image: _profileController.imagePath.isNotEmpty
-                                ? DecorationImage(
-                                    image: FileImage(
-                                      File(_profileController.imagePath.value),
+                            
+                              Container(
+                                decoration:const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.blue,
+                                ),
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                              ),
+                          ],
+                        )
+                    ),
+                     SizedBox(height: constraints.maxHeight*0.05),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(color: Colors.grey.shade200,borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                            padding:  const EdgeInsets.all(16.0),
+                            child:  Container(
+                               decoration: BoxDecoration(color:Colors.white,borderRadius: BorderRadius.circular(20)),
+                              child: Form(
+            key: _formKey,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                          TextFormField(
+                                            controller: usernameController,
+                                            decoration: InputDecoration(
+                                  labelText: "Username",
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(
                                     ),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
+                                  ),
+                                  //fillColor: Colors.green
+                                                      ),
+                                          validator: (val) {
+                                                        if(val!.isEmpty) {
+                                                          return "Username cannot be empty";
+                                                        }else{
+                                                          return null;
+                                                        }
+                                                      },
+                                          ),
+                                          SizedBox(height: constraints.maxHeight*0.05,),
+                                          TextFormField(
+                                            controller: emailController,
+                                            keyboardType: TextInputType.emailAddress,
+                                            decoration: InputDecoration(
+                                  labelText: "Email",
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(
+                                    ),
+                                  ),
+                                  //fillColor: Colors.green
+                                                      ),
+                                          validator: (val) {
+                                                        if(val!.isEmpty) {
+                                                          return "Email cannot be empty";
+                                                        }else{
+                                                          return null;
+                                                        }
+                                                      },
+                                          ),
+                                          SizedBox(height: constraints.maxHeight*0.05,),
+                                           ElevatedButton(
+                                            style: ElevatedButton.styleFrom(elevation: 10,foregroundColor: Colors.white,backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                                    onPressed: () {
+                                                      if(_formKey.currentState!.validate())
+                                                      {
+                                                      _profileController.updateProfile(email:emailController.text,username:usernameController.text);
+                                                      }
+                                                    },
+                                                    child: const Text("Update Profile"),
+                                                  ),
+                                                  SizedBox(height: constraints.maxHeight*0.05,)
+                                    ],
+                                    
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                          child: _profileController.imagePath.isEmpty
-                              ?Icon(
-                                  Icons.person,
-                                  size: avatarSize * 0.8,
-                                  color: Colors.grey,
-                                )
-                              : null,
                         ),
-                        if (_profileController.imagePath.isEmpty)
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.blue,
-                            ),
-                            child: const Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                          ),
-                      ],
-                    );
-                  }),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    _profileController.uploadProfileImage();
-                  },
-                  child: const Text("Update Profile"),
-                ),
-              ],
-            );
-          },
+                      ),
+                  
+                
+                    
+                   
+                  ],
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
+  }
+  @override
+  void dispose()
+  {
+    _profileController.imagePath.value='';
+    super.dispose();
   }
 }
 

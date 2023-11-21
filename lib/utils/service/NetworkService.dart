@@ -16,6 +16,7 @@ import 'package:educationadmin/Modals/LoginModal.dart';
 import 'package:educationadmin/Modals/NoticesResponse.dart';
 import 'package:educationadmin/Modals/PasswordResetResponse.dart';
 import 'package:educationadmin/Modals/PhoneVerificationModal.dart';
+import 'package:educationadmin/Modals/ProfileUpdateResponse.dart';
 import 'package:educationadmin/Modals/SignupResponseModal.dart';
 import 'package:educationadmin/Modals/SubsciberModal.dart';
 import 'package:educationadmin/Modals/UserModal.dart';
@@ -62,6 +63,8 @@ class NetworkService extends GetConnect {
   final String getbanners="banners";
   final String getnotices="notice/get/notices";
   final String createnotice="notice/create";
+  final String updateprofile="auth/profile/edit";
+  final String deletenotice="notice/delete/";
 
   final Logger logger=Logger();
   Future<SignupResponseModal?> signUp(SignupModal model) async {
@@ -549,6 +552,7 @@ Future<CreateNoticeResponse> createNotices({required String title,required Strin
   Response response=await post("$baseURL$createnotice",body,headers:{"Authorization":"Bearer $token"});
   if(response.body!=null)
   {
+    logger.e(response.body);
     return CreateNoticeResponse.fromJson(response.body);
   }
   else
@@ -562,6 +566,43 @@ Future<CreateNoticeResponse> createNotices({required String title,required Strin
   
 
 
+}
+Future<GeneralResponse2> updateProfile({required SignupModal signupModal,required String token,required String image})async
+{
+Map<String,dynamic> map=signupModal.toJson();
+map.remove('password');
+map.remove('phone');
+map.addAll({'image': image});
+logger.e("Update profile:$map");
+try {
+  Response response=await put("$baseURL$updateprofile",map,headers:{"Authorization":"Bearer $token"});
+  if(response.body!=null)
+  {
+  logger.e(response.body);
+  return GeneralResponse2.fromJson(response.body);}
+} on Exception catch (e) {
+  e.printError();
+}
+return GeneralResponse2();
+
+}
+
+Future<GeneralResponse2> deleteNotice({required int id,required String token})async
+{
+  try {
+  Response response=await delete("$baseURL$deletenotice$id",headers: {"Authorization":"Bearer $token"});
+  if(response.body!=null)
+  {
+    return GeneralResponse2.fromJson(response.body);
+  }
+  else
+  {
+    return GeneralResponse2();
+  }
+} on Exception catch (e) {
+  e.printError();
+}
+return GeneralResponse2();
 }
 }
 

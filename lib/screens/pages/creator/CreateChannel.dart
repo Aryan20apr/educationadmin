@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
+import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
@@ -74,7 +75,7 @@ class CreateChannelState extends State<CreateChannel> {
                  child: Container(
                   decoration: BoxDecoration(
                     color: Colors.greenAccent.shade100,
-                    borderRadius: BorderRadius.all(Radius.circular(20))
+                    borderRadius: const BorderRadius.all(Radius.circular(20))
                   ),
                    child: Padding(
                      padding: const EdgeInsets.all(16.0),
@@ -111,7 +112,7 @@ class CreateChannelState extends State<CreateChannel> {
                    child: Container(
                     decoration: BoxDecoration(
                     color: Colors.greenAccent.shade100,
-                   borderRadius: BorderRadius.all(Radius.circular(20))
+                   borderRadius: const BorderRadius.all(Radius.circular(20))
                                  ),
                      child: Padding(
                        padding: const EdgeInsets.all(16.0),
@@ -126,8 +127,7 @@ class CreateChannelState extends State<CreateChannel> {
                                   () => controller.imagePath.isNotEmpty
                                       ? Image.file(
                                           File(controller.imagePath.value),
-                                          width: Get.height*0.2,
-                                          height: Get.width*0.8,
+                                         width: double.infinity,
                                         )
                                       : Icon(Icons.camera_alt, size: Get.height*0.15, color: CustomColors.secondaryColor),
                                 ),
@@ -153,7 +153,7 @@ class CreateChannelState extends State<CreateChannel> {
                   child: Container(
                     decoration: BoxDecoration(
                     color: Colors.greenAccent.shade100,
-                   borderRadius: BorderRadius.all(Radius.circular(20))
+                   borderRadius: const BorderRadius.all(Radius.circular(20))
                   ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -165,6 +165,10 @@ class CreateChannelState extends State<CreateChannel> {
                               children: <Widget>[
                                  Text("Is Channel Paid?",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
                                 Switch(
+                                  activeColor: CustomColors.primaryColorDark,
+                                  
+                                  inactiveThumbColor: Colors.grey.shade600,
+                                  inactiveTrackColor: Colors.grey.shade400,
                                   value: _isChannelPaid,
                                   onChanged: (value) {
                                     setState(() {
@@ -176,7 +180,7 @@ class CreateChannelState extends State<CreateChannel> {
                               ],
                             ),
                           ),
-                          _isChannelPaid? SizedBox(height: Get.height*0.04):SizedBox(height: 0.0,),
+                          _isChannelPaid? SizedBox(height: Get.height*0.04):const SizedBox(height: 0.0,),
                           _isChannelPaid
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,11 +229,11 @@ class CreateChannelState extends State<CreateChannel> {
                     ),
                   ):Center(
                     child: ElevatedButton(
-                      
+                       style: ElevatedButton.styleFrom(minimumSize: Size(Get.width*0.7, Get.height*0.05),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
                       onPressed: (){},
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(),
+                        child: ProgressIndicatorWidget(),
                       ),
                     ),
                   ),

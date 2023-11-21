@@ -1,5 +1,6 @@
 import 'package:educationadmin/screens/common/ChangePasswordScreen.dart';
 import 'package:educationadmin/screens/pages/creator/UploadBannerScreen.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +9,8 @@ import '../../utils/Controllers/AuthenticationController.dart';
 import '../../utils/Controllers/UserController.dart';
 import '../common/UpdatePeofileScreen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import 'creator/CreatorNotifications.dart';
 void main() {
   runApp(ProfileScreen());
 }
@@ -54,6 +57,8 @@ class ProfileScreen extends StatelessWidget {
                             // backgroundImage:const NetworkImage(
                             //     'https://via.placeholder.com/100x100'),
                             child:CachedNetworkImage(
+                              width: double.infinity,
+                              height: double.infinity,
                               colorBlendMode: BlendMode.darken,
                                               imageUrl: userDetailsManager.image.value,
                             placeholder: (context, url) => Image.asset(
@@ -98,20 +103,20 @@ const Text(
                   ),
                 ),
               ),
-              ElevatedCard(const Icon(Icons.edit), 'Edit Profile', () {
-                Get.to(()=> ProfileUpdateScreen());
+              ElevatedCard( Icons.edit, 'Edit Profile', () {
+                Get.to(()=>const ProfileUpdateScreen());
               }),
-              ElevatedCard(const Icon(Icons.file_download), 'Upload Banner', () {
+              ElevatedCard(Icons.file_download, 'Upload Banner', () {
                 Get.to(()=>const UploadBanner());
               }),
-              ElevatedCard(const Icon(Icons.lock), 'Change Password', () {
+              ElevatedCard(Icons.lock, 'Change Password', () {
                 // Handle change password
                 Get.to(()=>ChangePassword());
               }),
-              ElevatedCard(const Icon(Icons.camera_alt), 'Update Profile Picture', () {
-              
+              ElevatedCard(Icons.notifications, 'My Notifications', () {
+                Get.to(()=>CreatorNotifications());
               }),
-              ElevatedCard(const Icon(Icons.exit_to_app), 'Logout', () {
+              ElevatedCard(Icons.exit_to_app, 'Logout', () {
                 AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
                 authenticationManager.logOut();
                 Get.offAll(()=>const LoginScreen());
@@ -124,22 +129,24 @@ const Text(
     );
   }
 
-  Widget ElevatedCard(Icon leadingIcon, String title, VoidCallback onPressed) {
+  Widget ElevatedCard(IconData leadingIcon, String title, VoidCallback onPressed) {
     return Card(
+      color: CustomColors.primaryColorDark,
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: InkWell(
         onTap: onPressed,
         child: ListTile(
-          leading: leadingIcon,
+          leading:Icon(leadingIcon,color: Colors.white,),
           title: Text(
             title,
             style: const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w500,
+              color: Colors.white
             ),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios),
+          trailing: const Icon(Icons.arrow_forward_ios,color: Colors.white,),
         ),
       ),
     );

@@ -244,7 +244,7 @@ void initState(){
         // Implement your logic for adding a subscriber here
         Get.defaultDialog(
           backgroundColor: Colors.white,
-          title: "Enter id number of new subscriber",
+          title: "Enter phone number of new subscriber",
           titleStyle: TextStyle(fontSize: 14.sp),
           content: Column(
             children: [

@@ -31,7 +31,7 @@ class _PdfViewState extends State<PdfView> with WidgetsBindingObserver{
   Logger logger=Logger();
   @override
   void initState() {
-    fileController=Get.put(FileDownloadStatusController(),tag:widget.file!.title!);
+    fileController=Get.put(FileDownloadStatusController(),tag:widget.file!.link!);
    
     super.initState();
   }

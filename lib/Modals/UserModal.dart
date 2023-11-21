@@ -44,7 +44,7 @@ class Consumer {
   String? _name;
   String? _phone;
   String? _email;
-  Null? _image;
+  String? _image;
 
   Consumer(
       {int? id,
@@ -53,7 +53,7 @@ class Consumer {
       String? name,
       String? phone,
       String? email,
-      Null? image}) {
+      String? image}) {
     if (id != null) {
       _id = id;
     }
@@ -89,8 +89,8 @@ class Consumer {
   set phone(String? phone) => _phone = phone;
   String? get email => _email;
   set email(String? email) => _email = email;
-  Null? get image => _image;
-  set image(Null? image) => _image = image;
+  String? get image => _image;
+  set image(String? image) => _image = image;
 
   Consumer.fromJson(Map<String, dynamic> json) {
     _id = json['id'];

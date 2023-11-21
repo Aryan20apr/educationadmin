@@ -1,5 +1,6 @@
 
 import 'package:educationadmin/Modals/NoticesResponse.dart';
+import 'package:educationadmin/Modals/ProfileUpdateResponse.dart' as General;
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/core/NetworkChecker.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
@@ -71,5 +72,24 @@ AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
 void updateExpansion({required int index,required bool status})
 {
 isExpanded[index]=status;
+}
+
+Future<void> deleteNotice({required int id,required int index})async
+{
+  String? token=await authenticationManager.getToken();
+  General.GeneralResponse2 generalResponse2=await networkService.deleteNotice(id:id,token:token!);
+  if(generalResponse2.data==null)
+  {
+    Get.showSnackbar(const GetSnackBar(message: "Cannot delete notices",duration: Duration(seconds: 3),));
+  }
+  else
+  {
+    Data notoceList= notices.value;
+notoceList.notices!.removeAt(index);
+    notices.value=notoceList;
+    notices.refresh();
+    
+    Get.showSnackbar(const GetSnackBar(message: "Notice delete successfully",duration: Duration(seconds: 3),));
+  }
 }
 }

@@ -1,6 +1,8 @@
 
 import 'dart:developer';
-
+import 'package:educationadmin/Modals/ProfileUpdateResponse.dart';
+import 'package:educationadmin/Modals/SingnupModal.dart';
+import 'package:logger/logger.dart';
 
 import 'package:educationadmin/Modals/ImageUploadResponse.dart';
 import 'package:educationadmin/Modals/UserModal.dart';
@@ -16,6 +18,8 @@ import 'package:image_picker/image_picker.dart';
 
 
 class UserDetailsManager extends GetxController with CacheManager {
+
+  Logger logger=Logger();
   final isInitialised=false.obs;
   final id=0.obs;
   final createdAt="".obs;
@@ -25,6 +29,7 @@ class UserDetailsManager extends GetxController with CacheManager {
   final email="".obs;
   final image="".obs;
  final RxString imagePath = ''.obs;
+ RxBool isUpdating=false.obs;
 
 NetworkService networkService=NetworkService();
   Future<void> pickImage() async {
@@ -34,30 +39,73 @@ NetworkService networkService=NetworkService();
       imagePath.value = pickedImage.path;
     }
   }
-  Future<void> uploadProfileImage() async{
-
+  Future<void> updateProfile({required String email,required String username}) async{
+      isUpdating.value=true;
+      logger.e('Image path: ${imagePath.value}');
     NetworkChecker networkChecker=NetworkChecker();
-   bool isConnectionAvailible=await networkChecker.checkConnectivity();
-   if(!isConnectionAvailible)
-   {
-    Get.showSnackbar(const GetSnackBar(message: 'Internet Connection Unvailable',duration: Duration(seconds: 3),));
-
-   }
-   else
-   {
+    var status=await networkChecker.checkConnectivity();
     AuthenticationManager authenticationManager=AuthenticationManager();
     String? token=await authenticationManager.getToken();
-    ImageUploadResponse imageUploadResponse=await networkService.uploadProfileImage(token: token!, file: XFile(imagePath.value));
-    if(imageUploadResponse.data!=null)
+
+    if(status==false)
     {
-      Get.showSnackbar(const GetSnackBar(message: 'Image uploaded successfully',duration: Duration(seconds: 3),));
-      image.value=imageUploadResponse.data!.url!;
+      Get.showSnackbar(const GetSnackBar(message: 'Internet Connection Unvailable',duration: Duration(seconds: 3),));
     }
     else
     {
-      Get.showSnackbar(const GetSnackBar(message: 'Image could not be uploaded',duration: Duration(seconds: 3),));
+      ImageUploadResponse? imageUploadResponse;
+      if(imagePath.isEmpty==false)
+      {
+         imageUploadResponse=await networkService.uploadProfileImage(token: token!, file: XFile(imagePath.value));
+
+        if(imageUploadResponse.data!=null)
+        {
+          image.value=imageUploadResponse.data!.url!;
+        }
+        else
+        {
+          Get.showSnackbar(const GetSnackBar(message: 'Could not update profile picture',duration: Duration(seconds: 3),));
+        }
+      }
+ 
+        SignupModal signupModal=SignupModal(name:username,phone: phone.value,email: email);
+        GeneralResponse2 response=await networkService.updateProfile(signupModal:signupModal,token: token!,image:image.value);
+         isUpdating.value=false;
+         
+          if(response.data==null)
+          {
+            Get.showSnackbar(const GetSnackBar(message: 'Could not update profile',duration: Duration(seconds: 3),));
+          }
+      else
+      {
+        
+        Get.showSnackbar(const GetSnackBar(message: 'Profile details updated ',duration: Duration(seconds: 3),));
+      }
+        
+
     }
-   }
+  //   NetworkChecker networkChecker=NetworkChecker();
+  //  bool isConnectionAvailible=await networkChecker.checkConnectivity();
+  //  if(!isConnectionAvailible)
+  //  {
+  //   Get.showSnackbar(const GetSnackBar(message: 'Internet Connection Unvailable',duration: Duration(seconds: 3),));
+
+  //  }
+  //  else
+  //  {
+  //   AuthenticationManager authenticationManager=AuthenticationManager();
+  //   String? token=await authenticationManager.getToken();
+  //   ImageUploadResponse imageUploadResponse=await networkService.uploadProfileImage(token: token!, file: XFile(imagePath.value));
+  //   if(imageUploadResponse.data!=null)
+  //   {
+  //     Get.showSnackbar(const GetSnackBar(message: 'Image uploaded successfully',duration: Duration(seconds: 3),));
+  //     image.value=imageUploadResponse.data!.url!;
+  //   }
+  //   else
+  //   {
+  //     Get.showSnackbar(const GetSnackBar(message: 'Image could not be uploaded',duration: Duration(seconds: 3),));
+  //   }
+   //}
   }
 
 

@@ -91,6 +91,8 @@ void initState()
                             // backgroundImage:const NetworkImage(
                             //     'https://via.placeholder.com/100x100'),
                             child:CachedNetworkImage(
+                              width: double.infinity,
+                              height: double.infinity,
                               colorBlendMode: BlendMode.darken,
                                               imageUrl: userDetailsManager.image.value,
                             placeholder: (context, url) => Image.asset(
