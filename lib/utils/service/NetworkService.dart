@@ -203,9 +203,14 @@ Response<Map<String,dynamic>> response = await get('$baseURL$channelfiles$channe
 
 Future<VideoResourcesData> getChannelVideo({String? token, required int channelId}) async
 {
-Response<Map<String,dynamic>> response = await get('$baseURL$channelvideos$channelId',headers: {"Authorization":"Bearer $token"});
-    logger.e(response.body);
-   return VideoResourcesData.fromJson(response.body!);
+try {
+  Response<Map<String,dynamic>> response = await get('$baseURL$channelvideos$channelId',headers: {"Authorization":"Bearer $token"});
+      logger.e(response.body);
+     return VideoResourcesData.fromJson(response.body!);
+} on Exception catch (e) {
+  e.printError();
+  return VideoResourcesData();
+}
 }
 
 

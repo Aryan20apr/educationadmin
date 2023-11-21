@@ -5,7 +5,7 @@ import 'package:educationadmin/Modals/VideoResourcesModal.dart';
 import 'package:educationadmin/screens/common/VideoScreen.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
-
+import  'package:sizer/sizer.dart';
 import 'package:educationadmin/utils/Controllers/ChanneResourcelController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -67,57 +67,118 @@ void onRefresh() async {
                 return const Center(
                   child: Text('Could not obtain videos'),
                 );
-              } else {
+              } else if(snapshot.hasData) {
                 if (resourceController.videoData.value.data == null) {
                   return const Center(
                     child: Text('No Files Available'),
                   );
                 }
-                Data? data = resourceController.videoData.value.data;
+               // Data? data = resourceController.videoData.value.data;
           
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: data!.videos!.length,
-                  itemBuilder: (context, index) {
-                    List<Videos>? videos = data.videos;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        
-                        onTap: () {
-                          Get.to(() => YouTubePlayerScreen(video: videos[index]));
+                return Obx(
+                  ()=> Column(
+                    children: <Widget>[
+                      if(resourceController.liveVideos.isNotEmpty)
+                      Text('Live Now',style: TextStyle(color: Colors.black,fontSize: 14.sp),),
+                      if(resourceController.liveVideos.isNotEmpty)
+                      
+                        ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: resourceController.liveVideos.length,//data!.videos!.length,
+                        itemBuilder: (context, index) {
+                          // List<Videos>? videos = data.videos;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: ListTile(
+                              
+                              onTap: () {
+                                Get.to(() => YouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
+                              },
+                              style: ListTileStyle.list,
+                              enableFeedback: true,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                              tileColor: CustomColors.tileColour,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                              leading: Container(
+                               
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  gradient: _buildTileGradient(), // Use the custom gradient
+                                ),
+                                child: const Icon(Icons.video_file_rounded, color: CustomColors.secondaryColor),
+                              ),
+                              title: Text(
+                                "${resourceController.liveVideos[index].title}",
+                                style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
+                              ),
+                              // subtitle: Row(
+                              //   children: <Widget>[
+                              //     const Icon(Icons.linear_scale, color: CustomColors.accentColor),
+                              //     Text(
+                              //       resourceController.videoData.value.data!.videos![index].title ?? "",
+                              //       style: const TextStyle(color: CustomColors.secondaryColor),
+                              //     )
+                              //   ],
+                              // ),
+                              trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
+                            ),
+                          );
                         },
-                        style: ListTileStyle.list,
-                        enableFeedback: true,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        tileColor: CustomColors.tileColour,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                        leading: Container(
-                         
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            gradient: _buildTileGradient(), // Use the custom gradient
-                          ),
-                          child: const Icon(Icons.video_file_rounded, color: CustomColors.secondaryColor),
-                        ),
-                        title: Text(
-                          "${videos![index].title}",
-                          style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Row(
-                          children: <Widget>[
-                            const Icon(Icons.linear_scale, color: CustomColors.accentColor),
-                            Text(
-                              videos[index].description ?? "",
-                              style: const TextStyle(color: CustomColors.secondaryColor),
-                            )
-                          ],
-                        ),
-                        trailing: Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
                       ),
-                    );
-                  },
+                      Text('Past Recordings',style: TextStyle(color: Colors.black,fontSize: 14.sp),),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: resourceController.normalVideos.length,//data!.videos!.length,
+                        itemBuilder: (context, index) {
+                          // List<Videos>? videos = data.videos;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: ListTile(
+                              
+                              onTap: () {
+                                Get.to(() => YouTubePlayerScreen(video: resourceController.normalVideos[index]/*videos[index]*/));
+                              },
+                              style: ListTileStyle.list,
+                              enableFeedback: true,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                              tileColor: CustomColors.tileColour,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                              leading: Container(
+                               
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  gradient: _buildTileGradient(), // Use the custom gradient
+                                ),
+                                child: const Icon(Icons.video_file_rounded, color: CustomColors.secondaryColor),
+                              ),
+                              title: Text(
+                                "${resourceController.normalVideos[index].title}",
+                                style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
+                              ),
+                              // subtitle: Row(
+                              //   children: <Widget>[
+                              //     const Icon(Icons.linear_scale, color: CustomColors.accentColor),
+                              //     Text(
+                              //       resourceController.videoData.value.data!.videos![index].title ?? "",
+                              //       style: const TextStyle(color: CustomColors.secondaryColor),
+                              //     )
+                              //   ],
+                              // ),
+                              trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+              else
+              {
+                 return const Center(
+                  child: Text('Could not obtain videos'),
                 );
               }
             },
@@ -130,7 +191,7 @@ void onRefresh() async {
   // Define the custom gradient for the ListTile
   LinearGradient _buildTileGradient() {
     // Use multiple colors in the gradient
-    return LinearGradient(
+    return const LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [

@@ -24,7 +24,9 @@ class ChannelResourceController extends GetxController
   AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
    Rx<FileResourcesData> fileData=FileResourcesData().obs;
    Rx<VideoResourcesData> videoData=VideoResourcesData().obs;
- 
+   Rx<VideoResourcesData> liveVideosData=VideoResourcesData().obs;
+   RxList<Videos> normalVideos=RxList.empty();
+   RxList<Videos> liveVideos = RxList.empty();
   NetworkService networkService=Get.find<NetworkService>();
 
 
@@ -63,7 +65,28 @@ class ChannelResourceController extends GetxController
         ));
         Logger().i("Get snackbar displayed");
         return false;}
-    videoData.value= await networkService.getChannelVideo(token:await authenticationManager.getToken(),channelId: channelId);
+    /*videoData.value*/ VideoResourcesData resourcesData= await networkService.getChannelVideo(token:await authenticationManager.getToken(),channelId: channelId);
+    if(resourcesData.data!=null)
+    //videoData.refresh();
+    {
+      videoData.value=resourcesData;
+    List<Videos> videos=resourcesData.data!.videos!;
+    liveVideos.clear();
+    normalVideos.clear();
+    for (var element in videos) {
+      if(element.isLive!=null&&element.isLive!)
+    {
+        liveVideos.add(element);
+    }
+    else
+    {
+      normalVideos.add(element);
+    }
+    }
+    liveVideos.refresh();
+    normalVideos.refresh();
+    }
+
     return true;
   }
 }
