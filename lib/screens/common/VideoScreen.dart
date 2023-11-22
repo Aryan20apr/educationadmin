@@ -2,6 +2,7 @@ import 'dart:convert';
 
 
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
+import 'package:educationadmin/screens/common/ChatView.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:http/http.dart' as http; 
@@ -44,13 +45,19 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.video.title}'),
-      ),
-      body: Center(
-        child: _videoLink.isNotEmpty
-            ? YoutubePlayer(
+    return SafeArea(
+      
+      child: Scaffold(
+        
+        appBar: AppBar(
+          title: Text('${widget.video.title}'),
+        ),
+        body:Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+           _videoLink.isNotEmpty
+          ? SizedBox(
+            width: MediaQuery.of(context).size.width,
+    
+            child: YoutubePlayer(
                 controller: _controller,
                 showVideoProgressIndicator: true,
                 onReady: () {
@@ -59,8 +66,15 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
                 onEnded: (data) {
                   // Video has ended
                 },
-              )
-            :const CircularProgressIndicator(), // Show loading indicator while fetching link
+              ),
+          )
+          :const CircularProgressIndicator(),
+        
+          Expanded(child: Padding(
+            padding: const EdgeInsets.only(top:4.0),
+            child: ChatView(video: widget.video,),
+          ))
+        ])
       ),
     );
   }
