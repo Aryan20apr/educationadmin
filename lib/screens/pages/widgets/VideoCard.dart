@@ -80,12 +80,12 @@ class VideoCard extends StatelessWidget {
                 //           foregroundColor: CustomColors.secondaryColor),
                 //       child: const Text('Ok')),
                 // );
-                 showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return SubscriptionModalBottomSheet(channel:channel);
-              },
-            );
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SubscriptionModalBottomSheet(channel: channel);
+                  },
+                );
               }
             }
           },
@@ -158,28 +158,58 @@ class VideoCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                trailing:flag==ListType.Creator? PopupMenuButton<String>(
-                  icon: const Icon(
-                    Icons.more_vert,
-                    color: CustomColors.accentColor,
-                  ), // Icon color is green
-                  itemBuilder: flag == ListType.Creator
-                      ? getCreatorItem
-                      : getExploreItem,
-                  onSelected: (value) async {
-                    if (value == 'edit') {
-                      await Get.to(() => EditChannel(channel: channel));
-                      onReturn;
-                      print('Edit selected');
-                    } else if (value == 'delete') {
-                      // Handle Delete option
-                      print('Delete selected');
-                      await _showDeleteConfirmationDialog(context);
-                    } else if (value == 'subscribe') {}
+                trailing: flag == ListType.Creator
+                    ? PopupMenuButton<String>(
+                        icon: const Icon(
+                          Icons.more_vert,
+                          color: CustomColors.accentColor,
+                        ), // Icon color is green
+                        itemBuilder: flag == ListType.Creator
+                            ? getCreatorItem
+                            : getExploreItem,
+                        onSelected: (value) async {
+                          if (value == 'edit') {
+                            await Get.to(() => EditChannel(channel: channel));
+                            onReturn;
+                            print('Edit selected');
+                          } else if (value == 'delete') {
+                            // Handle Delete option
+                            print('Delete selected');
+                            await _showDeleteConfirmationDialog(context);
+                          } else if (value == 'subscribe') {
+                             showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SubscriptionModalBottomSheet(channel: channel);
                   },
-                ):ElevatedButton(style:ElevatedButton.styleFrom (elevation: 10,shape:const ContinuousRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.accentColor,foregroundColor: CustomColors.primaryColorDark,),onPressed:()  { 
-                  
-                 },child:Text('Subscribe',style: TextStyle(fontSize:12.sp),)),
+                );
+                          }
+                        },
+                      )
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          shape: const ContinuousRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          backgroundColor: CustomColors.accentColor,
+                          foregroundColor: CustomColors.primaryColorDark,
+                        ),
+                        onPressed: () {
+                          if(channel.isCompletelyPaid!||channel.price!>0);
+                          {
+                             showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SubscriptionModalBottomSheet(channel: channel);
+                  },
+                );
+                          }
+                        },
+                        child: Text(
+                          'Subscribe',
+                          style: TextStyle(fontSize: 12.sp),
+                        )),
               ),
             ],
           ),

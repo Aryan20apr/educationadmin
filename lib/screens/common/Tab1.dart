@@ -79,7 +79,7 @@ void onRefresh() async {
                   ()=> Column(
                     children: <Widget>[
                       if(resourceController.liveVideos.isNotEmpty)
-                      Text('Live Now',style: TextStyle(color: Colors.black,fontSize: 14.sp),),
+                      Text('Live Now',style: TextStyle(color: Colors.black,fontSize: 14.sp,fontWeight: FontWeight.bold),),
                       if(resourceController.liveVideos.isNotEmpty)
                       
                         ListView.builder(
@@ -126,7 +126,13 @@ void onRefresh() async {
                           );
                         },
                       ),
-                      Text('Past Recordings',style: TextStyle(color: Colors.black,fontSize: 14.sp),),
+                      Text('Past Recordings',style: TextStyle(color: Colors.black,fontSize: 14.sp,fontWeight: FontWeight.bold),),
+
+                      if(resourceController.normalVideos.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text('No videos available',style: TextStyle(color: Colors.black,fontSize: 10.sp),),
+                          ),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),

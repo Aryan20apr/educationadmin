@@ -13,7 +13,7 @@ import 'package:logger/logger.dart';
 
 
 class MainWrapper extends StatefulWidget {
-  MainWrapper({super.key});
+  const MainWrapper({super.key});
 
   @override
   State<MainWrapper> createState() => _MainWrapperState();

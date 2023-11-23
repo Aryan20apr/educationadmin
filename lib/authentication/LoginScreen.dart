@@ -4,6 +4,7 @@
 import 'package:educationadmin/authentication/PhoneVerification.dart';
 import 'package:educationadmin/authentication/ForgotPasswordPhone.dart';
 import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
+import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 late  TextEditingController phoneNumberController;
 late TextEditingController passwordController;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -62,69 +64,92 @@ late TextEditingController passwordController;
                   
                       SvgPicture.asset('assets/login.svg',fit: BoxFit.scaleDown,height:40.h,),
                   
-                        Container(
-                          width: constraints.maxWidth*0.8,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          color: Colors.grey[200], // Grey background color
-                        ),
-                        child: TextField(
-                          controller: phoneNumberController,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter your Phone Number',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none, // Hide the default border
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              Container(
+                                width: constraints.maxWidth*0.8,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                                color: Colors.grey[200], // Grey background color
+                              ),
+                              child: TextFormField(
+                                controller: phoneNumberController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter your Phone Number',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none, // Hide the default border
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                                ),
+                                validator: (value) {
+                                  if(value == null||value.length!=10)
+                                  {
+                                      return 'Not a valid phone number';
+                                  }
+                                },
+                              ),
+                                              ),
+                                              const SizedBox(height: 20.0),
+                                              Container(
+                              width: constraints.maxWidth*0.8,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                                color: Colors.grey[200], // Grey background color
+                              ),
+                              child:  TextFormField(
+                                validator: (value) {
+                                  if(value==null||value.isEmpty)
+                                  {
+                                      return 'Password cannot be empty';
+                                  }
+                                },
+                                controller: passwordController,
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  
+                                  hintText: 'Password',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none, // Hide the default border
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                                ),
+                              ),
+                                              ),
+                                              const SizedBox(height: 20.0),
+                                              ElevatedButton(
+                                              onPressed: () {
+                                                if(_formKey.currentState!
+                                                .validate()) {
+                                                  authenticationViewModel.login(password: passwordController.text, phone: phoneNumberController.text);
+                                                }
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                backgroundColor:  Theme.of(context).primaryColor,
+                                foregroundColor:  Theme.of(context).primaryColorDark,
+                              maximumSize: Size(constraints.maxWidth*0.8,constraints.maxHeight*0.2),
+                              padding: const EdgeInsets.symmetric(vertical: 16.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                                              ),
+                                              child: Container(
+                              
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              child: Obx(()=>authenticationViewModel.isLoading.value?  const ProgressIndicatorWidget():  Text(
+                                'Log in',
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                  
+                                ),
+                              ),)
+                                              ),
+                                            ),
+                            ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Container(
-                        width: constraints.maxWidth*0.8,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          color: Colors.grey[200], // Grey background color
-                        ),
-                        child:  TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            
-                            hintText: 'Password',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none, // Hide the default border
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      ElevatedButton(
-                      onPressed: () {
-                        authenticationViewModel.login(password: passwordController.text, phone: phoneNumberController.text);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:  Theme.of(context).primaryColor,
-                          foregroundColor:  Theme.of(context).primaryColorDark,
-                        maximumSize: Size(constraints.maxWidth*0.8,constraints.maxHeight*0.2),
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      ),
-                      child: Container(
-                        
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        child: Obx(()=>authenticationViewModel.isLoading.value?  const CircularProgressIndicator.adaptive():  Text(
-                          'Log in',
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                            
-                          ),
-                        ),)
-                      ),
-                    ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

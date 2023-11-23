@@ -20,7 +20,7 @@ import 'MainScreen.dart';
 class FirstScreen extends StatelessWidget {
   final AuthenticationManager _authmanager = Get.put(AuthenticationManager());
   final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
-  final NetworkService _networkService = Get.put(NetworkService());
+
  final Logger logger=Logger();
   Future<void> initializeSettings() async {
     await _authmanager.checkLoginStatus();
@@ -85,7 +85,7 @@ class OnBoard extends StatelessWidget {
  final UserDetailsManager _userdetails=Get.find<UserDetailsManager>();
     return Obx(() {
       log("Is Logged in and initialised ? ${_authManager.isLogged.value} ${_userdetails.isInitialised.value}");
-      return _authManager.isLogged.value&&_userdetails.isInitialised.value ?  MainWrapper() : const LoginScreen();
+      return _authManager.isLogged.value&&_userdetails.isInitialised.value ? const MainWrapper() : const LoginScreen();
     });
   }
 }

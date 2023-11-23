@@ -105,18 +105,23 @@ TODO: "Handle signup error ";
   }
 
 Future<OTPModal?> sendOTP({required PhoneModal phone}) async {
-    Response<Map<String,dynamic>> response = await post('$baseURL$sendotp', phone.toJson());
-    logger.e(response.body);
-    if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
+    try {
+  Response<Map<String,dynamic>> response = await post('$baseURL$sendotp', phone.toJson());
+logger.e(response.body);
+    if (response.body!=null) {
       
       return OTPModal.fromJson(response.body!);
     } else {
+      return OTPModal();
 
 
-TODO: "Handle OTP error ";
-      return OTPModal.fromJson(response.body!);
-      //return SignupErrorModal.fromJson(response.body!);
     }
+    } 
+on Exception catch (e) {
+e.printError();
+}
+return OTPModal();
+    
   }
 
   Future<UserModal> getUserDetails({String? token}) async {

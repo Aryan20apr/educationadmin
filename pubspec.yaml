@@ -108,6 +108,7 @@ flutter:
     - assets/google.svg
     - assets/default_image.png
     - assets/profileicon.jpeg
+    - assets/qrcode.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

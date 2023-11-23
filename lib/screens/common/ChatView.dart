@@ -20,6 +20,8 @@ late TextEditingController _messageInputController;
 ChatController chatController=Get.put(ChatController());
 UserDetailsManager userDetailsManager=Get.put(UserDetailsManager());
 ScrollController scrollController=ScrollController();
+
+RxBool isKeyboardOpen = false.obs;
   @override
   void initState()
   {
@@ -40,6 +42,14 @@ Duration(milliseconds: 300),
       );
     }
   });
+
+ 
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Code that is accessing the MediaQuery widget
+       MediaQuery.of(context).viewInsets.bottom.obs.listen((bottom) {
+      isKeyboardOpen.value = bottom > 0;
+    });
+    });
   }
   @override
   void dispose()
@@ -51,18 +61,25 @@ Duration(milliseconds: 300),
   }
   @override
   Widget build(BuildContext context) {
+      
+
     return LayoutBuilder(
       builder: (context,constraints) {
-        return Column(
+        return Obx(
+              ()=>Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Obx(
-              ()=>Expanded(
+            Expanded(
                 child: ListView.separated(
                   controller: scrollController,
                   dragStartBehavior:DragStartBehavior.down,reverse: false,physics:const BouncingScrollPhysics(),itemBuilder: (context,index){
                 
-                      return Wrap(
+                      if(index==chatController.chatList.length)
+                      {
+                        return const SizedBox(height: 80,);
+                      }
+                      else {
+                        return Wrap(
                         alignment: chatController.chatList[index].userName == userDetailsManager.username.value
                             ? WrapAlignment.end
                             : WrapAlignment.start,
@@ -88,15 +105,17 @@ Duration(milliseconds: 300),
                           )
                         ],
                       );
+                      }
                      
                 }, separatorBuilder: (_, index) =>  SizedBox(
                       height: 0.05.h,
-                    ), itemCount: chatController.chatList.length),
-              )
-            ),
-            //SizedBox(height: constraints.maxHeight*0.1,),
+                    ), itemCount: chatController.chatList.length+1),
+              ),
+            
+        
+            //SizedBox(height:isKeyboardOpen.value?MediaQuery.of(context).viewInsets.bottom:MediaQuery.of(context).viewInsets.bottom+20),
             Container(
-              height: constraints.maxHeight*0.1,
+              height: isKeyboardOpen.value ?constraints.maxHeight*0.7:constraints.maxHeight*0.1,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
               ),
@@ -134,6 +153,7 @@ Duration(milliseconds: 300),
               ),
             )
           ],
+        )
         );
       }
     );
