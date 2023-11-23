@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
+import 'package:intl/intl.dart';
 
 
 
@@ -87,7 +87,7 @@ void onRefresh() async {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: resourceController.liveVideos.length,//data!.videos!.length,
                         itemBuilder: (context, index) {
-                          // List<Videos>? videos = data.videos;
+                          String datetime=parseDateTimeAndSeparate(resourceController.liveVideos[index].startDate!);
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
@@ -112,15 +112,7 @@ void onRefresh() async {
                                 "${resourceController.liveVideos[index].title}",
                                 style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
                               ),
-                              // subtitle: Row(
-                              //   children: <Widget>[
-                              //     const Icon(Icons.linear_scale, color: CustomColors.accentColor),
-                              //     Text(
-                              //       resourceController.videoData.value.data!.videos![index].title ?? "",
-                              //       style: const TextStyle(color: CustomColors.secondaryColor),
-                              //     )
-                              //   ],
-                              // ),
+                              subtitle: Text(datetime,  style: const TextStyle(color: CustomColors.secondaryColor, ),),
                               trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
                             ),
                           );
@@ -207,4 +199,12 @@ void onRefresh() async {
       ],
     );
   }
+
+String parseDateTimeAndSeparate(String dateTimeString) {
+  DateTime dateTime = DateFormat('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'').parse(dateTimeString);
+  String date = dateTime.toIso8601String().split('T')[0];
+  String time = dateTime.toIso8601String().split('T')[1];
+  return "Starting on $date at $time";
+}
+
 }
