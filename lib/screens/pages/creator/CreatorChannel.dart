@@ -4,6 +4,7 @@ import 'package:circular_menu/circular_menu.dart';
 import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/screens/pages/creator/ChannelOptionController.dart';
 import 'package:educationadmin/screens/pages/creator/DescriptionTab.dart';
+import 'package:educationadmin/screens/pages/creator/LiveVideosTab.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -314,7 +315,7 @@ void initState(){
           ],
         ),
         body: DefaultTabController(
-          length: 4,
+          length: 5,
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
@@ -359,7 +360,8 @@ void initState(){
                       labelColor: Colors.red,
                       indicatorColor: Colors.red, // YouTube red color
                       tabs: [
-                        Tab(text: 'Videos'),
+                        Tab(text: 'Recordings'),
+                         Tab(text: 'Live'),
                         Tab(text: 'Files'),
                         Tab(text: 'Your subscribers'),
                         Tab(text: 'About'),
@@ -375,6 +377,7 @@ void initState(){
               children: [
                 // Videos Tab Content
                 VideosTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!,),
+                LiveVideosTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!,),
                 // Files Tab Content
                 FilesTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!),
                 SubscribersTab(channelId: widget.channel.id!,createrId: widget.channel.createdBy!),

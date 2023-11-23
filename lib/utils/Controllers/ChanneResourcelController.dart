@@ -24,7 +24,7 @@ class ChannelResourceController extends GetxController
   AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
    Rx<FileResourcesData> fileData=FileResourcesData().obs;
    Rx<VideoResourcesData> videoData=VideoResourcesData().obs;
-   Rx<VideoResourcesData> liveVideosData=VideoResourcesData().obs;
+
    RxList<Videos> normalVideos=RxList.empty();
    RxList<Videos> liveVideos = RxList.empty();
   NetworkService networkService=Get.find<NetworkService>();

@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:intl/intl.dart';
 import '../../../utils/ColorConstants.dart';
-class VideosTab extends StatefulWidget {
-  const VideosTab({
+class LiveVideosTab extends StatefulWidget {
+  const LiveVideosTab({
     super.key,
     required this.channelId,
     required this.createrId
@@ -19,10 +19,10 @@ class VideosTab extends StatefulWidget {
   final int createrId;
 
   @override
-  State<VideosTab> createState() => _VideosTabState();
+  State<LiveVideosTab> createState() => _LiveVideosTabState();
 }
 
-class _VideosTabState extends State<VideosTab> {
+class _LiveVideosTabState extends State<LiveVideosTab> {
   final CreaterChannelsController channelsController=Get.put(CreaterChannelsController());
   final _formKey = GlobalKey<FormState>();
     final RefreshController _refreshController =
@@ -33,8 +33,8 @@ List<Videos> videos=[];
   void _onRefresh() async {
     bool result= await channelsController.getChannelVideos(channelId: widget.channelId);
     setState(() {
-      isFetched=Future.delayed(Duration.zero,()=>result);                                                                     
-      videos=channelsController.normalVideos;                                                                                                                                                                                                                                                                                                                                                                   
+      isFetched=Future.delayed(Duration.zero,()=>result);
+      videos=channelsController.liveVideos;
     });
     _refreshController.refreshCompleted(); // Complete the refresh
      _refreshController.loadComplete();
@@ -70,13 +70,14 @@ List<Videos> videos=[];
                     {
                       if(channelsController.videoData.value.data!.videos!.isNotEmpty)
                       {
-                        videos=channelsController.videoData.value.data!.videos??[];
+                        videos=channelsController.liveVideos;
                          return Obx(
                            ()=> ListView.builder(
                                       physics: const NeverScrollableScrollPhysics(),
                                      addAutomaticKeepAlives: true,
-                                     itemCount: channelsController.videoData.value.data!.videos!.length, // Adjust the number of video items
+                                     itemCount: channelsController.liveVideos.length, // Adjust the number of video items
                                      itemBuilder: (context, index) {
+                                       String datetime=parseDateTimeAndSeparate(videos[index].startDate!);
                                        return Card(
                                         color: CustomColors.tileColour,
                                         shape:const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -90,6 +91,7 @@ List<Videos> videos=[];
                                               Get.to(() => YouTubePlayerScreen(video: videos[index]));
                                            },
                                            contentPadding: const EdgeInsets.all(10),
+                                           subtitle: Text(datetime,  style: const TextStyle(color: CustomColors.secondaryColor, ),),
                                            leading: CachedNetworkImage(
                               colorBlendMode: BlendMode.darken,
                                               imageUrl: 'https://img.freepik.com/free-photo/multi-color-fabric-texture-samples_1373-434.jpg?t=st=1698132567~exp=1698133167~hmac=4cefa7b45b26f445d5823b41320e1c572ef6a98f6313f54ce351f818b03cc26e',
@@ -275,4 +277,11 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
       },
     );
   }
+
+  String parseDateTimeAndSeparate(String dateTimeString) {
+  DateTime dateTime = DateFormat('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'').parse(dateTimeString);
+  String date = dateTime.toIso8601String().split('T')[0];
+  String time = dateTime.toIso8601String().split('T')[1];
+  return "Starting on $date at $time";
+}
   }
