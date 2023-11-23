@@ -3,6 +3,7 @@ import 'package:educationadmin/utils/Controllers/UserController.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import '../../Modals/VideoResourcesModal.dart';
@@ -114,43 +115,47 @@ Duration(milliseconds: 300),
             
         
             //SizedBox(height:isKeyboardOpen.value?MediaQuery.of(context).viewInsets.bottom:MediaQuery.of(context).viewInsets.bottom+20),
-            Container(
-              height: isKeyboardOpen.value ?constraints.maxHeight*0.7:constraints.maxHeight*0.1,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _messageInputController,
-                      decoration: const InputDecoration(
-                        hintText: 'Type your message here...',
-                        border: InputBorder.none,
-                      ),
-                    ),
+            KeyboardVisibilityBuilder(
+              builder: (context,isVisible) {
+                return Container(
+                  height: isVisible?constraints.maxHeight*0.3:constraints.maxHeight*0.1,//isKeyboardOpen.value ?constraints.maxHeight*0.7:constraints.maxHeight*0.1,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
                   ),
-                  IconButton(
-                    onPressed: () {
-                      // scrollController.animateTo(
-                      //   scrollController.position.maxScrollExtent,
-                      //   duration: const Duration(milliseconds: 300),
-                      //   curve: Curves.easeOut,
-                      // );
-                      if (_messageInputController.text.trim().isNotEmpty) {
-                        chatController.sendMessage(id: widget.video.id!, message: _messageInputController.text);
-                        _messageInputController.clear();
-                         
-                      }
-                    },
-                    icon: const Icon(Icons.send),
-                  )
-                ],
-              ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _messageInputController,
+                          decoration: const InputDecoration(
+                            hintText: 'Type your message here...',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          // scrollController.animateTo(
+                          //   scrollController.position.maxScrollExtent,
+                          //   duration: const Duration(milliseconds: 300),
+                          //   curve: Curves.easeOut,
+                          // );
+                          if (_messageInputController.text.trim().isNotEmpty) {
+                            chatController.sendMessage(id: widget.video.id!, message: _messageInputController.text);
+                            _messageInputController.clear();
+                             
+                          }
+                        },
+                        icon: const Icon(Icons.send),
+                      )
+                    ],
+                  ),
+                );
+              }
             )
           ],
         )
