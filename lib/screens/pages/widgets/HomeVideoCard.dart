@@ -15,7 +15,7 @@ class HomeVideoCard extends StatelessWidget {
   final Color gradientEndColor;
   final VoidCallback? onTap;
 
-  HomeVideoCard({
+  const HomeVideoCard({super.key, 
     required this.thumbnailUrl,
     required this.title,
     required this.price,

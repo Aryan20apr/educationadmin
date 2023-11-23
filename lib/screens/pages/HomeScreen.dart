@@ -392,61 +392,66 @@ void initState()
                   itemBuilder: (context, index) {
                             return HomeVideoCard(
                               onTap: (){
-                      //           Get.to(()=>ChannelDetails(channel: 
-                      //        homeScreenController.channelData.value.channels![index],
-                      // ));
-                      print(homeScreenController
-                                                      .channelData
-                                                      .value
-                                                      .channels![index]
-                                                      .isCompletelyPaid!);
-                                                      print(homeScreenController
-                                                      .channelData
-                                                      .value
-                                                      .channels![index]
-                                                      .price);
-                                              if (homeScreenController
-                                                      .channelData
-                                                      .value
-                                                      .channels![index]
-                                                      .isCompletelyPaid! ||
-                                                  homeScreenController
-                                                          .channelData
-                                                          .value
-                                                          .channels![index]
-                                                          .price ==
-                                                      0) {
-                                                Get.to(() => ChannelDetails(
+                   
+                      Get.to(() => ChannelDetails(
                                                       channel:
                                                           homeScreenController
                                                               .channelData
                                                               .value
                                                               .channels![index],
                                                     ));
-                                              } else {
-                                                Get.defaultDialog(
-                                                  title: 'Attention',
-                                                  backgroundColor: CustomColors
-                                                      .secondaryColor,
-                                                  middleText:
-                                                      'This content is not available free of cost.',
-                                                  //textConfirm: 'This content is not available free of cost',
-                                                  confirmTextColor:
-                                                      Colors.white,
-                                                  confirm: ElevatedButton(
-                                                      onPressed: () {
-                                                        Get.back();
-                                                      },
-                                                      style: ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              CustomColors
-                                                                  .primaryColor,
-                                                          foregroundColor:
-                                                              CustomColors
-                                                                  .secondaryColor),
-                                                      child: const Text('Ok')),
-                                                );
-                                              }
+                      // print(homeScreenController
+                      //                                 .channelData
+                      //                                 .value
+                      //                                 .channels![index]
+                      //                                 .isCompletelyPaid!);
+                      //                                 print(homeScreenController
+                      //                                 .channelData
+                      //                                 .value
+                      //                                 .channels![index]
+                      //                                 .price);
+                      //                         if (homeScreenController
+                      //                                 .channelData
+                      //                                 .value
+                      //                                 .channels![index]
+                      //                                 .isCompletelyPaid! ||
+                      //                             homeScreenController
+                      //                                     .channelData
+                      //                                     .value
+                      //                                     .channels![index]
+                      //                                     .price ==
+                      //                                 0) {
+                      //                           Get.to(() => ChannelDetails(
+                      //                                 channel:
+                      //                                     homeScreenController
+                      //                                         .channelData
+                      //                                         .value
+                      //                                         .channels![index],
+                      //                               ));
+                      //                         } else {
+                      //                           Get.defaultDialog(
+                      //                             title: 'Attention',
+                      //                             backgroundColor: CustomColors
+                      //                                 .secondaryColor,
+                      //                             middleText:
+                      //                                 'This content is not available free of cost.',
+                      //                             //textConfirm: 'This content is not available free of cost',
+                      //                             confirmTextColor:
+                      //                                 Colors.white,
+                      //                             confirm: ElevatedButton(
+                      //                                 onPressed: () {
+                      //                                   Get.back();
+                      //                                 },
+                      //                                 style: ElevatedButton.styleFrom(
+                      //                                     backgroundColor:
+                      //                                         CustomColors
+                      //                                             .primaryColor,
+                      //                                     foregroundColor:
+                      //                                         CustomColors
+                      //                                             .secondaryColor),
+                      //                                 child: const Text('Ok')),
+                      //                           );
+                      //                         }
                                             },
                               
                               thumbnailUrl: homeScreenController.channelData.value.channels![index].thumbnail!,

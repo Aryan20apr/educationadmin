@@ -149,7 +149,7 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                   if(validate) {
                                   await  _authenticationViewModel.changePassword(
                                         phonenumber:widget.phone,password: passwordController.text,verificationType: VerificationType.ForgotPassword);
-                                    Get.offAll(const LoginScreen());
+                                    Get.offAll(()=>const LoginScreen());
                                   }
                                   },
                                   style: ElevatedButton.styleFrom(
