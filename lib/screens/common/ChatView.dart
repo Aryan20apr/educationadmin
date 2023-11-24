@@ -45,12 +45,12 @@ Duration(milliseconds: 300),
   });
 
  
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Code that is accessing the MediaQuery widget
-       MediaQuery.of(context).viewInsets.bottom.obs.listen((bottom) {
-      isKeyboardOpen.value = bottom > 0;
-    });
-    });
+  // WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     // Code that is accessing the MediaQuery widget
+  //      MediaQuery.of(context).viewInsets.bottom.obs.listen((bottom) {
+  //     isKeyboardOpen.value = bottom > 0;
+  //   });
+  //   });
   }
   @override
   void dispose()

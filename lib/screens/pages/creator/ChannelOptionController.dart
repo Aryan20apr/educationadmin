@@ -18,6 +18,7 @@ class ChannelOptionsController extends GetxController
   RxBool isVideoPaid=false.obs;
   RxBool isFilePaid=false.obs;
   RxString filePath="".obs;
+  Rx<DateTime> selectedDateTime=DateTime.now().obs;
   void updatePhoneNumber(String value) {
     phoneNumber.value = value;
   }

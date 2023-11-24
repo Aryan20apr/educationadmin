@@ -47,34 +47,45 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       
-      child: Scaffold(
-        
-        appBar: AppBar(
-          title: Text('${widget.video.title}'),
-        ),
-        body:Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-           _videoLink.isNotEmpty
-          ? SizedBox(
-            width: MediaQuery.of(context).size.width,
+      child: YoutubePlayerBuilder(
+        onExitFullScreen: (){
+         // _controller.toggleFullScreenMode();
+        },
+        onEnterFullScreen: (){
+         // _controller.toggleFullScreenMode();
+        },
+        player:YoutubePlayer(
+                    controller: _controller,
+                    showVideoProgressIndicator: true,
+                    onReady: () {
+                      // Video is ready to play
+                    },
+                    onEnded: (data) {
+                      // Video has ended
+                    },
+                  ),
+        builder: (context,player) {
+          return Scaffold(
+            
+            appBar: AppBar(
+              title: Text('${widget.video.title}'),
+            ),
+            body:Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+              //  _videoLink.isNotEmpty
+              // ? SizedBox(
+              //   width: MediaQuery.of(context).size.width,
     
-            child: YoutubePlayer(
-                controller: _controller,
-                showVideoProgressIndicator: true,
-                onReady: () {
-                  // Video is ready to play
-                },
-                onEnded: (data) {
-                  // Video has ended
-                },
-              ),
-          )
-          :const CircularProgressIndicator(),
-        
-          Expanded(child: Padding(
-            padding: const EdgeInsets.only(top:4.0),
-            child: ChatView(video: widget.video,),
-          ))
-        ])
+              //   child: 
+                
+            player,
+            
+              Expanded(child: Padding(
+                padding: const EdgeInsets.only(top:4.0),
+                child: ChatView(video: widget.video,),
+              ))
+            ])
+          );
+        }
       ),
     );
   }

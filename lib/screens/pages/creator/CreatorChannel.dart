@@ -17,7 +17,8 @@ import 'FilesTab.dart';
 import 'SubscribersTab.dart';
 import 'VideosTab.dart';
 import 'NoticeBottomSheet.dart';
-
+import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 class CreatorChannel extends StatefulWidget {
   const CreatorChannel({super.key,required this.channel});
  final Channels channel;
@@ -224,6 +225,170 @@ void initState(){
     )
               );
   }
+   void showLiveVideoDialog(BuildContext context)
+  {
+    showDialog(
+                context: context,
+                builder: (context) =>  Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                 Text(
+                  "Schedule a new live video",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                 SizedBox(height: Get.height*0.01),
+                TextFormField(
+                  controller: videoTitleTextEditingController,
+                  decoration: const InputDecoration(labelText: 'Title',labelStyle: TextStyle(color: Colors.grey)),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: videoUrlcontroller,
+                  decoration: const InputDecoration(labelStyle: TextStyle(color: Colors.grey),labelText: 'Live video link from Youtube'),
+                  validator: (value) {
+                    // Add your link validation regex here
+                    // For example, to require a valid URL:
+                    if (!Uri.tryParse(value??"")!.isAbsolute == true) {
+                      return 'Please enter a valid URL';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: Get.height*0.02,),
+                                SizedBox(height: Get.height*0.01,),
+                Text('Choose Date and Time below',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 12.sp)),
+                SizedBox(height: Get.height*0.01,),
+                 GestureDetector(
+                  onTap: () async {
+                    DateTime? selectedDate = await
+ 
+showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate:
+ 
+DateTime.now(),
+                      lastDate: DateTime(2100),
+                    );
+                    if (selectedDate != null) {
+                      channelOptionsController.selectedDateTime.value = DateTime(
+                        selectedDate.year,
+                        selectedDate.month,
+                        selectedDate.day,
+                      );
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_month_rounded,size: 12.sp,),
+                       Text('Scheduled Date:',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 12.sp
+                    ),),
+                      Obx(
+                        () => Text(
+                            channelOptionsController.selectedDateTime.value != null
+                              ? DateFormat('yyyy-MM-dd').format(  channelOptionsController.selectedDateTime.value)
+                              : 'Select a date',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                GestureDetector(
+                  onTap: () async {
+                    TimeOfDay? selectedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (selectedTime != null) {
+                      if (  channelOptionsController.selectedDateTime.value != null) {
+                         channelOptionsController.selectedDateTime.value =   channelOptionsController.selectedDateTime.value.copyWith(
+                          hour: selectedTime.hour,
+                          minute: selectedTime.minute,
+                        );
+                      } else {
+                          channelOptionsController.selectedDateTime.value = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      }
+                    }
+                  },
+
+                  child: Row(
+                    children: [
+                      Icon(Icons.schedule_rounded,size: 12.sp,),
+                       Text('Scheduled Time:',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 12.sp
+                    )),
+                      Obx(
+                        () => Text(
+                            channelOptionsController.selectedDateTime.value != null
+                              ? DateFormat('HH:mm').format(  channelOptionsController.selectedDateTime.value)
+                              : 'Select a time',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                 SizedBox(height: Get.height*0.02),
+                Row(
+                  children: <Widget>[
+                     Text('Paid Video:',style: TextStyle( color: Colors.black,fontWeight: FontWeight.w400,fontSize: 12.sp),),
+                    Obx(
+                      ()=> Switch(
+                        value: channelOptionsController.isVideoPaid.value, // Set the initial value as needed
+                        onChanged: (value) {
+                          
+                          // Handle the switch state change
+                          channelOptionsController.isVideoPaid.value=value;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+               SizedBox(height: Get.height*0.01),
+                Obx(
+                  ()=>channelOptionsController.isLoading.value==false? ElevatedButton(
+                    onPressed: () {
+                     validateFieldsAndUpload();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      minimumSize: const Size(200, 50), // Adjust button size as needed
+                    ),
+                    child: const Text('Upload Video'),
+                  ):const ButtonProgressWidget(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    )
+              );
+  }
    bool validateFieldsAndUpload() {
     if (_formKey.currentState!.validate()) {
                      channelOptionsController.uploadVideo(videoRequestModal: VideoRequestModal(title:videoTitleTextEditingController.text,link: videoUrlcontroller.text,isPaid:channelOptionsController.isVideoPaid.value.toString(),type: 'Video',channelId: widget.channel.id ));
@@ -237,6 +402,8 @@ void initState(){
       case "Add Video":
         showAddVideoDialog(context);
         break;
+      case "Add Live Video":
+      showLiveVideoDialog(context);
       case "Add File":
         // Implement your logic for adding a file here
         showAddFileDialog(context);
@@ -280,6 +447,7 @@ void initState(){
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         floatingActionButton: CircularMenu(
           alignment: Alignment.bottomRight,
+          radius: 120,
           toggleButtonColor:
               Colors.red, // Color of the central floating action button
           toggleButtonSize:
@@ -288,11 +456,24 @@ void initState(){
             CircularMenuItem(
               icon: Icons.video_library,
               color: Colors.blue,
+              padding: 10,
+              iconSize: 25,
               onTap: () {
                 _handleOptionSelected("Add Video");
               },
             ),
+             CircularMenuItem(
+               padding: 10,
+              iconSize: 25,
+              icon: Icons.live_tv_rounded,
+              color: Colors.tealAccent,
+              onTap: () {
+                _handleOptionSelected("Add Live Video");
+              },
+            ),
             CircularMenuItem(
+               padding: 10,
+              iconSize: 25,
               icon: Icons.attach_file,
               color: Colors.green,
               onTap: () {
@@ -300,6 +481,8 @@ void initState(){
               },
             ),
             CircularMenuItem(
+               padding: 10,
+              iconSize: 25,
               icon: Icons.person_add,
               color: Colors.orange,
               onTap: () {
@@ -307,6 +490,8 @@ void initState(){
               },
             ),
             CircularMenuItem(
+               padding: 10,
+              iconSize: 25,
               icon: Icons.note_add_rounded,
               color: Colors.purple,
               onTap: () {
