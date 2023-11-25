@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../widgets/ProgressIndicatorWidget.dart';
 import 'PdfView.dart';
 
 

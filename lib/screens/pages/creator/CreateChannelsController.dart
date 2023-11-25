@@ -116,8 +116,9 @@ AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
     if(token!=null)
     {
      channellist.ChannelListModal channelListModal=await   networkService.getCreatorList(token: token);
-     if(channelListModal.data==null)
-     return false;
+     if(channelListModal.data==null||channelListModal.data!.channels==null) {
+       return false;
+     }
      channelData.value=channelListModal.data!;
     }
     return true;

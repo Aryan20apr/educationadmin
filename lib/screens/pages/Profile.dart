@@ -78,7 +78,7 @@ class ProfileScreen extends StatelessWidget {
                                             ), // Replace with the user's image URL
                           ),
                         ),
-                        SizedBox(width: 16.0),
+                        const SizedBox(width: 16.0),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -118,7 +118,7 @@ const Text(
                 Get.to(()=>ChangePassword());
               }),
               ElevatedCard(Icons.notifications, 'My Notifications', () {
-                Get.to(()=>CreatorNotifications());
+                Get.to(()=>const CreatorNotifications());
               }),
               ElevatedCard(Icons.exit_to_app, 'Logout', () {
                 AuthenticationManager authenticationManager=Get.put(AuthenticationManager());

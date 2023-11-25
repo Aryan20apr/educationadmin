@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 
 import 'package:sizer/sizer.dart';
 
+import '../widgets/ProgressIndicatorWidget.dart';
+
 class PhoneVerification extends StatefulWidget {
   const PhoneVerification({super.key});
 

@@ -13,6 +13,8 @@ import 'package:logger/logger.dart';
 import 'package:pinput/pinput.dart';
 import 'package:sizer/sizer.dart';
 
+import '../widgets/ProgressIndicatorWidget.dart';
+
 class OtpVerification extends StatelessWidget {
    OtpVerification({super.key,required phoneNumber, required this.verificationType});
  String? phoneNumber;

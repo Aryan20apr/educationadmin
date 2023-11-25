@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+
+import '../widgets/ProgressIndicatorWidget.dart';
 class SignupScreen extends StatefulWidget {
   SignupScreen({super.key,required this.phoneNumber});
   String? phoneNumber;

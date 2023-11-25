@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../utils/Flag.dart';
+import '../../widgets/ProgressIndicatorWidget.dart';
 
 class ChangePassword extends StatefulWidget {
  ChangePassword({super.key,});

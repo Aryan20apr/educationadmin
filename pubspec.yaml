@@ -46,6 +46,7 @@ dependencies:
   flutter_custom_clippers: ^2.1.0
   socket_io_client: ^2.0.3+1
   flutter_keyboard_visibility: ^5.4.1
+  youtube_player_iframe: ^4.0.4
 
 dev_dependencies:
   flutter_test:

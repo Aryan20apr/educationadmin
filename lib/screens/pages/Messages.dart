@@ -1,6 +1,7 @@
 
 
 import 'package:educationadmin/screens/pages/Explore2.dart';
+import 'package:educationadmin/screens/pages/creator/CreaterHome.dart';
 import 'package:educationadmin/utils/Controllers/NoticesController.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -8,6 +9,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../utils/ColorConstants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
+
+import '../../widgets/ProgressIndicatorWidget.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -124,10 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   future: isFetched,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: ProgressIndicatorWidget(),
-                      );
+                      return const CenterProgressIndicator();
                     } else if (snapshot.hasError) {
                       return const Center(child: Text('Some error occurred'));
                     } else if (ConnectionState.done == snapshot.connectionState &&
@@ -135,8 +135,18 @@ class _ChatScreenState extends State<ChatScreen> {
                       if (snapshot.data == false) {
                         return const Center(child: Text('Cannot obtain notices'));
                       } else {
-                                         
-                        //physics: const NeverScrollableScrollPhysics(),
+                          if(noticesController.notices.value.notices!.isEmpty)
+                          {
+                            return  SizedBox(
+                              height: MediaQuery.of(context).size.height*0.8,
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text('You have no notifications so far.',style: TextStyle(fontSize: 12.sp),),
+                                ),
+                              ),
+                            );
+                          }
                        
                        return   ListView.builder(
                         shrinkWrap: true,

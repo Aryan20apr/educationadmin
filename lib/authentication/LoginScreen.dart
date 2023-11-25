@@ -12,6 +12,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:sizer/sizer.dart';
+
+import '../widgets/ProgressIndicatorWidget.dart';
 class LoginScreen extends StatefulWidget {
  const LoginScreen({super.key});
 

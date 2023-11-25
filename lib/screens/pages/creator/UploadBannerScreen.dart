@@ -14,6 +14,7 @@ import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import '../../../widgets/ProgressIndicatorWidget.dart';
 import 'ImagePickerController.dart';
 class UploadBanner extends StatefulWidget {
   const UploadBanner({super.key});

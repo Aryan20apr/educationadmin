@@ -1,21 +1,22 @@
 import 'dart:convert';
+import 'dart:developer';
 
 
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
 import 'package:educationadmin/screens/common/ChatView.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:http/http.dart' as http; 
+
 class YouTubePlayerScreen extends StatefulWidget {
 
- YouTubePlayerScreen({super.key,required this.video});
- Videos video ;
+ const YouTubePlayerScreen({super.key,required this.video});
+ final Videos video ;
   @override
-  _YouTubePlayerScreenState createState() => _YouTubePlayerScreenState();
+  YouTubePlayerScreenState createState() => YouTubePlayerScreenState();
 
 }
 
-class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
+class YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
   late YoutubePlayerController _controller;
   late YoutubePlayerFlags _flags;
   String _videoLink = ''; // Store the fetched video link
@@ -49,6 +50,7 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
       
       child: YoutubePlayerBuilder(
         onExitFullScreen: (){
+          log('Full Screen exited');
          // _controller.toggleFullScreenMode();
         },
         onEnterFullScreen: (){
@@ -79,6 +81,7 @@ class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
                 
             player,
             
+            if(widget.video.isLive!=null && widget.video.isLive!)
               Expanded(child: Padding(
                 padding: const EdgeInsets.only(top:4.0),
                 child: ChatView(video: widget.video,),

@@ -18,6 +18,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../Modals/ChannelListModal.dart';
 import '../../../utils/Flag.dart';
+import '../../../widgets/ProgressIndicatorWidget.dart';
 import '../widgets/VideoCard.dart';
 
 class CreaterHome extends StatefulWidget {
@@ -125,106 +126,106 @@ isChannelFetched=Future.delayed(Duration.zero,()=>result);
             child: ListView(
               children: [
                
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white, // Background color of the bottom sheet
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(16.0)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey[300]!,
-                        offset: const Offset(0, -2),
-                        blurRadius: 3.0,
-                      ),
-                    ],
-                  ),
-                  child: FutureBuilder<bool>(
-                    future: isChannelFetched,
-                    builder: (context,snapshot) {
-                      if(ConnectionState.waiting==snapshot.connectionState)
+                FutureBuilder<bool>(
+                  future: isChannelFetched,
+                  builder: (context,snapshot) {
+                    if(ConnectionState.waiting==snapshot.connectionState)
+                    {
+                        return const CenterProgressIndicator();
+                    }
+                    else if(ConnectionState.done==snapshot.connectionState)
+                    {
+                      if(snapshot.data==false)
                       {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: const ProgressIndicatorWidget(),
-                          );
-                      }
-                      else if(ConnectionState.done==snapshot.connectionState)
-                      {
-                        if(snapshot.data==false)
-                        {
-                          return const Center(child: Text('Could not obtain channels'),);
-                        }
-                        else
-                        {
-                          if(createrChannelsController.channelData.value.channels!.isNotEmpty)
-                          {
-                            return Column(
-                        children: [
-                          Obx(
-                            ()=> ListView.builder(
-                              shrinkWrap: true,
-                              physics: const ClampingScrollPhysics(),
-                              itemCount: createrChannelsController.channelData.value.channels?.length,
-                              itemBuilder: (context, index) {
-                                return VideoCard(
-                                  flag: ListType.Creator,
-                                  onReturn: ()async{
-                                    await  createrChannelsController.getChannels();
-                                  },
-                                  channel:createrChannelsController.channelData.value.channels![index],
-                                  onPressed: () async{
-                                          // Handle Delete
-                                           // Handle Cancel
-                                          CreaterChannelsController controller=Get.put(CreaterChannelsController());
-                                    bool result=    await controller.deleteChannel(channelId:createrChannelsController.channelData.value.channels![index].id!);
-                                          if(result)
-                                          {
-                                            Get.back();
-                                            Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
-                                            
-                                            // setState(() {
-                                            await  createrChannelsController.getChannels();
-                                            // });
-                                          }
-                                          else{
-                                            Get.back();
-                                            Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
-                                          }
-                                       
-                                       
-                                          
-                                          // Perform the delete operation
-                                          print('Item deleted');
-                                        },
-                                  accentColor: ColorConstants.accentColor,
-                                  gradientStartColor: ColorConstants.primaryColor,
-                                  gradientEndColor: ColorConstants.secondaryColor,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
-                          }
-                          else
-                          {
-                            return const Center(child: Text('No channels available'),);
-                          }
-                        }
+                        return const Center(child: Text('Could not obtain channels'),);
                       }
                       else
                       {
-                        return const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: ProgressIndicatorWidget(),
-                        );
+                        if(createrChannelsController.channelData.value.channels!.isNotEmpty)
+                        {
+                          return Column(
+                      children: [
+                        Obx(
+                          ()=> ListView.builder(
+                            shrinkWrap: true,
+                            physics: const ClampingScrollPhysics(),
+                            itemCount: createrChannelsController.channelData.value.channels?.length,
+                            itemBuilder: (context, index) {
+                              return VideoCard(
+                                flag: ListType.Creator,
+                                onReturn: ()async{
+                                  await  createrChannelsController.getChannels();
+                                },
+                                channel:createrChannelsController.channelData.value.channels![index],
+                                onPressed: () async{
+                                        // Handle Delete
+                                         // Handle Cancel
+                                        CreaterChannelsController controller=Get.put(CreaterChannelsController());
+                                  bool result=    await controller.deleteChannel(channelId:createrChannelsController.channelData.value.channels![index].id!);
+                                        if(result)
+                                        {
+                                          Get.back();
+                                          Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
+                                          
+                                          // setState(() {
+                                          await  createrChannelsController.getChannels();
+                                          // });
+                                        }
+                                        else{
+                                          Get.back();
+                                          Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
+                                        }
+                                     
+                                     
+                                        
+                                        // Perform the delete operation
+                                        print('Item deleted');
+                                      },
+                                accentColor: ColorConstants.accentColor,
+                                gradientStartColor: ColorConstants.primaryColor,
+                                gradientEndColor: ColorConstants.secondaryColor,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                        }
+                        else
+                        {
+                          return const Center(child: Text('No channels available'),);
+                        }
                       }
                     }
-                  ),
+                    else
+                    {
+                      return const CenterProgressIndicator();
+                      
+                    }
+                  }
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CenterProgressIndicator extends StatelessWidget {
+  const CenterProgressIndicator({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height*0.8,
+      child:const Center(
+        child:  Padding(
+          padding: EdgeInsets.all(8.0),
+          child: ProgressIndicatorWidget(),
         ),
       ),
     );

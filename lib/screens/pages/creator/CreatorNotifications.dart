@@ -10,7 +10,11 @@ import '../../../utils/ColorConstants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 
+import '../../../widgets/ProgressIndicatorWidget.dart';
+
 class CreatorNotifications extends StatefulWidget {
+  const CreatorNotifications({super.key});
+
   @override
   State<CreatorNotifications> createState() => _CreatorNotificationsState();
 }

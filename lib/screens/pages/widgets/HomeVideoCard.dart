@@ -119,7 +119,7 @@ class HomeVideoCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                  trailing: const Icon(Icons.more_vert, color: CustomColors.accentColor),
+                  //trailing: const Icon(Icons.more_vert, color: CustomColors.accentColor),
                 ),
               ],
             ),

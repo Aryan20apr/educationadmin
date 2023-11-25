@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:educationadmin/authentication/viewmodal/ExploreViewModal.dart';
+import 'package:educationadmin/screens/pages/creator/CreaterHome.dart';
 import 'package:educationadmin/utils/Flag.dart';
 
 
@@ -10,6 +11,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../utils/ColorConstants.dart';
 
+import '../../widgets/ProgressIndicatorWidget.dart';
 import 'widgets/VideoCard.dart';
 
 
@@ -124,13 +126,10 @@ void initState()
                     future: isFetched,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Padding(
-                          padding:  EdgeInsets.all(8.0),
-                          child:  ProgressIndicatorWidget(),
-                        );
+                        return const CenterProgressIndicator();
                       } else if (snapshot.connectionState == ConnectionState.done) {
                         if (exploreViewModal.channelData.value.channels == null) {
-                          return const Center(child: Text('Could not obtain channels'));
+                          return  Center(child: SizedBox(height: MediaQuery.of(context).size.height*0.8,child:const Center(child: Text('Could not obtain channels'))));
                         }
                         
                             return Obx(
@@ -182,10 +181,7 @@ void initState()
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else {
-                        return const Padding(
-                          padding:  EdgeInsets.all(8.0),
-                          child:  ProgressIndicatorWidget(),
-                        );
+                        return const CenterProgressIndicator();
                       }
                     },
                   ),
@@ -198,25 +194,3 @@ void initState()
     );
   }
 }
-
-
-
-class ProgressIndicatorWidget extends StatelessWidget {
-  const ProgressIndicatorWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Center(
-        child: SizedBox(
-          
-          child:  CircularProgressIndicator(color:  
-                        Theme.of(context).primaryColorDark,),
-        ),
-      ),
-    );
-  }
-}
-

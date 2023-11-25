@@ -12,6 +12,8 @@ import '../../../utils/ColorConstants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 
+import '../../../widgets/ProgressIndicatorWidget.dart';
+
 class MyBanners extends StatefulWidget {
   @override
   State<MyBanners> createState() => _MyBannersState();
