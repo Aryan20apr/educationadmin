@@ -2,6 +2,7 @@
 
 
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
+import 'package:educationadmin/screens/common/PodVideoScreen.dart';
 import 'package:educationadmin/screens/common/VideoScreen.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
@@ -95,7 +96,7 @@ void onRefresh() async {
                             child: ListTile(
                              
                               onTap: () {
-                                Get.to(() => YouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
+                                Get.to(() => PodYouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
                               },
                               style: ListTileStyle.list,
                               enableFeedback: true,
@@ -149,7 +150,7 @@ void onRefresh() async {
                             child: ListTile(
                               
                               onTap: () {
-                                Get.to(() => YouTubePlayerScreen(video: resourceController.normalVideos[index]/*videos[index]*/));
+                                Get.to(() => PodYouTubePlayerScreen(video: resourceController.normalVideos[index]/*videos[index]*/));
                               },
                               style: ListTileStyle.list,
                               enableFeedback: true,

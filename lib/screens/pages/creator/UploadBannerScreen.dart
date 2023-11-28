@@ -55,7 +55,8 @@ class UploadBannerState extends State<UploadBanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text("Upload Banner",style:TextStyle(color: Colors.black,fontSize: 14.sp,fontWeight: FontWeight.bold)),
+        title:  Text("Upload Banner",style:TextStyle(
+          fontSize: 14.sp,fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         child: Padding(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:educationadmin/Modals/SubsciberModal.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannelsController.dart';
@@ -90,6 +92,8 @@ void onRefresh() async {
                           radius: 28, // Adjust the radius as needed
                                 
                           child: CachedNetworkImage(
+                            height: double.infinity,
+                            width: double.infinity,
                                     colorBlendMode: BlendMode.darken,
                                                     imageUrl: controller.consumerList.value.consumers![index].image??'',
                                   placeholder: (context, url) => ClipOval(
@@ -136,8 +140,8 @@ void onRefresh() async {
                         onSelected: (value) {
                            if (value == 'delete') {
                             // Handle Delete option
-                            print('Delete selected');
-                            _showDeleteConfirmationDialog(context);
+                          log('Delete selected');
+                            _showDeleteConfirmationDialog(context,index);
                           }
                         },
                       ),
@@ -159,7 +163,7 @@ void onRefresh() async {
     );
   }
 
-Future<void> _showDeleteConfirmationDialog(BuildContext context) async{
+Future<void> _showDeleteConfirmationDialog(BuildContext context,int index) async{
    await showDialog(
       
       barrierDismissible: false,
@@ -168,43 +172,32 @@ Future<void> _showDeleteConfirmationDialog(BuildContext context) async{
         return AlertDialog(
           
           title: const Text('Delete Confirmation'),
-          content: const Text('Are you sure you want to delete this subscriber?'),
+          content: const Text('Are you sure you want to remove this subscriber?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-               
-                Navigator.of(context).pop();
+              Get.back();
               },
               child: const Text('Cancel'),
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-              ),
-              onPressed:() async{
-                                    // Handle Delete
-                                     // Handle Cancel
-                                    
-                              // bool result=    await controller.deleteSubscriber(channelId:createrChannelsController.channelData.value.channels![index].id!);
-                              //       if(result)
-                              //       {
-                              //         Get.showSnackbar(const GetSnackBar(message:'Channel Deleted successfully',duration: Duration(seconds:3),));
-                              //         setState(() {
-                              //           createrChannelsController.channelData.value.channels!.remove(createrChannelsController.channelData.value.channels![index]);
-                              //         });
-                              //       }
-                              //       else{
-                              //         Get.showSnackbar(const GetSnackBar(message:'Channel could not be deleted successfully',duration: Duration(seconds:3),));
-                              //       }
-                                 
-                              //    Navigator.of(context).pop();
-                                    
-                              //       // Perform the delete operation
-                              //       print('Item deleted');
-                                },
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Colors.white),
+            Obx(
+              ()=> ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all( RoundedRectangleBorder( borderRadius: BorderRadius.circular(10))),
+                 fixedSize: MaterialStateProperty.all(Size(Get.width*0.3, Get.height*0.01)),
+                  backgroundColor: MaterialStateProperty.all(CustomColors.primaryColor),
+                ),
+                onPressed:() async{
+                                   controller.isLoading.value=false;
+                controller.removeSubscriber(channeId: widget.channelId,index:index);
+                                  },
+                child:controller.isLoading.value==false?  Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.white,fontSize:10.sp),
+                ):const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(color: CustomColors.primaryColorDark,),
+                ),
               ),
             ),
           ],

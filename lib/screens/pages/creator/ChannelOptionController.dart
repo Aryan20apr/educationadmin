@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../Modals/GeneralResponse.dart';
+import '../../../Modals/ProfileUpdateResponse.dart';
 class ChannelOptionsController extends GetxController
 {
   final AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
@@ -33,26 +34,57 @@ class ChannelOptionsController extends GetxController
     isLoading.value=true;
     String? token=await authenticationManager.getToken();
     if(token!=null){
-   GeneralResponse generalResponse= await networkService.subscribeByCreator(channelId:channeId,consumerId:int.parse(phoneNumber.value),token:token);
+   GeneralResponse2 generalResponse= await networkService.subscribeByCreator(channelId:channeId,consumerId:int.parse(phoneNumber.value),token:token);
    isLoading.value=false;  
-   print(generalResponse.msg);
-   if(generalResponse.status==false)
+   //logger.i(generalResponse.data);
+   if(generalResponse.data==null)
    {
     Get.back();
 
     
-    Get.showSnackbar(GetSnackBar(message:generalResponse.msg,duration: const Duration(seconds:3 ),));
+    Get.showSnackbar(const GetSnackBar(message: 'Could not add the subscriber',duration: Duration(seconds:3 ),));
     
       return false;
    }   
    else
    {Get.back();
-     Get.showSnackbar(GetSnackBar(message: generalResponse.msg,duration: const Duration(seconds:3 ),));
+     Get.showSnackbar(GetSnackBar(message: generalResponse.data!.msg!,duration: const Duration(seconds:3 ),));
     return true;
    }
   }
   else
   {
+    Get.showSnackbar(const GetSnackBar(message: 'Could not add the subscriber',duration: Duration(seconds:3 ),));
+    return false;
+  }
+}
+
+ Future<bool> removeSubscriber({required int channeId}) async
+  {
+    isLoading.value=true;
+    String? token=await authenticationManager.getToken();
+    if(token!=null){
+   GeneralResponse2 generalResponse= await networkService.removeSubscriber(channelId:channeId,consumerId:int.parse(phoneNumber.value),token:token);
+   isLoading.value=false;  
+   //logger.i(generalResponse.data);
+   if(generalResponse.data==null)
+   {
+    Get.back();
+
+    
+    Get.showSnackbar(const GetSnackBar(message: 'Could not remove the subscriber',duration: Duration(seconds:3 ),));
+    
+      return false;
+   }   
+   else
+   {Get.back();
+     Get.showSnackbar(GetSnackBar(message: generalResponse.data!.msg!,duration: const Duration(seconds:3 ),));
+    return true;
+   }
+  }
+  else
+  {
+    Get.showSnackbar(const GetSnackBar(message: 'Could not remove the subscriber',duration: Duration(seconds:3 ),));
     return false;
   }
 }

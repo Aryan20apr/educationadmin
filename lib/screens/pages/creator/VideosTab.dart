@@ -1,4 +1,5 @@
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
+import 'package:educationadmin/screens/common/PodVideoScreen.dart';
 import 'package:educationadmin/screens/common/VideoScreen.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannelsController.dart';
@@ -88,7 +89,7 @@ List<Videos> videos=[];
                                           style:ListTileStyle.list,
                                           //tileColor:CustomColors.tileColour,
                                            onTap: () {
-                                              Get.to(() => YouTubePlayerScreen(video: videos[index]));
+                                              Get.to(() => PodYouTubePlayerScreen(video: videos[index]));
                                            },
                                            contentPadding: const EdgeInsets.all(10),
                                            leading: CachedNetworkImage(

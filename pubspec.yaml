@@ -47,6 +47,7 @@ dependencies:
   socket_io_client: ^2.0.3+1
   flutter_keyboard_visibility: ^5.4.1
   youtube_player_iframe: ^4.0.4
+  pod_player: ^0.2.1
 
 dev_dependencies:
   flutter_test:

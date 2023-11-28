@@ -68,6 +68,8 @@ class NetworkService extends GetConnect {
   final String deletebanner="banners/delete/";
   final String startstream="resources/live/start/";
   final String endstream="resources/live/end/";
+  final String removesubscriber="subscription/unsubscribe/creator/";
+
   final Logger logger=Logger();
   Future<SignupResponseModal> signUp(SignupModal model) async {
 //     Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
@@ -313,7 +315,7 @@ Future<CreateChannelResponseModal> createChannel({required String? token, requir
   }
    return CreateChannelResponseModal();
   }
-Future<CreateChannelResponseModal> editChannel({required String? token, XFile? file, required String name,required int channelid})async
+Future<CreateChannelResponseModal> editChannel({required bool paidChannel,required int price,required String? token, XFile? file, required String name,required int channelid})async
 {
    var formData;
    if(file!=null)
@@ -322,6 +324,9 @@ Future<CreateChannelResponseModal> editChannel({required String? token, XFile? f
   
   'file': await dio.MultipartFile.fromFile(file.path,filename: file.name),
     'name': name,
+     "isCompletelyPaid": paidChannel,
+     "price" : price
+
 });}
 else
 {
@@ -370,7 +375,7 @@ else
         return false;
       }
   }
-  Future<GeneralResponse> subscribeByCreator({required String token,required int channelId,required int consumerId})async
+  Future<GeneralResponse2> subscribeByCreator({required String token,required int channelId,required int consumerId})async
   {
      try {
   Response<Map<String,dynamic>> response=await post("$baseURL$addconsumerfromcreator/$channelId/$consumerId",{},headers: {"Authorization":"Bearer $token"});
@@ -379,21 +384,45 @@ else
    {
     if(response.body!=null)
     {
-    Map<String,dynamic> map=  response.body!['data'];
-     return GeneralResponse(msg: map['msg']);
+  
+     return GeneralResponse2.fromJson(response.body!);
     }
     else
     {
-      return GeneralResponse(msg: 'Could not subscribe.');
+      return GeneralResponse2();
     }
    }
   
 } on Exception catch (e) {
-   return GeneralResponse(msg: "Could not subscibe",status: false);
+  e.printError();
+   return GeneralResponse2();
 }
-return   GeneralResponse(msg: "Could not subscibe",status: false);
+return   GeneralResponse2();
   }
+   Future<GeneralResponse2> removeSubscriber({required String token,required int channelId,required int consumerId})async
+  {
+     try {
+  Response<Map<String,dynamic>> response=await post("$baseURL$removesubscriber$channelId/$consumerId",{},headers: {"Authorization":"Bearer $token"});
+   logger.i(response.body);
+   if(response.statusCode==200 ||response.statusCode==201)
+   {
+    if(response.body!=null)
+    {
   
+     return GeneralResponse2.fromJson(response.body!);
+    }
+    else
+    {
+      return GeneralResponse2();
+    }
+   }
+  
+} on Exception catch (e) {
+  e.printError();
+   return GeneralResponse2();
+}
+return   GeneralResponse2();
+  }
 
   Future<VideoUploadResponseModal> uploadVideo({required String token,required VideoRequestModal videoRequestModal})async
 {

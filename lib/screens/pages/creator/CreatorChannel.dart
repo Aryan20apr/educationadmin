@@ -455,8 +455,12 @@ DateTime.now(),
                     }
                    
                   },
-                  style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),backgroundColor: Colors.red,foregroundColor: Colors.white,elevation: 10,),
-                  child: channelOptionsController.isLoading.value?const CircularProgressIndicator(): const Text("Add Subscriber"),
+                  style: ElevatedButton.styleFrom(fixedSize: Size(Get.width*0.5, Get.width*0.1),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),backgroundColor: CustomColors.primaryColor,elevation: 10,),
+                  child: channelOptionsController.isLoading.value?const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(color: CustomColors.primaryColorDark,),
+                  ):  Text("Add Subscriber",style: TextStyle(color: CustomColors.primaryColorDark,fontSize: 12.sp),),
                 ),
               ],
             ),

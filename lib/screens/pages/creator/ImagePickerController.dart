@@ -42,8 +42,8 @@ class ImagePickerController extends GetxController {
     NetworkService networkService=NetworkService();
     AuthenticationManager authmanager=Get.put(AuthenticationManager());
      String? token=await authmanager.getToken();
-     Logger().e("Is channel completely paid ${isChannelPaid}");
-    CreateChannelResponseModal modal=await networkService.editChannel(token:token,file:imagePath.value.isNotEmpty? XFile(imagePath.value):null,  name: channelName.value, channelid: channelId);
+     Logger().e("Is channel completely paid ${isChannelPaid.value}");
+    CreateChannelResponseModal modal=await networkService.editChannel(token:token,file:imagePath.value.isNotEmpty? XFile(imagePath.value):null,  name: channelName.value, channelid: channelId,paidChannel:isChannelPaid.value,price:channelPrice.value);
     if(modal.data!=null)
     {
       Get.showSnackbar(const GetSnackBar(message: 'Channel Updated Successfully',duration: Duration(seconds: 3),));

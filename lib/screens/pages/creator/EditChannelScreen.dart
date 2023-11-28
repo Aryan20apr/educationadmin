@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:educationadmin/screens/pages/creator/CreateChannel.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
+import 'package:educationadmin/widgets/ProgressIndicatorWidget.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,14 +28,15 @@ class EditChannelState extends State<EditChannel> {
  
   @override
   void initState(){
+    
+    super.initState();
     _channelNameController.text=widget.channel.name!;
     _channelPriceController.text=(widget.channel.price!).toString();
     _isChannelPaid=widget.channel.isCompletelyPaid!;
     Logger().e("Channel paid ? ${_isChannelPaid} ${widget.channel.isCompletelyPaid!}");
-    super.initState();
   }
 
-  void _createChannel() {
+  void _updateChannel() {
     if (_formKey.currentState!.validate()) {
       // Implement channel creation logic here
       controller.channelName.value = _channelNameController.text;
@@ -108,7 +110,7 @@ class EditChannelState extends State<EditChannel> {
                             children: [
                               Obx(
                                 () => controller.imagePath.isNotEmpty
-                                    ? Image.file(
+                                    ?  Image.file(
                                         File(controller.imagePath.value),
                                         width: 200,
                                         height: 200,
@@ -135,24 +137,43 @@ class EditChannelState extends State<EditChannel> {
                 Container(
                    decoration: BoxDecoration(
                     color: Colors.greenAccent.shade100,
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
+                        // Row(
+                        //   children: <Widget>[
+                        //      Text("Is Channel Paid?",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
+                        //     _isChannelPaid?Icon(Icons.check_circle_outline_rounded,color: ColorConstants.accentColor,):const Icon(Icons.close_outlined)
+                        //   ],
+                        // ),
                         Row(
-                          children: <Widget>[
-                             Text("Is Channel Paid?",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
-                            _isChannelPaid?Icon(Icons.check_circle_outline_rounded,color: ColorConstants.accentColor,):Icon(Icons.close_outlined)
-                          ],
-                        ),
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                 Text("Paid channel: ",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
+                                Switch(
+                                  activeColor: CustomColors.primaryColorDark,
+                                 
+                                  inactiveThumbColor: Colors.grey.shade600,
+                                  inactiveTrackColor: Colors.grey.shade400,
+                                  value: _isChannelPaid,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isChannelPaid = value;
+                                      _channelPriceController.clear(); // Clear the price when changing the switch.
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
                         _isChannelPaid
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                    Text("Price (in Rupees)",style: TextStyle(color: Colors.black,fontSize: 12.sp,fontWeight: FontWeight.bold)),
                                   TextFormField(
-                                    enabled: false,
+                                    enabled: true,
                                     controller: _channelPriceController,
                                      validator: (value) {
                                       final digitOnly = RegExp(r'^\d+$');
@@ -173,24 +194,29 @@ class EditChannelState extends State<EditChannel> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Obx(
-                  ()=> controller.isLoading.value==false? Center(
-                    child: ElevatedButton(
-                     style: ElevatedButton.styleFrom(minimumSize: Size(Get.width*0.8, Get.height*0.05),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
-                      onPressed: _createChannel,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Update Channel"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(
+                      ()=> controller.isLoading.value==false? Center(
+                        child: ElevatedButton(
+                         style: ElevatedButton.styleFrom(fixedSize: Size(Get.width*0.8, Get.height*0.08),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
+                          onPressed: _updateChannel,
+                          child:  Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text("Update Channel",style: TextStyle(fontSize: 12.sp),),
+                          ),
+                        ),
+                      ):ElevatedButton(
+                         style: ElevatedButton.styleFrom(fixedSize: Size(Get.width*0.8, Get.height*0.08),shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),backgroundColor: CustomColors.primaryColor,foregroundColor: CustomColors.primaryColorDark),
+                        onPressed: (){},
+                        child: const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: ProgressIndicatorWidget(),
+                        ),
                       ),
                     ),
-                  ):ElevatedButton(
-                    
-                    onPressed: (){},
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),

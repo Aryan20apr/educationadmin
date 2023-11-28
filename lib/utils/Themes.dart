@@ -61,9 +61,9 @@ static final submittedPinTheme = defaultPinTheme.copyWith(
     backgroundColor:  Color(0xFFF7FFF7)
   ),
   appBarTheme: const AppBarTheme(
-   systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: CustomColors.primaryColor,systemNavigationBarColor: Colors.white ),
-      backgroundColor: CustomColors.secondaryColor,
-    foregroundColor: CustomColors.primaryColor,
+   systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: CustomColors.primaryColorDark,systemNavigationBarColor: Colors.white ),
+      backgroundColor: CustomColors.primaryColorDark,
+    foregroundColor: CustomColors.accentColor,
     elevation: 2,
     
   ),

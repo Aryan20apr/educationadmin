@@ -3,6 +3,7 @@
 import 'package:educationadmin/Modals/EditResourceModal.dart';
 import 'package:educationadmin/Modals/ProfileUpdateResponse.dart';
 import 'package:educationadmin/Modals/SubsciberModal.dart';
+import 'package:educationadmin/utils/Controllers/UserController.dart';
 import 'package:logger/logger.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart' as channellist;
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
@@ -18,10 +19,14 @@ class CreaterChannelsController extends GetxController{
 
   final AuthenticationManager _authmanager = Get.find<AuthenticationManager>();
   final NetworkService networkService=Get.find<NetworkService>();
+  final UserDetailsManager userDetailsManager=Get.put(UserDetailsManager());
+
 final Rx<channellist.Data> channelData=channellist.Data().obs;
 
 
 AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
+NetworkChecker networkChecker=NetworkChecker();
+
   Rx<FileResourcesData> fileData=FileResourcesData().obs;
   Rx<VideoResourcesData> videoData=VideoResourcesData().obs;
  Rx<SubcriberData> consumerList=SubcriberData().obs;
@@ -276,4 +281,41 @@ NetworkChecker networkChecker=NetworkChecker();
         Get.showSnackbar(const GetSnackBar(message: 'Live streaming could not be stopped',duration: Duration(seconds:3),));
     }
   }
+
+  Future<bool> removeSubscriber({required int channeId,required int index}) async
+  {
+    isLoading.value=true;
+    if(await networkChecker.checkConnectivity()==false)
+    {
+      isLoading.value=false;
+      Get.back();
+      Get.showSnackbar(const GetSnackBar(message: 'Could not remove subscriber',duration: Duration(seconds: 3),));
+
+    }
+    String? token=await authenticationManager.getToken();
+    if(token!=null){
+   GeneralResponse2 generalResponse= await networkService.removeSubscriber(channelId:channeId,consumerId:int.parse(consumerList.value.consumers![index].phone!),token:token);
+   isLoading.value=false;  
+   //logger.i(generalResponse.data);
+   if(generalResponse.data==null)
+   {
+    Get.back();
+
+    
+    Get.showSnackbar(const GetSnackBar(message: 'Could not remove the subscriber',duration: Duration(seconds:3 ),));
+    
+      return false;
+   }   
+   else
+   {Get.back();
+     Get.showSnackbar(GetSnackBar(message: generalResponse.data!.msg!,duration: const Duration(seconds:3 ),));
+    return true;
+   }
+  }
+  else
+  {
+    Get.showSnackbar(const GetSnackBar(message: 'Could not remove the subscriber',duration: Duration(seconds:3 ),));
+    return false;
+  }
+}
 }

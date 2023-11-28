@@ -97,31 +97,29 @@ class _MainWrapperState extends State<MainWrapper> {
       {required icon, required page, required label}) {
     return ZoomTapAnimation(
       onTap: () => _mainWrapperController.goToTab(page),
-      child: Container(
-        
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: _mainWrapperController.currentPage == page
-                  ? CustomColors.primaryColor
-                  : Colors.grey,
-              size: 2.5.h,
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                  color: _mainWrapperController.currentPage == page
-                      ? ColorConstants.appColors
-                      : Colors.grey,
-                  fontSize: 12.sp,
-                  fontWeight: _mainWrapperController.currentPage == page
-                      ? FontWeight.w600
-                      : null),
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: _mainWrapperController.currentPage == page
+                ? CustomColors.primaryColorDark
+                : Colors.grey,
+            size: 2.5.h,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+                color: _mainWrapperController.currentPage == page
+                    ? CustomColors.primaryColorDark
+                    : Colors.grey,
+                fontSize: 10.sp,
+                fontWeight: _mainWrapperController.currentPage == page
+                    ? FontWeight.w600
+                    : null),
+          ),
+        ],
       ),
     );
   }

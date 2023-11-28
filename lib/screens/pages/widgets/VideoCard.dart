@@ -186,7 +186,7 @@ class VideoCard extends StatelessWidget {
                           }
                         },
                       )
-                    : ElevatedButton(
+                    : channel.isCompletelyPaid! ? ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           elevation: 10,
                           shape: const ContinuousRectangleBorder(
@@ -209,7 +209,9 @@ class VideoCard extends StatelessWidget {
                         child: Text(
                           'Subscribe',
                           style: TextStyle(fontSize: 12.sp),
-                        )),
+                        )
+                        ): const SizedBox()
+                        ,
               ),
             ],
           ),

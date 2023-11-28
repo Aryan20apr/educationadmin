@@ -61,7 +61,7 @@ class CreateChannelState extends State<CreateChannel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text("Create Channel",style:TextStyle(color: Colors.black,fontSize: 14.sp,fontWeight: FontWeight.bold)),
+        title:  Text("Create Channel",style:TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -190,7 +190,7 @@ class CreateChannelState extends State<CreateChannel> {
                                     TextFormField(
                                       
                             decoration: InputDecoration(
-                              hintText: 'Enter your channel name',
+                              hintText: 'Enter your channel price',
                               hintStyle: TextStyle(color: Colors.grey,fontSize: 12.sp,fontWeight: FontWeight.w300)
                             ),
                                       controller: _channelPriceController,
