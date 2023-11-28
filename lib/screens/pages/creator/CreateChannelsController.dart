@@ -1,6 +1,7 @@
 
 
 import 'package:educationadmin/Modals/EditResourceModal.dart';
+import 'package:educationadmin/Modals/ProfileUpdateResponse.dart';
 import 'package:educationadmin/Modals/SubsciberModal.dart';
 import 'package:logger/logger.dart';
 import 'package:educationadmin/Modals/ChannelListModal.dart' as channellist;
@@ -81,9 +82,10 @@ AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
     }
     liveVideos.refresh();
     normalVideos.refresh();
+    return true;
     }
 
-    return true;
+    return false;
   }
 
   // Future<bool> getChannelVideos({required int channelId}) async
@@ -215,6 +217,63 @@ AuthenticationManager authenticationManager=Get.find<AuthenticationManager>();
       Get.showSnackbar(const GetSnackBar(message:"Resource delete successfully",duration: Duration(seconds: 3),));
      
       return true;
+    }
+  }
+
+  Future<void> startStream({required int channelId,required int id,required String title }) async
+  {
+NetworkChecker networkChecker=NetworkChecker();
+    bool check=await networkChecker.checkConnectivity();
+    if(check==false) {
+      Get.showSnackbar(const GetSnackBar(message: 'Could not start live streaming',duration: Duration(seconds:3),));
+      //return false;
+    }
+    String? token=await _authmanager.getToken();
+
+    GeneralResponse2 generalResponse=await networkService.startStream(id: id, token: token!, title: title);
+    if(generalResponse.data!=null)
+    {
+      if(generalResponse.data!.status==true)
+    {
+      getChannelVideos(channelId: channelId);
+       Get.showSnackbar(const GetSnackBar(title: 'Live streaming started',message: 'Consumers can now see your live video.',duration: Duration(seconds:3),));
+    }
+    else
+    {
+       Get.showSnackbar(const GetSnackBar(title: 'Live streaming could not be started',message: 'Some error occurred.',duration: Duration(seconds:3),));
+    }
+    }
+    else
+    {
+       Get.showSnackbar(const GetSnackBar(title: 'Live streaming could not be started',message: 'Some error occurred.',duration: Duration(seconds:3),));
+    }
+  }
+
+    Future<void> endStream({required int channelId,required int id,required String title }) async
+  {
+    NetworkChecker networkChecker=NetworkChecker();
+    bool check=await networkChecker.checkConnectivity();
+    if(check==false) {
+      Get.showSnackbar(const GetSnackBar(message: 'Could not delete',duration: Duration(seconds:3),));
+      //return false;
+    }
+    String? token=await _authmanager.getToken();
+    GeneralResponse2 generalResponse=await networkService.endStream(id: id, token: token!, title: title);
+    if(generalResponse.data!=null)
+    {
+      if(generalResponse.data!.status==true)
+    {
+      getChannelVideos(channelId: channelId);
+       Get.showSnackbar(const GetSnackBar(message: 'Live streaming stopped',duration: Duration(seconds:3),));
+    }
+    else
+    {
+       Get.showSnackbar(const GetSnackBar(message: 'Live streaming could not be stopped',duration: Duration(seconds:3),));
+    }
+    }
+    else
+    {
+        Get.showSnackbar(const GetSnackBar(message: 'Live streaming could not be stopped',duration: Duration(seconds:3),));
     }
   }
 }

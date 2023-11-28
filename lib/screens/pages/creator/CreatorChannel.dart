@@ -227,6 +227,8 @@ void initState(){
   }
    void showLiveVideoDialog(BuildContext context)
   {
+    videoTitleTextEditingController.text='';
+    videoUrlcontroller.text='';
     showDialog(
                 context: context,
                 builder: (context) =>  Dialog(
@@ -288,11 +290,22 @@ DateTime.now(),
                       lastDate: DateTime(2100),
                     );
                     if (selectedDate != null) {
+                      if( channelOptionsController.selectedDateTime.value != null)
+                      {
+                         channelOptionsController.selectedDateTime.value =channelOptionsController.selectedDateTime.value.copyWith(
+                       year:selectedDate.year,
+                      month: selectedDate.month,
+                       day:selectedDate.day,
+                      );
+                      }
+                      else
+                      {
                       channelOptionsController.selectedDateTime.value = DateTime(
                         selectedDate.year,
                         selectedDate.month,
                         selectedDate.day,
                       );
+                      }
                     }
                   },
                   child: Row(
@@ -370,7 +383,7 @@ DateTime.now(),
                 Obx(
                   ()=>channelOptionsController.isLoading.value==false? ElevatedButton(
                     onPressed: () {
-                     validateFieldsAndUpload();
+                     validateFieldsAndUploadLive();
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -395,6 +408,12 @@ DateTime.now(),
                     }
     return true; // Replace with your validation logic.
   }
+   bool validateFieldsAndUploadLive() {
+    if (_formKey.currentState!.validate()) {
+                     channelOptionsController.uploadLiveVideo(videoRequestModal: VideoRequestModal(title:videoTitleTextEditingController.text,link: videoUrlcontroller.text,isPaid:channelOptionsController.isVideoPaid.value.toString(),type: 'Video',channelId: widget.channel.id));
+                    }
+    return true; // Replace with your validation logic.
+  }
   void _handleOptionSelected(String option) {
     switch (option) {
       case "New Notice":
@@ -410,29 +429,37 @@ DateTime.now(),
         break;
       case "Add Subscriber":
         // Implement your logic for adding a subscriber here
+        channelOptionsController.phoneNumber.value='';
+        TextEditingController texteditingController=TextEditingController(text:channelOptionsController.phoneNumber.value);
         Get.defaultDialog(
           backgroundColor: Colors.white,
-          title: "Enter phone number of new subscriber",
-          titleStyle: TextStyle(fontSize: 14.sp),
-          content: Column(
-            children: [
-              TextField(
-                keyboardType: TextInputType.phone,
-                onChanged: (value) {
-                  channelOptionsController.updatePhoneNumber(value);
-                },
-                decoration:  InputDecoration(labelText: "Id",hintStyle: TextStyle(fontSize: 12.sp)),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: ()async {
-                await channelOptionsController.addSubscriber(channeId: widget.channel.id! );
-                 
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red,foregroundColor: Colors.white,elevation: 10),
-                child: Obx(()=>channelOptionsController.isLoading.value?const CircularProgressIndicator.adaptive(): const Text("Add Subscriber")),
-              ),
-            ],
+          title: "  Enter phone number of new subscriber  ",
+          titleStyle: TextStyle(fontSize: 12.sp),
+          content:Obx(
+            ()=> Column(
+              children: [
+                TextField(
+                  controller: texteditingController,
+                  keyboardType: TextInputType.phone,
+                  onChanged: (value) {
+                    channelOptionsController.updatePhoneNumber(value);
+                  },
+                  decoration:  InputDecoration(labelText: "Phone Number",hintStyle: TextStyle(fontSize: 12.sp)),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  
+                  onPressed: ()async {
+                    if(channelOptionsController.phoneNumber.value.isNotEmpty) {
+                      await channelOptionsController.addSubscriber(channeId: widget.channel.id! );
+                    }
+                   
+                  },
+                  style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),backgroundColor: Colors.red,foregroundColor: Colors.white,elevation: 10,),
+                  child: channelOptionsController.isLoading.value?const CircularProgressIndicator(): const Text("Add Subscriber"),
+                ),
+              ],
+            ),
           ),
         );
         break;

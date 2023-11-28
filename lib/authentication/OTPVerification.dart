@@ -104,7 +104,7 @@ class OtpVerification extends StatelessWidget {
                           style: TextButton.styleFrom(textStyle: TextStyle(fontSize:12.sp,fontWeight: FontWeight.bold,color: CustomColors.primaryColorDark)), onPressed: () { 
                            
                            },
-                          child:const Text('Resend OTP'),
+                          child:const Text('Resend OTP',style: TextStyle(color: CustomColors.primaryColorDark),),
                         ),
                         ]
                     ),

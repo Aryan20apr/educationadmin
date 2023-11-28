@@ -50,8 +50,8 @@ class YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
       
       child: YoutubePlayerBuilder(
         onExitFullScreen: (){
-          log('Full Screen exited');
-         // _controller.toggleFullScreenMode();
+          log('Full Screen');
+          
         },
         onEnterFullScreen: (){
          // _controller.toggleFullScreenMode();
@@ -99,83 +99,129 @@ class YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
     super.dispose();
   }
 }
-// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+// import 'dart:convert';
+// import 'dart:developer';
+
+
+// import 'package:educationadmin/Modals/VideoResourcesModal.dart';
+// import 'package:educationadmin/screens/common/ChatView.dart';
 // import 'package:flutter/material.dart';
+// import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // class YouTubePlayerScreen extends StatefulWidget {
-//   YouTubePlayerScreen({Key? key, required this.video}) : super(key: key);
 
-//   final Videos video;
-
+//  const YouTubePlayerScreen({super.key,required this.video});
+//  final Videos video ;
 //   @override
-//   _YouTubePlayerScreenState createState() => _YouTubePlayerScreenState();
+//   YouTubePlayerScreenState createState() => YouTubePlayerScreenState();
+
 // }
 
-// class _YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
+// class YouTubePlayerScreenState extends State<YouTubePlayerScreen> {
 //   late YoutubePlayerController _controller;
-//   late YoutubePlayerFlags _flags;
-//   String _videoLink = ''; // Store the fetched video link
+//   //late YoutubePlayerFlags _flags;
+//   //String _videoLink = ''; // Store the fetched video link
 
 //   @override
 //   void initState() {
 //     super.initState();
 //     // Set flags for the YouTube player (e.g., captions)
-//     _flags = const YoutubePlayerFlags(
-//       autoPlay: true,
-//       mute: false,
-//       captionLanguage: 'en', // Replace with your desired caption language code
+//     // _flags = const YoutubePlayerFlags(
+//     //   autoPlay: true,
+//     //   mute: false,
+//     //   captionLanguage: 'en', // Replace with your desired caption language code
+//     // );
+//     _controller=YoutubePlayerController(
+//        params: const YoutubePlayerParams(
+//         enableJavaScript: false,
+//         captionLanguage: 'en',
+//         strictRelatedVideos: true,
+//         showControls: true,
+//         mute: false,
+//         showFullscreenButton: true,
+//         loop: false,
+        
+//       ),
 //     );
 
-//     _videoLink = widget.video.link!;
-//     // Update the controller with the fetched video link
-//     _controller = YoutubePlayerController(
-//       initialVideoId: YoutubePlayer.convertUrlToId(_videoLink)!,
-//       flags: _flags,
+    
+
+//     //  _videoLink = widget.video.link!;
+//     //     // Update the controller with the fetched video link
+//     //     _controller = YoutubePlayerController(
+//     //       initialVideoId: YoutubePlayer.convertUrlToId(_videoLink)!,
+//     //       flags: _flags,
+//     //     );
+
+//          _controller.setFullScreenListener(
+//       (isFullScreen) {
+//         log('${isFullScreen ? 'Entered' : 'Exited'} Fullscreen.');
+//       },
 //     );
+
+//     _controller.loadVideoByUrl( mediaContentUrl:widget.video.link! );
+   
 //   }
+
+  
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return YoutubePlayerControllerProvider(
-//       controller: _controller,
-//       child: Scaffold(
-//         appBar: AppBar(
-//           title: Text('${widget.video.title}'),
-//         ),
-//         body: Center(
-//           child: _videoLink.isNotEmpty
-//               ? YoutubePlayerBuilder(
-//                   player: YoutubePlayer(
-//                     controller: _controller,
-//                     showVideoProgressIndicator: true,
-//                     onReady: () {
-//                       // Video is ready to play
-//                     },
-//                     onEnded: (data) {
-//                       // Video has ended
-//                     },
-//                   ),
-//                   builder: (context, player) {
-//                     return Column(
-//                       children: [
-//                         // Your other widgets can go here
-//                         player,
-//                       ],
-//                     );
-//                   },
-//                 )
-//               : const CircularProgressIndicator(), // Show loading indicator while fetching link
-//         ),
-//         floatingActionButton: FullScreenPlayer(
-//           controller: _controller,
-//         ),
+//     return SafeArea(
+      
+//       child: YoutubePlayerScaffold(
+//         controller: _controller,
+//         aspectRatio: 16 / 9,
+//         // onExitFullScreen: (){
+//         //   log('Full Screen');
+//         //   _controller.toggleFullScreenMode();
+//         // },
+//         // onEnterFullScreen: (){
+//         //  // _controller.toggleFullScreenMode();
+//         // },
+//         // player:YoutubePlayer(
+//         //             controller: _controller,
+//         //             showVideoProgressIndicator: true,
+//         //             onReady: () {
+//         //               // Video is ready to play
+//         //             },
+//         //             onEnded: (data) {
+//         //               // Video has ended
+//         //             },
+//         //           ),
+//         builder: (context,player) {
+//           return Scaffold(
+            
+//             appBar: AppBar(
+//               title: Text('${widget.video.title}'),
+//             ),
+//             body:Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+//               //  _videoLink.isNotEmpty
+//               // ? SizedBox(
+//               //   width: MediaQuery.of(context).size.width,
+    
+//               //   child: 
+                
+//             player,
+            
+//             if(widget.video.isLive!=null && widget.video.isLive!)
+//               Expanded(child: Padding(
+//                 padding: const EdgeInsets.only(top:4.0),
+//                 child: ChatView(video: widget.video,),
+//               ))
+//             ])
+//           );
+//         }
 //       ),
 //     );
 //   }
 
 //   @override
 //   void dispose() {
-//     _controller.dispose();
+//     _controller.stopVideo();
+//     _controller.close();
+    
 //     super.dispose();
 //   }
 // }

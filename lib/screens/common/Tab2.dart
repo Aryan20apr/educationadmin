@@ -68,7 +68,7 @@ void onRefresh() async {
                 }
                 else
                 {
-                  if(resourceController.fileData.value.data==null) {
+                  if(resourceController.fileData.value.data==null||resourceController.fileData.value.data!.files!.isEmpty) {
                     return const Center(child: Text('No Files Available'),);
                   }
                   Data? data =resourceController.fileData.value.data;

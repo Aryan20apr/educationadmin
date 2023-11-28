@@ -87,7 +87,7 @@ bool _isSearchBarOpen = false;
                          child: Center(child: Text('Videos')),
                       ),
                       Tab(
-                        child: Center(child: Text('Resources')),
+                        child: Center(child: Text('Files')),
                       ),
                         
                     ],

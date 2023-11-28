@@ -71,12 +71,12 @@ List<Videos> videos=[];
                     {
                       if(channelsController.videoData.value.data!.videos!.isNotEmpty)
                       {
-                        videos=channelsController.videoData.value.data!.videos??[];
+                        videos=channelsController.normalVideos;
                          return Obx(
                            ()=> ListView.builder(
                                       physics: const NeverScrollableScrollPhysics(),
                                      addAutomaticKeepAlives: true,
-                                     itemCount: channelsController.videoData.value.data!.videos!.length, // Adjust the number of video items
+                                     itemCount: channelsController.normalVideos.length, // Adjust the number of video items
                                      itemBuilder: (context, index) {
                                        return Card(
                                         color: CustomColors.tileColour,
@@ -141,7 +141,7 @@ List<Videos> videos=[];
                                     await showEditDialog(context: context,fileName:videos[index].title!,resourceId:  videos[index].id!);
                                      await channelsController.getChannelVideos(channelId: widget.channelId);
                                     setState(() {
-                                     videos=channelsController.videoData.value.data!.videos!;
+                                     videos=channelsController.normalVideos;
                                     });
                                      print('Edit selected');
                                    } else if (value == 'delete') {
@@ -150,7 +150,7 @@ List<Videos> videos=[];
                                      await _showDeleteConfirmationDialog(context:context,resourceId: videos[index].id!);
                                       await channelsController.getChannelVideos(channelId: widget.channelId);
                                       setState(() {
-                                        videos = channelsController.videoData.value.data!.videos!;
+                                        videos = channelsController.normalVideos;
                                       });
                                    }
                                  },

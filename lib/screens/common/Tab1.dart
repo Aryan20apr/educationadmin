@@ -93,7 +93,7 @@ void onRefresh() async {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: ListTile(
-                              
+                             
                               onTap: () {
                                 Get.to(() => YouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
                               },
@@ -114,8 +114,19 @@ void onRefresh() async {
                                 "${resourceController.liveVideos[index].title}",
                                 style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text(datetime,  style: const TextStyle(color: CustomColors.secondaryColor, ),),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(datetime,  style: const TextStyle(color: CustomColors.secondaryColor, ),),
+                                  if(resourceController.liveVideos[index].isStreaming!=null&&resourceController.liveVideos[index].isStreaming!)
+                                  Container(decoration:const BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(8)),color: Colors.amber),child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text('Streaming Now',style: TextStyle(color: Colors.green.shade900,fontWeight: FontWeight.bold),),
+                                  ))
+                                ],
+                              ),
                               trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
+                              
                             ),
                           );
                         },

@@ -4,11 +4,11 @@ class VideoResourcesData {
   VideoResourcesData({this.data});
 
   VideoResourcesData.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -27,13 +27,13 @@ class Data {
     if (json['videos'] != null) {
       videos = <Videos>[];
       json['videos'].forEach((v) {
-        videos!.add(new Videos.fromJson(v));
+        videos!.add(Videos.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['msg'] = msg;
     if (videos != null) {
       data['videos'] = videos!.map((v) => v.toJson()).toList();
@@ -53,7 +53,8 @@ class Videos {
   bool? isLive;
   String? startDate;
   String? startTime;
-  Null? description;
+  bool? isStreaming;
+  String? description;
   int? channelId;
   int? createdBy;
 
@@ -68,6 +69,7 @@ class Videos {
       this.isLive,
       this.startDate,
       this.startTime,
+      this.isStreaming,
       this.description,
       this.channelId,
       this.createdBy});
@@ -83,6 +85,7 @@ class Videos {
     isLive = json['isLive'];
     startDate = json['startDate'];
     startTime = json['startTime'];
+    isStreaming = json['isStreaming'];
     description = json['description'];
     channelId = json['channelId'];
     createdBy = json['createdBy'];
@@ -100,6 +103,7 @@ class Videos {
     data['isLive'] = isLive;
     data['startDate'] = startDate;
     data['startTime'] = startTime;
+    data['isStreaming'] = isStreaming;
     data['description'] = description;
     data['channelId'] = channelId;
     data['createdBy'] = createdBy;

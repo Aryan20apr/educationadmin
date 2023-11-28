@@ -12,12 +12,14 @@ class NoticeBottomSheet{
   TextEditingController descriptionController = TextEditingController();
   NoticesController noticesController=Get.put(NoticesController());
   void showCreateNoticeBottomSheet({required BuildContext context,required int channeId}) {
+    descriptionController.text='';
+    titleController.text='';
     showModalBottomSheet(
       backgroundColor: CustomColors.secondaryColor,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: Get.height*0.45,
+          height: Get.height*0.5,
           padding:const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
@@ -61,10 +63,33 @@ class NoticeBottomSheet{
                       },
                     ),
                     SizedBox(height: constraints.maxHeight*0.05),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: Text('Limit message to your subscribers only', style: TextStyle(fontSize: 10.sp,fontWeight: FontWeight.w600),)),
+                        Obx(
+                            ()=> Switch(
+                                        activeColor: CustomColors.primaryColorDark,
+                                        
+                                        inactiveThumbColor: Colors.grey.shade600,
+                                        inactiveTrackColor: Colors.grey.shade400,
+                                        value:noticesController.isLimited.value,
+                                        onChanged: (value) {
+                                           noticesController.isLimited.value = value;
+                                          
+                                        },
+                                      ),
+                          ),
+                      ],
+                    ),
+                       SizedBox(height: constraints.maxHeight*0.05),
                     Center(
                       child: Obx(
                         ()=>noticesController.isLoading.value?ElevatedButton(
-                          style: ElevatedButton.styleFrom(fixedSize: Size(constraints.maxWidth*0.4, constraints.maxHeight*0.1),backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                          style: ElevatedButton.styleFrom(fixedSize: Size(constraints.maxWidth*0.4, constraints.maxHeight*0.1),backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
                       
@@ -74,10 +99,10 @@ class NoticeBottomSheet{
                           },
                           child:  Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: SizedBox(height:constraints.maxHeight*0.05,width: constraints.maxHeight*0.05,child: const Center(child: CircularProgressIndicator(strokeWidth: 4.0,backgroundColor: CustomColors.primaryColorDark,)))
+                            child: SizedBox(height:constraints.maxHeight*0.05,width: constraints.maxHeight*0.05,child: const Center(child: CircularProgressIndicator(color: CustomColors.primaryColorDark,strokeWidth: 2.0,backgroundColor: CustomColors.primaryColorDark,)))
                           ),
                         ): ElevatedButton(
-                          style: ElevatedButton.styleFrom(fixedSize: Size(constraints.maxWidth*0.4, constraints.maxHeight*0.1),backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                          style: ElevatedButton.styleFrom(fixedSize: Size(constraints.maxWidth*0.4, constraints.maxHeight*0.1),backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
                       
@@ -93,8 +118,11 @@ class NoticeBottomSheet{
                             ),
                           ),
                         ),
+                        
+                     
                       ),
                     ),
+                      
                   ],
                 );
               }

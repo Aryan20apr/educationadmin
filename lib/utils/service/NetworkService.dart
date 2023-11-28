@@ -66,42 +66,87 @@ class NetworkService extends GetConnect {
   final String updateprofile="auth/profile/edit";
   final String deletenotice="notice/delete/";
   final String deletebanner="banners/delete/";
-
+  final String startstream="resources/live/start/";
+  final String endstream="resources/live/end/";
   final Logger logger=Logger();
-  Future<SignupResponseModal?> signUp(SignupModal model) async {
-    Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
-    logger.e(response.body.toString());
-    if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
+  Future<SignupResponseModal> signUp(SignupModal model) async {
+//     Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
+//     logger.e(response.body.toString());
+//     if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
+//       return SignupResponseModal.fromJson(response.body!);
+//     } else {
+
+
+// TODO: "Handle signup error ";
+//       return null; 
+//       //return SignupErrorModal.fromJson(response.body!);
+//     }
+  try {
+  Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
+  logger.e(response.body.toString());
+  if(response.body!=null)
+  
+  {if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created)
+  {
       return SignupResponseModal.fromJson(response.body!);
-    } else {
-
-
-TODO: "Handle signup error ";
-      return null; 
-      //return SignupErrorModal.fromJson(response.body!);
-    }
+  }
+  else
+  {
+    Map<String,dynamic> map=response.body!['error'];
+    return SignupResponseModal(data: null,msg:map['msg'],statusCode: map['statusCode']);
+  }
+  }
+  else
+  {
+    return SignupResponseModal(data: null,msg: 'Some error occurred, try again later.',statusCode: 0);
+  }
+} on Exception catch (e) {
+  e.printError();
+  return SignupResponseModal(data: null,msg: 'Some error occurred, try again later.',statusCode: 0);
+}
   }
 
  Future<SignupResponseModal> login(LoginModal model) async {
-    Response<Map<String,dynamic>> response = await post('$baseURL$signin', model.toJson());
-    logger.e(response.body.toString());
-    if(response.body!=null)
-    {
-    if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
-      return SignupResponseModal.fromJson(response.body!);
+    try {
+  Response<Map<String,dynamic>> response = await post('$baseURL$signin', model.toJson());
+  logger.e(response.body.toString());
+  if(response.body!=null)
   
-    }
-      else if(response.body!["statusCode"]==Status.failed)
-      {
-      return SignupResponseModal(msg: response.body!["msg"]);}
-      // ignore: curly_braces_in_flow_control_structures
-      else 
-      {return SignupResponseModal(msg: "Could not login");}
-    }
-     else {
+  {if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created)
+  {
+      return SignupResponseModal.fromJson(response.body!);
+  }
+  else
+  {
+    Map<String,dynamic> map=response.body!['error'];
+    return SignupResponseModal(data: null,msg:map['msg'],statusCode: map['statusCode']);
+  }
+  }
+  else
+  {
+    return SignupResponseModal(data: null,msg: 'Some error occurred, try again later.',statusCode: 0);
+  }
+} on Exception catch (e) {
+  e.printError();
+  return SignupResponseModal(data: null,msg: 'Some error occurred, try again later.',statusCode: 0);
+}
+    // if(response.body!=null)
+    // {
+    // if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created) {
+    //   return SignupResponseModal.fromJson(response.body!);
+  
+    // }
+    //   else if(response.body!["statusCode"]==Status.failed)
+    //   {
+    //   return SignupResponseModal(msg: response.body!["msg"]);}
+    //   // ignore: curly_braces_in_flow_control_structures
+    //   else 
+    //   {return SignupResponseModal(msg: "Could not login");}
+    // }
+    //  else {
      
-      return SignupResponseModal(msg: "Could not login");
-    }
+    //   return SignupResponseModal(msg: "Could not login");
+    // }
   }
 
 Future<OTPModal?> sendOTP({required PhoneModal phone}) async {
@@ -191,10 +236,9 @@ Future<ChannelListModal> getUserChannelList({String? token,required int userid})
 {
   try {
   Response<Map<String,dynamic>> response = await get('$baseURL$userchannels',headers: {"Authorization":"Bearer $token"});
-    if(response.body!=null)
-    
-   return ChannelListModal.fromJson(response.body!);
-   else
+    if(response.body!=null) {
+      return ChannelListModal.fromJson(response.body!);
+    } else
    {
     return ChannelListModal();
    }
@@ -213,14 +257,24 @@ Response<Map<String,dynamic>> response = await get('$baseURL$channelfiles$channe
 
 Future<VideoResourcesData> getChannelVideo({String? token, required int channelId}) async
 {
-try {
+
+  try {
   Response<Map<String,dynamic>> response = await get('$baseURL$channelvideos$channelId',headers: {"Authorization":"Bearer $token"});
       logger.e(response.body);
-     return VideoResourcesData.fromJson(response.body!);
+      if(response.body!=null) {
+        return VideoResourcesData.fromJson(response.body!);
+      }
+      else
+      {
+        return VideoResourcesData();
+      }
 } on Exception catch (e) {
-  e.printError();
-  return VideoResourcesData();
+  // TODO
+    return VideoResourcesData();
 }
+  
+
+
 }
 
 
@@ -320,11 +374,18 @@ else
   {
      try {
   Response<Map<String,dynamic>> response=await post("$baseURL$addconsumerfromcreator/$channelId/$consumerId",{},headers: {"Authorization":"Bearer $token"});
-   
+   logger.i(response.body);
    if(response.statusCode==200 ||response.statusCode==201)
    {
-     return GeneralResponse.fromJson(response.body!);
-  
+    if(response.body!=null)
+    {
+    Map<String,dynamic> map=  response.body!['data'];
+     return GeneralResponse(msg: map['msg']);
+    }
+    else
+    {
+      return GeneralResponse(msg: 'Could not subscribe.');
+    }
    }
   
 } on Exception catch (e) {
@@ -557,13 +618,18 @@ Future<NoticesResponse> getNotices({required String token})async
 
 }
 
-Future<CreateNoticeResponse> createNotices({required String title,required String description,required int channelId,required String token})async
+Future<CreateNoticeResponse> createNotices({required bool isLimited,
+required String title,required String description,required int channelId,required String token})async
 {
     Map<String,dynamic> body={
       "title":title,
       "description":description,
       "channelId":channelId
     };
+    if(isLimited==false)
+    {
+      body.remove('channelId');
+    }
   try {
   Response response=await post("$baseURL$createnotice",body,headers:{"Authorization":"Bearer $token"});
   if(response.body!=null)
@@ -637,6 +703,46 @@ Future<GeneralResponse2> deleteBanner({required int id,required String token})as
 }
 return GeneralResponse2();
 }
+  Future<GeneralResponse2> startStream({required int id,required String token,required String title})async
+  {
+       Map<String,dynamic> body={"title":title};
+     try {
+  Response response=await put("$baseURL$startstream$id",body,headers: {"Authorization":"Bearer $token"});
+   logger.i(response.body);
+  if(response.body!=null)
+  {
+   
+    return GeneralResponse2.fromJson(response.body);
+  }
+  else
+  {
+    return GeneralResponse2();
+  }
+} on Exception catch (e) {
+  e.printError();
+}
+return GeneralResponse2();
+  }
+  Future<GeneralResponse2> endStream({required int id,required String token,required String title })async
+  {
+    Map<String,dynamic> body={"title":title};
+     try {
+  Response response=await put("$baseURL$endstream$id",body,headers: {"Authorization":"Bearer $token"});
+   logger.i(response.body);
+  if(response.body!=null)
+  {
+   
+    return GeneralResponse2.fromJson(response.body);
+  }
+  else
+  {
+    return GeneralResponse2();
+  }
+} on Exception catch (e) {
+  e.printError();
+}
+return GeneralResponse2();
+  }
 }
 
 

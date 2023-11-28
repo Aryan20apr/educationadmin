@@ -1,6 +1,7 @@
 import 'package:educationadmin/authentication/LoginScreen.dart';
 import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
+import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -161,7 +162,7 @@ late  TextEditingController confirmPasswordController;
                         
                             }
                             else {
-                                return 'Email id cannot be empty';
+                                return null;
                               }
                             }
                           ),
@@ -265,22 +266,27 @@ late  TextEditingController confirmPasswordController;
                           //Get.to(()=>const OtpVerification());
                         },
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.primaryColor,
                           maximumSize: Size(constraints.maxWidth*0.8,constraints.maxHeight*0.2),
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                         ),
-                        child: Container(
+                        child: SizedBox(
+                          //color: CustomColors.primaryColor,
                           width: double.infinity,
-                          alignment: Alignment.center,
-                          child: Obx(()=>_authenticationViewModel.isLoading.value? const ProgressIndicatorWidget(): const Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),)
+                          //alignment: Alignment.center,
+                          child: Center(
+                            child: Obx(()=>_authenticationViewModel.isLoading.value? const ProgressIndicatorWidget(): const Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: CustomColors.primaryColorDark
+                              ),
+                            ),),
+                          )
                         ),
                       ),
                       Row(
@@ -294,7 +300,7 @@ late  TextEditingController confirmPasswordController;
                             style: TextButton.styleFrom(textStyle: TextStyle(fontSize:12.sp,fontWeight: FontWeight.bold)), onPressed: () { 
                               Get.to(()=>const LoginScreen());
                              },
-                            child:const Text('Sign in'),
+                            child:const Text('Sign in',style: TextStyle(color: CustomColors.primaryColorDark),),
                           ),
                           ]
                       ),

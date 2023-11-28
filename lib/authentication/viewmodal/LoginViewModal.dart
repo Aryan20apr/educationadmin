@@ -41,19 +41,20 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
     final SignupResponseModal response = await networkService
         .login(loginModal);
 
-    if (response!.data!=null) {
+    if (response.data!=null) {
       /// Set isLogin to true
       _authManager.login(response.data!);
 
        UserModal userModal= await _networkService.getUserDetails(token: response.data!.token);
       _userdetails.initializeUserDetails(userModal: userModal);
       isLoading.value=false;
-      Get.off(()=> MainWrapper());
+      Get.off(()=>const MainWrapper());
       
     } else {
        isLoading.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
+        buttonColor: CustomColors.primaryColor,
         title: 'Login error',
         backgroundColor: CustomColors.secondaryColor,
           middleText: response.msg!,
@@ -71,22 +72,24 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
   Future<void> registerUser({required String email,required String password,required phone,required String name}) async {
     isLoading.value=true;
     SignupModal signupModal=SignupModal(name:name, email:email, password:password, phone:phone);
-    final SignupResponseModal? response = await networkService
+    final SignupResponseModal response = await networkService
         .signUp(signupModal);
 
-    if (response != null) {
+    if (response.data != null) {
       /// Set isLogin to true
       _authManager.login(response.data!/*,signupModal*/);
       
       UserModal userModal= await _networkService.getUserDetails(token: response.data!.token);
       _userdetails.initializeUserDetails(userModal: userModal);
       isLoading.value=false;
-      Get.off(()=> MainWrapper());
+      Get.off(()=>const MainWrapper());
     } else {
       isLoading.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
-          middleText: 'Register Error',
+        buttonColor: CustomColors.primaryColor,
+          title: 'Register Error',
+          middleText: response.msg!,
           textConfirm: 'OK',
           confirmTextColor: Colors.white,
           onConfirm: () {
@@ -120,7 +123,8 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
       isLoading.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
-          middleText: 'Register Error',
+          buttonColor: CustomColors.primaryColorDark,
+          middleText: 'Registeration Error',
           textConfirm: 'OK',
           confirmTextColor: Colors.white,
           onConfirm: () {

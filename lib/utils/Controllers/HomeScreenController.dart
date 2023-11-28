@@ -28,7 +28,7 @@ final RxInt currentPage=0.obs;
     if(token!=null)
     {
      ChannelListModal channelListModal=await   networkService.getUserChannelList(userid: userDetailsManager.id.value,token: token);
-     channelData.value=channelListModal.data!;
+    //  channelData.value=channelListModal.data!;
 
       
      if(channelListModal.data!=null)

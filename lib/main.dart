@@ -14,9 +14,11 @@ import 'screens/common/FirstScreen.dart';
 
 void main() async{
    WidgetsFlutterBinding.ensureInitialized();
-   
+    
   runApp(  DevicePreview(
     enabled: kReleaseMode,                                          
+
+    
     builder: (context) => const MyApp(), // Wrap your app
   ),);
 }

@@ -10,6 +10,7 @@ import '../../Modals/CreateNoticeResponse.dart' as notice;
 class NoticesController extends GetxController
 {
 RxBool isLoading=false.obs;
+RxBool isLimited=false.obs;
 Rx<Data> notices=Data().obs;
 RxList<bool> isExpanded=RxList<bool>();
 NetworkService networkService=Get.put(NetworkService());
@@ -50,7 +51,9 @@ AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
    if(isAvailable)
    {
       String? token=await authenticationManager.getToken();
-      notice.CreateNoticeResponse  response=await networkService.createNotices(token: token!, title:title, description: description, channelId: channelId);
+      
+        notice.CreateNoticeResponse  response=await networkService.createNotices(isLimited:isLimited.value,token: token!, title:title, description: description, channelId: channelId);
+      
       isLoading.value=false;
       if(response.data!=null)
       {
