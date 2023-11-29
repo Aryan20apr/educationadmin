@@ -1,6 +1,5 @@
 import 'package:educationadmin/screens/common/ChangePasswordScreen.dart';
-import 'package:educationadmin/screens/pages/creator/AllBanners.dart';
-import 'package:educationadmin/screens/pages/creator/UploadBannerScreen.dart';
+
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +11,7 @@ import '../common/DownloadsPage.dart';
 import '../common/UpdatePeofileScreen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import 'creator/CreatorNotifications.dart';
+
 void main() {
   runApp(ProfileScreen());
 }

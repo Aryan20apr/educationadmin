@@ -1,7 +1,7 @@
 
 
 import 'package:educationadmin/screens/pages/Explore2.dart';
-import 'package:educationadmin/screens/pages/creator/CreaterHome.dart';
+
 import 'package:educationadmin/utils/Controllers/NoticesController.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -10,6 +10,7 @@ import '../../utils/ColorConstants.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/CenterProgressIndicator.dart';
 import '../../widgets/ProgressIndicatorWidget.dart';
 
 class ChatScreen extends StatefulWidget {

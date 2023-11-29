@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:educationadmin/authentication/viewmodal/ExploreViewModal.dart';
-import 'package:educationadmin/screens/pages/creator/CreaterHome.dart';
+
 import 'package:educationadmin/utils/Flag.dart';
 
 
@@ -11,6 +11,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../utils/ColorConstants.dart';
 
+import '../../widgets/CenterProgressIndicator.dart';
 import '../../widgets/ProgressIndicatorWidget.dart';
 import 'widgets/VideoCard.dart';
 
