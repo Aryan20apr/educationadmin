@@ -386,7 +386,15 @@ void initState()
                                   return const Center(child: Text('Could not obtain channels for you'),);
                               }
                               else
-                              {return ListView.builder(
+                              {
+                                if(homeScreenController.channelData.value.channels!.isEmpty)
+                                {
+                                  return SizedBox(
+                                    height: Get.height*0.1,
+                                    child: const Center(child: Text('Youi have not subscribed to any channels.'),));
+                                }
+                              
+                              return ListView.builder(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
                   itemCount: homeScreenController.channelData.value.channels!.length,
