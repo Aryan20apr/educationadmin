@@ -60,7 +60,7 @@ class _MainWrapperState extends State<MainWrapper> {
                   
                   _bottomAppBarItem(
                       icon: FontAwesomeIcons.user,
-                      page: 4,
+                      page: 3,
                       context,
                       label: "Profile"),
                 ],

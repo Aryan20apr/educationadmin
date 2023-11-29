@@ -1,7 +1,6 @@
 import 'package:educationadmin/Modals/ChannelListModal.dart';
 import 'package:educationadmin/screens/common/ChannelDetails.dart';
-import 'package:educationadmin/screens/pages/creator/CreatorChannel.dart';
-import 'package:educationadmin/screens/pages/creator/EditChannelScreen.dart';
+
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Flag.dart';
 import 'package:flutter/material.dart';
@@ -55,16 +54,14 @@ class VideoCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            if (flag == ListType.Creator) {
-              Get.to(() => CreatorChannel(
-                    channel: channel,
-                  ));
-            } else {
+          
+
               if (!channel.isCompletelyPaid! || channel.price == 0) {
                 Get.to(() => ChannelDetails(
                       channel: channel,
                     ));
-              } else {
+              }
+               else {
                 // Get.defaultDialog(
                 //   title: 'Attention',
                 //   backgroundColor: CustomColors.secondaryColor,
@@ -87,7 +84,7 @@ class VideoCard extends StatelessWidget {
                   },
                 );
               }
-            }
+            
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,8 +166,8 @@ class VideoCard extends StatelessWidget {
                             : getExploreItem,
                         onSelected: (value) async {
                           if (value == 'edit') {
-                            await Get.to(() => EditChannel(channel: channel));
-                            onReturn;
+                            // await Get.to(() => EditChannel(channel: channel));
+                            // onReturn;
                             print('Edit selected');
                           } else if (value == 'delete') {
                             // Handle Delete option

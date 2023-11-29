@@ -1,6 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 
+
+import 'package:educationadmin/widgets/ProgressIndicatorWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -12,7 +16,7 @@ import '../../utils/Controllers/FileDownloadStatusController.dart';
 
 class DownloadsPage extends StatelessWidget {
   DownloadsPage({super.key});
-  FileController fileController = Get.put(FileController());
+ final FileController fileController = Get.put(FileController());
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +26,15 @@ class DownloadsPage extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: fileController.getPdfFiles(),
-        builder: (context, snapshot) {
+        builder: (context, snapshot) { 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
             Logger().e("files loaded");
-            final pdfFiles = snapshot.data as List<File>;
-            return PdfListView(pdfFiles);
+            final pdfFiles = snapshot.data;
+            return PdfListView(pdfFiles!);
           }
         },
       ),
@@ -39,7 +43,7 @@ class DownloadsPage extends StatelessWidget {
 }
 
 class PdfListView extends StatefulWidget {
-  final List<File> pdfFiles;
+  final List<FileSystemEntity> pdfFiles;
 
   const PdfListView(this.pdfFiles, {super.key});
 
@@ -98,9 +102,9 @@ class _PdfListItemState extends State<PdfListItem> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: ListTile(
-        leading: Icon(
+        leading: const Icon(
           Icons.picture_as_pdf,
           color: Colors.red, // Change the color as desired
         ),
@@ -115,7 +119,7 @@ class _PdfListItemState extends State<PdfListItem> {
         trailing: PopupMenuButton(
           itemBuilder: (context) {
             return <PopupMenuEntry>[
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'remove',
                 child: Text('Remove'),
               ),
@@ -129,33 +133,52 @@ class _PdfListItemState extends State<PdfListItem> {
   }
 }
 
-class FileView extends StatelessWidget {
-  FileView({super.key, required this.title, required this.file});
-  File file;
-  String title;
+class FileView extends StatefulWidget {
+ const FileView({super.key, required this.title, required this.file});
+ final FileSystemEntity file;
+ final String title;
+
+  @override
+  State<FileView> createState() => _FileViewState();
+}
+
+class _FileViewState extends State<FileView> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  FileController controller=Get.put(FileController());
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.bookmark,
-              color: Colors.white,
-              semanticLabel: 'Bookmark',
-            ),
-            onPressed: () {
-              //  _pdfViewerKey.currentState?.openBookmarkView();
-            },
-          ),
-        ],
+        title: Text(widget.title),
+        
       ),
-      body: SfPdfViewer.file(
-        file,
-        key: _pdfViewerKey,
+      body: FutureBuilder<File>(
+        future: controller.getDecryptedFile(name: widget.file.path,fromDownloads:true),
+        builder: (context,snapshot) {
+          if(snapshot.hasData)
+          {
+            log('Read bytes are ${snapshot.data!.path}');
+            return SfPdfViewer.file(
+            snapshot.data!,
+            key: _pdfViewerKey,
+          );}
+          else if(snapshot.hasError)
+          {
+           return const Center(child: Text('Some error occurred'),);
+          }
+          else
+          {
+           return const ProgressIndicatorWidget();
+          }
+        }
       ),
     );
+  }
+  @override
+  void dispose()
+  {
+    controller.deleteTempFile(path: widget.file.path);
+    super.dispose();
   }
 }

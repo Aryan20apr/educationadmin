@@ -67,8 +67,9 @@ class FileController extends GetxController
 
       if(response.statusCode==200||response.statusCode==201)
       {
- //logger.i(response.bodyBytes);
+ 
       final directory = await getApplicationDocumentsDirectory();
+      logger.i("Document Diretory path is ${directory.path}");
     final filesDirectory = await Directory('${directory.path}/files').create(recursive: true);
     
 
@@ -77,19 +78,14 @@ class FileController extends GetxController
    
     logger.i("Length of key is ${key.length} and key is ${key.bytes}");
    
-    //final encryptor=Encrypter(AES(key,padding: null));
+   
    final encryptor=Encrypter(AES(Key.fromBase64("Eur91rZ/EKnHbkijT65vK2DKPxoRpASD60SlHkJdXK0="),mode: AESMode.cbc));
     
-    // logger.i("Unencrypted bytes: ${response.bodyBytes}");
-    // logger.i("Unencrypted bytes length: ${response.bodyBytes.length}");
+  
     final encryptedBytes = encryptor.encryptBytes(response.bodyBytes,iv: iv,);
-    //final decryptedBytes = encryptor.decryptBytes(encryptedBytes,iv: iv,associatedData: encryptedBytes.bytes);
-   // Directory generalDownloadDir =await Directory('/storage/emulated/0/Download/mypdfs').create(recursive: true);
-   // final unencryptefFile=File(/*"/storage/emulated/0/Download/mypdfs/${file.title!}.pdf"*/filePath);
-  //File writtenFile=  await unencryptefFile.writeAsBytes(response.bodyBytes);
-  //logger.i(await writtenFile.length());
+   
 
-  //logger.i(response.bodyBytes);
+
   logger.i("Mime type of saved file is ${lookupMimeType(filePath)}");
    // encrypted file
     final encryptedFile=File(filePath);
@@ -100,9 +96,10 @@ class FileController extends GetxController
       }
 } on Exception catch (e) {
   logger.i(e);
-      Get.showSnackbar(GetSnackBar(
+      Get.showSnackbar(const GetSnackBar(
         message: 'Cannot download pdf, check your internet connection',
       ));
+      isDownloaded.value=false;
 }
    
     
@@ -113,11 +110,19 @@ class FileController extends GetxController
 
  
 
-Future<File> getDecryptedFile({required String name,required String createdAt}) async
-{
+Future<File> getDecryptedFile({required String name, String? createdAt,bool? fromDownloads
+}) async
+{     String filePath;
+Directory? filesDirectory;
+    if(fromDownloads==null)
+    {
      final directory = await getApplicationDocumentsDirectory();
-    final filesDirectory = Directory('${directory.path}/files');
-    String filePath='${filesDirectory.path}/${name}_$createdAt.pdf';
+     filesDirectory = Directory('${directory.path}/files');
+     filePath='${filesDirectory.path}/${name}_$createdAt.pdf';}
+     else
+     {
+      filePath=name;
+     }
     File encryptedfile=File(filePath );
     bool isPresent=await encryptedfile.exists();
     logger.i("File at path $filePath is present $isPresent");
@@ -140,30 +145,29 @@ Future<File> getDecryptedFile({required String name,required String createdAt}) 
     //logger.i(await encryptedfile..readAsString());
 
     //return encryptedfile;
-
-     final decryptedFilePath = '${filesDirectory.path}/${name}_${createdAt}_decryptedfile.pdf';
+  if(fromDownloads==null)
+    { final decryptedFilePath = '${filesDirectory!.path}/${name}_${createdAt}_decryptedfile.pdf';
      final decryptedFile = File(decryptedFilePath);
     
 
      await decryptedFile.writeAsBytes(decryptedBytes,flush: true/*Uint8List.fromList(decryptedBytes)*/);
-     return decryptedFile;//Uint8List.fromList(decryptedBytes);
+     return decryptedFile;}//Uint8List.fromList(decryptedBytes);}
+     else
+     {
+        final decryptedFilePath = '${name}_decryptedfile.pdf';
+     final decryptedFile = File(decryptedFilePath);
+    
+
+     await decryptedFile.writeAsBytes(decryptedBytes,flush: true/*Uint8List.fromList(decryptedBytes)*/);
+     return decryptedFile;
+     }
     
    
 }
  Future<dynamic> download({required String url}) async
 {
   try{
-    // String token=url. substring(url.indexOf("token")+7,url.indexOf("_gl"));
-    // String alt=url.substring( url.indexOf("alt=")+5,url.indexOf("token="));
-    // String gl=url.substring(url.indexOf("_gl=")+5);
-    // Map<String,String> query={
-    //   "token":token,
-    //   "alt":alt,
-    //   "_gl":gl
-    // };
-    // Response response =await Dio().get(url.substring(0,url.indexOf("?")),options: Options(responseType: ResponseType.bytes,
-    //         followRedirects: false,contentType: "application/pdf"),queryParameters: query);
-    // logger.i(response.data);
+   
     var client=http.Client();
     http.Response response= await http.get(Uri.parse(url),headers: {/*"Content-Type": "application/pdf",*/"Response-Type": "bytes"});
     
@@ -173,16 +177,35 @@ Future<File> getDecryptedFile({required String name,required String createdAt}) 
   on Exception catch(e)
   {
     logger.e(e.toString());
+    isDownloading.value=false;
+    isDownloaded.value=false;
   }
 }
-void deleteTempFile({required String name,required String createdAt}) async
+void deleteTempFile({ String? name, String? createdAt,String? path}) async
 {
+  
   final directory = await getApplicationDocumentsDirectory();
-    final filesDirectory = Directory('${directory.path}/files');
-    final decryptedFilePath = '${filesDirectory.path}/${name}_${createdAt}_decrypted.pdf';
+  if(path==null)
+ {   final filesDirectory = Directory('${directory.path}/files');
+    final decryptedFilePath = '${filesDirectory.path}/${name}_${createdAt}_decryptedfile.pdf';
     final decryptedFile = File(decryptedFilePath);
-    if(await decryptedFile.exists())
-    decryptedFile.delete(recursive: false);
+logger.i('removing temp file from path:$decryptedFilePath');
+bool exists=await decryptedFile.exists();
+logger.i("File exists:$exists");
+    if(exists) {
+      logger.i("Decrypted file found");
+      decryptedFile.delete(recursive: false);
+    }
+    }
+   else {
+logger.i('removing temp file from path:$path');
+    final decryptedFilePath = '${path}_decrypted.pdf';
+    final decryptedFile = File(decryptedFilePath);
+
+    if(await decryptedFile.exists()) {
+      decryptedFile.delete(recursive: false);
+    }
+    }
 }
 void deleteFile({required String name,required String createdAt}) async
 {
@@ -195,22 +218,27 @@ void deleteFile({required String name,required String createdAt}) async
     changeDownloadStatus(false);
 }
 
-Future<List<File>> getPdfFiles() async {
+Future<List<FileSystemEntity>> getPdfFiles() async {
   await Permission.manageExternalStorage.request();
 
-   // final directory = await getApplicationDocumentsDirectory();
-    var path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
-      final directory=await Directory(path);
-      
-    logger.e("Downloads directory is $path/mypdfs");
+    final directory = await getApplicationDocumentsDirectory();
+    // var path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
+      //final directory=await Directory(path);
+       final filesDirectory = Directory('${directory.path}/files');
     
-    List<FileSystemEntity> files = directory.listSync(); // Get a list of files in the application directory
+    logger.e("Application document directory is ${filesDirectory.path}");
+    
+    List<FileSystemEntity> files = filesDirectory.listSync(); // Get a list of files in the application directory
     logger.e("Size of obtained list: ${files.length}");
-    List<File> pdfFiles = [];
+    for (var element in files) {logger.i(element.path);}
+    List<FileSystemEntity> pdfFiles = [];
+   // pdfFiles = files.whereType<File>().map((entity) => entity as File).toList();
     for (var file in files) {
       if (file is File && file.path.endsWith('.pdf')) {
         logger.e('File is file ${file is File}');
-        pdfFiles.add(file);
+        pdfFiles.add(file)
+        ;
+        
       }
     }
     logger.e("Size of file list: ${pdfFiles.length}");

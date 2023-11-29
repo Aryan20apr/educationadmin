@@ -70,18 +70,7 @@ class _PdfViewState extends State<PdfView> with WidgetsBindingObserver{
     return Scaffold(
       appBar: AppBar(
         title:  Text(widget.file!.title!),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.bookmark,
-              color: Colors.white,
-              semanticLabel: 'Bookmark',
-            ),
-            onPressed: () {
-            //  _pdfViewerKey.currentState?.openBookmarkView();
-            },
-          ),
-        ],
+       
       ),
       body:
       fileController.isDownloaded.value==false? 
@@ -130,13 +119,13 @@ class _PdfViewState extends State<PdfView> with WidgetsBindingObserver{
   }
    @override
   void dispose() {
-    fileController.deleteTempFile(name:widget.file!.title!,createdAt:widget.file!.createdAt!) ;
+    fileController.deleteTempFile(name:widget.file!.title!,createdAt:widget.file!.createdAt!,path: null) ;
     
     super.dispose();
   } 
   Future<File> getFileBytes() async
   {
-    return await fileController.getDecryptedFile(name: widget.file!.title!,createdAt:widget.file!.createdAt!);
+    return await fileController.getDecryptedFile(name: widget.file!.title!,createdAt:widget.file!.createdAt!,fromDownloads: null);
     
   }
 }
