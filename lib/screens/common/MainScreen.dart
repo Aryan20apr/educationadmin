@@ -57,11 +57,7 @@ class _MainWrapperState extends State<MainWrapper> {
                       page: 2,
                       context,
                       label: "Messages"),
-                   _bottomAppBarItem(
-                      icon: FontAwesomeIcons.tv,
-                      page: 3,
-                      context,
-                      label: "Studio"),    
+                  
                   _bottomAppBarItem(
                       icon: FontAwesomeIcons.user,
                       page: 4,

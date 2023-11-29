@@ -7,14 +7,15 @@ import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
-
+import 'package:external_path/external_path.dart';
 import 'package:http/http.dart' as http; 
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:logger/logger.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class FileDownloadStatusController extends GetxController
+class FileController extends GetxController
 {
 
    final iv2=IV.fromLength(16);
@@ -193,5 +194,33 @@ void deleteFile({required String name,required String createdAt}) async
     encryptedfile.delete(recursive: false);
     changeDownloadStatus(false);
 }
+
+Future<List<File>> getPdfFiles() async {
+  await Permission.manageExternalStorage.request();
+
+   // final directory = await getApplicationDocumentsDirectory();
+    var path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
+      final directory=await Directory(path);
+      
+    logger.e("Downloads directory is $path/mypdfs");
+    
+    List<FileSystemEntity> files = directory.listSync(); // Get a list of files in the application directory
+    logger.e("Size of obtained list: ${files.length}");
+    List<File> pdfFiles = [];
+    for (var file in files) {
+      if (file is File && file.path.endsWith('.pdf')) {
+        logger.e('File is file ${file is File}');
+        pdfFiles.add(file);
+      }
+    }
+    logger.e("Size of file list: ${pdfFiles.length}");
+    return pdfFiles;
+  }
+  Future<void> deleteFilefromPath(String path) async
+  {
+    File encryptedfile=File(path );
+    encryptedfile.delete(recursive: false);
+  }
+  
 }
 

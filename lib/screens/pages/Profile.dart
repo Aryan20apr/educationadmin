@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../../authentication/LoginScreen.dart';
 import '../../utils/Controllers/AuthenticationController.dart';
 import '../../utils/Controllers/UserController.dart';
+import '../common/DownloadsPage.dart';
 import '../common/UpdatePeofileScreen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -107,19 +108,13 @@ const Text(
               ElevatedCard( Icons.edit, 'Edit Profile', () {
                 Get.to(()=>const ProfileUpdateScreen());
               }),
-              ElevatedCard(Icons.file_download, 'Upload Banner', () {
-                Get.to(()=>const UploadBanner());
-              }),
-              ElevatedCard(Icons.file_download, 'All Banners', () {
-                Get.to(()=> MyBanners());
-              }),
+               ElevatedCard( Icons.file_download, 'Downloads', ()=>Get.to(()=>DownloadsPage())),
+             
               ElevatedCard(Icons.lock, 'Change Password', () {
                 // Handle change password
                 Get.to(()=>ChangePassword());
               }),
-              ElevatedCard(Icons.notifications, 'My Notifications', () {
-                Get.to(()=>const CreatorNotifications());
-              }),
+             
               ElevatedCard(Icons.exit_to_app, 'Logout', () {
                 AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
                 authenticationManager.logOut();

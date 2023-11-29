@@ -25,13 +25,13 @@ class PdfView extends StatefulWidget {
 class _PdfViewState extends State<PdfView> with WidgetsBindingObserver{
    final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   //  File? _tempFile; 
-  late FileDownloadStatusController fileController;
+  late FileController fileController;
     
 
   Logger logger=Logger();
   @override
   void initState() {
-    fileController=Get.put(FileDownloadStatusController(),tag:widget.file!.link!);
+    fileController=Get.put(FileController(),tag:widget.file!.link!);
    
     super.initState();
   }

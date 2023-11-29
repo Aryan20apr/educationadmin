@@ -1,4 +1,5 @@
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
+import 'package:educationadmin/screens/common/PodVideoScreen.dart';
 import 'package:educationadmin/screens/common/VideoScreen.dart';
 import 'package:educationadmin/screens/pages/Explore2.dart';
 import 'package:educationadmin/screens/pages/creator/CreateChannelsController.dart';
@@ -89,7 +90,7 @@ class _LiveVideosTabState extends State<LiveVideosTab> {
                             //tileColor:CustomColors.tileColour,
                             onTap: () {
                               Get.to(() =>
-                                  YouTubePlayerScreen(video: videos[index]));
+                                  PodYouTubePlayerScreen(video: videos[index]));
                             },
                             contentPadding: const EdgeInsets.all(10),
                             subtitle: Column(

@@ -24,7 +24,7 @@ class MainWrapperController extends GetxController {
     const HomeScreen(),
     const ExploreScreen(),
      ChatScreen(),
-   const  CreaterHome(),
+   
    ProfileScreen(),
   ];
 

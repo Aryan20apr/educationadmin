@@ -80,7 +80,7 @@ void onRefresh() async {
                   itemBuilder: (context, index) {
                     
                     List<Files>? files=data.files;
-                    FileDownloadStatusController fileController=Get.put(FileDownloadStatusController(),tag: files![index].link);
+                    FileController fileController=Get.put(FileController(),tag: files![index].link);
                     fileController.checkFileDownloadStatus(filename:files[index].title!,createdAt: files[index].createdAt!);
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical:8.0),
