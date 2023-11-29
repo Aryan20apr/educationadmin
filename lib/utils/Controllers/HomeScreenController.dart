@@ -33,8 +33,9 @@ final RxInt currentPage=0.obs;
       
      if(channelListModal.data!=null)
      {
-      channelData.value=channelListModal.data!;
 
+      channelData.value=channelListModal.data!;
+      channelData.value.channels ??= [];
       return true;
      }
     
