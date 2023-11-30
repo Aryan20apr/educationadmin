@@ -176,7 +176,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           color: CustomColors.accentColor,
                                         ),
                                       ),
-                                     trailing: TextButton(onPressed: (){}, child: const Text('Delete Notice')),
+                                   
                                       children: [
                                         Card(
                                           

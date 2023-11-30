@@ -562,7 +562,8 @@ Future<PasswordResetResponse> resetPassword({required String phone,required Stri
 
   Map<String,dynamic> body={
     "phone": phone,
-    "password": password
+    "password": password,
+    "role" : "consumer"
 };
   try {
   Response<Map<String,dynamic>> response=await post("$baseURL$resetpassword",body);
@@ -688,7 +689,7 @@ Future<GeneralResponse2> updateProfile({required SignupModal signupModal,require
 Map<String,dynamic> map=signupModal.toJson();
 map.remove('password');
 map.remove('phone');
-map.addAll({'image': image});
+map.addAll({'image': image,'role' : "consumer"});
 logger.e("Update profile:$map");
 try {
   Response response=await put("$baseURL$updateprofile",map,headers:{"Authorization":"Bearer $token"});

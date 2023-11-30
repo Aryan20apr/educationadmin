@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:educationadmin/utils/ColorConstants.dart';
 import 'package:educationadmin/utils/Controllers/UserController.dart';
+import 'package:educationadmin/widgets/ProgressIndicatorWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -164,16 +165,20 @@ final _formKey = GlobalKey<FormState>();
                                                       },
                                           ),
                                           SizedBox(height: constraints.maxHeight*0.05,),
-                                           ElevatedButton(
-                                            style: ElevatedButton.styleFrom(elevation: 10,foregroundColor: Colors.white,backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                                    onPressed: () {
-                                                      if(_formKey.currentState!.validate())
-                                                      {
-                                                      _profileController.updateProfile(email:emailController.text,username:usernameController.text);
-                                                      }
-                                                    },
-                                                    child: const Text("Update Profile"),
-                                                  ),
+                                           Obx(
+                                             ()=> ElevatedButton(
+                                              style: ElevatedButton.styleFrom(elevation: 10,foregroundColor: Colors.white,backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                                      onPressed: () {
+                                                        if(_formKey.currentState!.validate())
+                                                        {
+                                                          if(_profileController.isUpdating.value==false) {
+                                                            _profileController.updateProfile(email:emailController.text,username:usernameController.text);
+                                                          }
+                                                        }
+                                                      },
+                                                      child:_profileController.isUpdating.value?const ProgressIndicatorWidget(): const Text("Update Profile"),
+                                                    ),
+                                           ),
                                                   SizedBox(height: constraints.maxHeight*0.05,)
                                     ],
                                     
