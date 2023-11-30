@@ -692,7 +692,7 @@ Map<String,dynamic> map=signupModal.toJson();
 map.remove('password');
 map.remove('phone');
 map.addAll({'image': image,"role":"creator"});
-logger.e("Update profile:$map");
+ logger.e("Update profile:$map");
 try {
   Response response=await put("$baseURL$updateprofile",map,headers:{"Authorization":"Bearer $token"});
   if(response.body!=null)

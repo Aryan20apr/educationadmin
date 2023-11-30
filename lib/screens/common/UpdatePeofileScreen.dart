@@ -167,7 +167,7 @@ final _formKey = GlobalKey<FormState>();
                                           SizedBox(height: constraints.maxHeight*0.05,),
                                            Obx(
                                              ()=> ElevatedButton(
-                                              style: ElevatedButton.styleFrom(elevation: 10,foregroundColor: Colors.white,backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                              style: ElevatedButton.styleFrom(fixedSize: Size(Get.width*0.8, Get.height*0.08),elevation: 10,foregroundColor: Colors.white,backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                                                       onPressed: () {
                                                         if(_formKey.currentState!.validate())
                                                         {
