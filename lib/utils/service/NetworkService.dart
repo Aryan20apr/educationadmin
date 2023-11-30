@@ -83,8 +83,11 @@ class NetworkService extends GetConnect {
 //       return null; 
 //       //return SignupErrorModal.fromJson(response.body!);
 //     }
+
+  Map<String,dynamic> map=model.toJson();
+  map['role']='creator';
   try {
-  Response<Map<String,dynamic>> response = await post('$baseURL$signup', model.toJson());
+  Response<Map<String,dynamic>> response = await post('$baseURL$signup', map);
   logger.e(response.body.toString());
   if(response.body!=null)
   
