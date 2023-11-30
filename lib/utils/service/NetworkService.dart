@@ -689,7 +689,7 @@ Future<GeneralResponse2> updateProfile({required SignupModal signupModal,require
 Map<String,dynamic> map=signupModal.toJson();
 map.remove('password');
 map.remove('phone');
-map.addAll({'image': image,'role' : "consumer"});
+map.addAll({'image': image});
 logger.e("Update profile:$map");
 try {
   Response response=await put("$baseURL$updateprofile",map,headers:{"Authorization":"Bearer $token"});
