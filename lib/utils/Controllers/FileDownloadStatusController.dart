@@ -7,7 +7,7 @@ import 'package:educationadmin/Modals/FileResourcesModal.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
-import 'package:external_path/external_path.dart';
+
 import 'package:http/http.dart' as http; 
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:logger/logger.dart';
