@@ -36,7 +36,7 @@ import '../../Modals/SingnupModal.dart';
 /// LoginService responsible to communicate with web-server
 /// via authenticaton related APIs
 class NetworkService extends GetConnect {
-  final String baseURL="https://backend-for-unidev.hop.sh/";
+  final String baseURL="https://db10-110-224-242-138.ngrok-free.app/";
 
   final String signup="auth/signup";
   final String signin="auth/signin";
@@ -86,6 +86,7 @@ class NetworkService extends GetConnect {
 
   Map<String,dynamic> map=model.toJson();
   map['role']='creator';
+
   try {
   Response<Map<String,dynamic>> response = await post('$baseURL$signup', map);
   logger.e(response.body.toString());
@@ -114,6 +115,7 @@ class NetworkService extends GetConnect {
  Future<SignupResponseModal> login(LoginModal model) async {
     Map<String,dynamic> map=model.toJson();
   map['role']='creator';
+    logger.e(map.toString());
     try {
   Response<Map<String,dynamic>> response = await post('$baseURL$signin', map);
   logger.e(response.body.toString());
@@ -562,7 +564,8 @@ Future<PasswordResetResponse> resetPassword({required String phone,required Stri
 
   Map<String,dynamic> body={
     "phone": phone,
-    "password": password
+    "password": password,
+    "role" : "creator"
 };
   try {
   Response<Map<String,dynamic>> response=await post("$baseURL$resetpassword",body);
@@ -688,7 +691,7 @@ Future<GeneralResponse2> updateProfile({required SignupModal signupModal,require
 Map<String,dynamic> map=signupModal.toJson();
 map.remove('password');
 map.remove('phone');
-map.addAll({'image': image});
+map.addAll({'image': image,"role":"creator"});
 logger.e("Update profile:$map");
 try {
   Response response=await put("$baseURL$updateprofile",map,headers:{"Authorization":"Bearer $token"});

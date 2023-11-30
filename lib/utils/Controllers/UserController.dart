@@ -78,8 +78,13 @@ NetworkService networkService=NetworkService();
           }
       else
       {
-        
-        Get.showSnackbar(const GetSnackBar(message: 'Profile details updated ',duration: Duration(seconds: 3),));
+        if(response.data!.status!=false) {
+          Get.showSnackbar(const GetSnackBar(message: 'Profile details updated ',duration: Duration(seconds: 3),));
+        }
+        else
+        {
+          Get.showSnackbar(const GetSnackBar(message: 'Profile could not be updated ',duration: Duration(seconds: 3),));
+        }
       }
         
 
