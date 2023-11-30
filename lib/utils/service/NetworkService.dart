@@ -111,9 +111,12 @@ Map<String,dynamic> map=model.toJson();
   }
 
  Future<SignupResponseModal> login(LoginModal model) async {
+    Map<String,dynamic> map=model.toJson();
+  map['role']='consumer';
     try {
-  Response<Map<String,dynamic>> response = await post('$baseURL$signin', model.toJson());
+  Response<Map<String,dynamic>> response = await post('$baseURL$signin', map);
   logger.e(response.body.toString());
+
   if(response.body!=null)
   
   {if (response.body!["statusCode"]==Status.positive||response.body!["statusCode"]==Status.created)
