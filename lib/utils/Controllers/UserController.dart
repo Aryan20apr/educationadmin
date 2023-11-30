@@ -79,6 +79,8 @@ NetworkService networkService=NetworkService();
       else
       {
         if(response.data!.status!=false) {
+          username=signupModal.name!;
+          username=signupModal.email!;
           Get.showSnackbar(const GetSnackBar(message: 'Profile details updated ',duration: Duration(seconds: 3),));
         }
         else

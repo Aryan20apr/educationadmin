@@ -532,6 +532,7 @@ Future<GeneralResponse> deleteresource({required String token,required int resou
 
 Future<ImageUploadResponse> uploadProfileImage({required String token,required XFile? file})async
 {
+  logger.i(file!.path);
  var formData = dio.FormData.fromMap({
   
   'file': await dio.MultipartFile.fromFile(file!.path,filename: file.name),
@@ -691,7 +692,7 @@ Future<GeneralResponse2> updateProfile({required SignupModal signupModal,require
 Map<String,dynamic> map=signupModal.toJson();
 map.remove('password');
 map.remove('phone');
-map.addAll({'image': image,"role":"creator"});
+map.addAll({'image': image});
  logger.e("Update profile:$map");
 try {
   Response response=await put("$baseURL$updateprofile",map,headers:{"Authorization":"Bearer $token"});
