@@ -37,11 +37,11 @@ class _ChangePassword extends State<ChangePassword> {
   void initState() {
    
 
-  
+    super.initState();
     passwordController = TextEditingController();
     passwordController2=TextEditingController();
-   
-    super.initState();
+    _authenticationViewModel.isChangingPassord.value=false;
+  
   }
 
   @override
@@ -179,8 +179,7 @@ class _ChangePassword extends State<ChangePassword> {
                                       width: double.infinity,
                                       alignment: Alignment.center,
                                       child: Obx(
-                                        () => _authenticationViewModel
-                                                .isLoading.value
+                                        () =>  _authenticationViewModel.isChangingPassord.value
                                             ? const ProgressIndicatorWidget()
                                             : const Text(
                                                 'Update Password',
@@ -202,5 +201,10 @@ class _ChangePassword extends State<ChangePassword> {
             ),
           ),
         ));
+  }
+  void dispose()
+  {
+     _authenticationViewModel.isChangingPassord.value=false;
+     super.dispose();
   }
 }
