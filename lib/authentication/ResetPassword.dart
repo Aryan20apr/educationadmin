@@ -13,7 +13,7 @@ import 'package:sizer/sizer.dart';
 import '../widgets/ProgressIndicatorWidget.dart';
 
 class RestForgotPassword extends StatefulWidget {
- RestForgotPassword({super.key,required this.phone});
+  RestForgotPassword({super.key, required this.phone});
   String phone;
   @override
   State<RestForgotPassword> createState() => _RestForgotPassword();
@@ -23,22 +23,18 @@ class _RestForgotPassword extends State<RestForgotPassword> {
   final AuthenticationViewModal _authenticationViewModel =
       Get.put(AuthenticationViewModal());
 
- final _formKey = GlobalKey<FormState>();
-  
- 
+  final _formKey = GlobalKey<FormState>();
+
   late TextEditingController passwordController;
   late TextEditingController passwordController2;
-  
 
   @override
   void initState() {
-   
-
-  
+     super.initState();
     passwordController = TextEditingController();
-    passwordController2=TextEditingController();
+    passwordController2 = TextEditingController();
+_authenticationViewModel.isChangingPassord.value = false;
    
-    super.initState();
   }
 
   @override
@@ -60,11 +56,11 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height:25.h,
+                          height: 25.h,
                         ),
                         LayoutBuilder(builder: (context, constraints) {
                           return Form(
-                              key: _formKey,
+                            key: _formKey,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -77,20 +73,13 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                               
                                 const SizedBox(height: 20.0),
-                          
-                                
-                                
-                          
-                               
-                                
                                 Container(
                                   width: constraints.maxWidth * 0.8,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.0),
-                                    color:
-                                        Colors.grey[200], // Grey background color
+                                    color: Colors
+                                        .grey[200], // Grey background color
                                   ),
                                   child: TextFormField(
                                     controller: passwordController,
@@ -100,26 +89,24 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder
                                           .none, // Hide the default border
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 20.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20.0),
                                     ),
                                     validator: (value) {
-                                      
-                                      
-    if (value == null || value.isEmpty ) {
-      return 'Please enter valid password';
-    }
-    return null;
-  },
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter valid password';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
-                            Container(
+                                Container(
                                   width: constraints.maxWidth * 0.8,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.0),
-                                    color:
-                                        Colors.grey[200], // Grey background color
+                                    color: Colors
+                                        .grey[200], // Grey background color
                                   ),
                                   child: TextFormField(
                                     controller: passwordController2,
@@ -129,37 +116,44 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder
                                           .none, // Hide the default border
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 20.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20.0),
                                     ),
                                     validator: (value) {
-                                      
-                                      
-    if (value == null || value.isEmpty|| passwordController.text!=passwordController2.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  },
+                                      if (value == null ||
+                                          value.isEmpty ||
+                                          passwordController.text !=
+                                              passwordController2.text) {
+                                        return 'Passwords do not match';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
-                          
                                 ElevatedButton(
                                   onPressed: () async {
-                                   FocusManager.instance.primaryFocus?.unfocus();
-                                  bool validate=  _formKey.currentState!.validate();
-                                  if(validate) {
-                                  await  _authenticationViewModel.changePassword(
-                                        phonenumber:widget.phone,password: passwordController.text,verificationType: VerificationType.ForgotPassword);
-                                    Get.offAll(()=>const LoginScreen());
-                                  }
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    bool validate =
+                                        _formKey.currentState!.validate();
+                                    if (validate) {
+                                      await _authenticationViewModel
+                                          .changePassword(
+                                              phonenumber: widget.phone,
+                                              password: passwordController.text,
+                                              verificationType: VerificationType
+                                                  .ForgotPassword);
+                                      Get.offAll(() => const LoginScreen());
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Theme.of(context).primaryColor,
                                     foregroundColor:
                                         Theme.of(context).primaryColorDark,
-                                    maximumSize: Size(constraints.maxWidth * 0.8,
+                                    maximumSize: Size(
+                                        constraints.maxWidth * 0.8,
                                         constraints.maxHeight * 0.2),
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
@@ -172,9 +166,9 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                       alignment: Alignment.center,
                                       child: Obx(
                                         () => _authenticationViewModel
-                                                .isLoading.value
+                                                .isChangingPassord.value
                                             ? const ProgressIndicatorWidget()
-                                            :  Text(
+                                            : Text(
                                                 'Reset Password',
                                                 style: TextStyle(
                                                   fontSize: 14.sp,
@@ -183,7 +177,6 @@ class _RestForgotPassword extends State<RestForgotPassword> {
                                               ),
                                       )),
                                 ),
-                                
                               ],
                             ),
                           );
@@ -194,5 +187,11 @@ class _RestForgotPassword extends State<RestForgotPassword> {
             ),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _authenticationViewModel.isChangingPassord.value = false;
+    super.dispose();
   }
 }

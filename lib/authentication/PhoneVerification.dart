@@ -31,13 +31,15 @@ class _HomeScreenState extends State<PhoneVerification> {
 
   @override
   void initState() {
+     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
 
     fullnameController = TextEditingController();
     phoneNumberController = TextEditingController();
     confirmPasswordController = TextEditingController();
-    super.initState();
+      _authenticationViewModel.isSendingOtp.value = false;
+   
   }
 
   @override
@@ -163,7 +165,9 @@ class _HomeScreenState extends State<PhoneVerification> {
                               ElevatedButton(
                                 onPressed: () async {
                                   _authenticationViewModel.sendOtp(
-                                      phone: phoneNumberController.text,verificationType: VerificationType.Signup);
+                                      phone: phoneNumberController.text,
+                                      verificationType:
+                                          VerificationType.Signup);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -183,7 +187,7 @@ class _HomeScreenState extends State<PhoneVerification> {
                                     alignment: Alignment.center,
                                     child: Obx(
                                       () => _authenticationViewModel
-                                              .isLoading.value
+                                              .isSendingOtp.value
                                           ? const ProgressIndicatorWidget()
                                           : const Text(
                                               'Get OTP',
@@ -206,7 +210,6 @@ class _HomeScreenState extends State<PhoneVerification> {
                                     ),
                                     TextButton(
                                       style: TextButton.styleFrom(
-                                          
                                           foregroundColor: Theme.of(context)
                                               .primaryColorDark,
                                           textStyle: TextStyle(
@@ -227,5 +230,11 @@ class _HomeScreenState extends State<PhoneVerification> {
             ),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    _authenticationViewModel.isSendingOtp.value = false;
+    super.dispose();
   }
 }

@@ -33,10 +33,10 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
   void initState() {
    
 
-  
+   super.initState();
     phoneNumberController = TextEditingController();
+    _authenticationViewModel.isSendingOtp.value=false;
    
-    super.initState();
   }
 
   @override
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
                                       alignment: Alignment.center,
                                       child: Obx(
                                         () => _authenticationViewModel
-                                                .isLoading.value
+                                                .isSendingOtp.value
                                             ? const ProgressIndicatorWidget()
                                             : const Text(
                                                 'Get OTP',
@@ -165,5 +165,11 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
             ),
           ),
         ));
+  }
+  @override
+   void dispose()
+  {
+    _authenticationViewModel.isSendingOtp.value=false;
+    super.dispose();
   }
 }
