@@ -29,13 +29,15 @@ late  TextEditingController confirmPasswordController;
 
   @override
   void initState() {
+     super.initState();
     emailController=TextEditingController();
     passwordController=TextEditingController();
     
     fullnameController=TextEditingController();
     phoneNumberController=TextEditingController(text: widget.phoneNumber);
     confirmPasswordController=TextEditingController();
-    super.initState();
+     _authenticationViewModel.isSiginingUp.value=false;
+   
   }
 
   @override
@@ -278,7 +280,7 @@ late  TextEditingController confirmPasswordController;
                           width: double.infinity,
                           //alignment: Alignment.center,
                           child: Center(
-                            child: Obx(()=>_authenticationViewModel.isLoading.value? const ProgressIndicatorWidget(): const Text(
+                            child: Obx(()=>_authenticationViewModel.isSiginingUp.value? const ProgressIndicatorWidget(): const Text(
                               'Sign Up',
                               style: TextStyle(
                                 fontSize: 18.0,
@@ -318,6 +320,12 @@ late  TextEditingController confirmPasswordController;
         ),
       )
     );
+  }
+
+  @override
+  void dispose() {
+    _authenticationViewModel.isSiginingUp.value=false;
+    super.dispose();
   }
 }
 

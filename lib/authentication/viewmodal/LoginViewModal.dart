@@ -23,7 +23,11 @@ import '../../utils/ColorConstants.dart';
 
 class AuthenticationViewModal extends GetxController {
 
-  final isLoading=false.obs;
+  RxBool isSiginingIn=false.obs;
+  RxBool isSiginingUp=false.obs;
+  RxBool isSendingOtp=false.obs;
+  RxBool isChangingPassord=false.obs;
+  RxBool iVerifyingOtp=false.obs;
   late final NetworkService networkService;
   late final AuthenticationManager _authManager;
 final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
@@ -36,7 +40,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
   }
 
  Future<void> login({ String? email,required String password,required phone}) async {
-    isLoading.value=true;
+    isSiginingIn.value=true;
     LoginModal loginModal=LoginModal( password:password, phone:phone);
     final SignupResponseModal response = await networkService
         .login(loginModal);
@@ -47,11 +51,11 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
 
        UserModal userModal= await _networkService.getUserDetails(token: response.data!.token);
       _userdetails.initializeUserDetails(userModal: userModal);
-      isLoading.value=false;
+        isSiginingIn.value=true;
       Get.off(()=>const MainWrapper());
       
     } else {
-       isLoading.value=false;
+           isSiginingIn.value=true;
       /// Show user a dialog about the error response
       Get.defaultDialog(
         buttonColor: CustomColors.primaryColor,
@@ -70,7 +74,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
   }
 
   Future<void> registerUser({required String email,required String password,required phone,required String name}) async {
-    isLoading.value=true;
+    isSiginingUp.value=true;
     SignupModal signupModal=SignupModal(name:name, email:email, password:password, phone:phone);
     final SignupResponseModal response = await networkService
         .signUp(signupModal);
@@ -81,10 +85,10 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
       
       UserModal userModal= await _networkService.getUserDetails(token: response.data!.token);
       _userdetails.initializeUserDetails(userModal: userModal);
-      isLoading.value=false;
+       isSiginingUp.value=false;
       Get.off(()=>const MainWrapper());
     } else {
-      isLoading.value=false;
+       isSiginingUp.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
         buttonColor: CustomColors.primaryColor,
@@ -99,7 +103,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
   }
 
   Future<void> sendOtp({required String phone,required VerificationType verificationType}) async {
-    isLoading.value=true;
+    isSendingOtp.value=true;
     PhoneModal phonemodal=PhoneModal(number:phone);
     final OTPModal? response = await networkService
         .sendOTP(phone:phonemodal);
@@ -108,7 +112,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
       /// Set isLogin to true
      
      await _authManager.saveOTP(response.data!.otp!);
-       isLoading.value=false;
+      isSendingOtp.value=false;
        Logger().e("Sent number is $phone");
        if(verificationType==VerificationType.Signup || verificationType==VerificationType.ForgotPassword) {
          Get.to(()=>OtpVerification(phoneNumber: phone,verificationType: verificationType,),arguments: {"phoneNumber":phone});
@@ -120,7 +124,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
       
      
     } else {
-      isLoading.value=false;
+      isSendingOtp.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
           buttonColor: CustomColors.primaryColorDark,
@@ -133,11 +137,13 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
     }
   }
   Future<void> verifyOTP(String otp,String phoneNumber,{required VerificationType verificationType}) async {
+      iVerifyingOtp.value=true;
       String? savedotp=await _authManager.getOTP();
       if(savedotp!=null)
       {
         if(otp==savedotp)
         {
+            
           if(verificationType==VerificationType.Signup) {
             Get.off(()=>SignupScreen(phoneNumber:phoneNumber));
           }
@@ -173,11 +179,12 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
             Get.back();
           });
       }
+      iVerifyingOtp.value=false;
   }
 
   Future<void> changePassword({  String? phonenumber,required String password,required VerificationType verificationType})async
   {
-    isLoading.value=true;
+    isChangingPassord.value=true;
       
      
      if(verificationType==VerificationType.ForgotPassword)
@@ -207,7 +214,7 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
       
 
       }
-      isLoading.value=false;
+        isChangingPassord.value=false;
       
   }
 }

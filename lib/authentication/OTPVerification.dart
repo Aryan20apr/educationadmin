@@ -83,7 +83,7 @@ class OtpVerification extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         alignment: Alignment.center,
-                        child: Obx(()=>_authenticationViewModel.isLoading.value? const ProgressIndicatorWidget():Text(
+                        child: Obx(()=>_authenticationViewModel.iVerifyingOtp.value? const ProgressIndicatorWidget():Text(
                           'Verify OTP',
                           style: TextStyle(
                             fontSize: 12.sp,

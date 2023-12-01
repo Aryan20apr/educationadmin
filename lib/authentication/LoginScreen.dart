@@ -25,17 +25,24 @@ class _LoginScreenState extends State<LoginScreen> {
 late  TextEditingController phoneNumberController;
 late TextEditingController passwordController;
   final _formKey = GlobalKey<FormState>();
-
+final AuthenticationViewModal authenticationViewModel = Get.put(AuthenticationViewModal());
   @override
   void initState() {
+    super.initState();
     phoneNumberController=TextEditingController();
     passwordController=TextEditingController();
-    super.initState();
+    authenticationViewModel.isSiginingIn.value=false;
+    
   }
-
+ @override
+ void dispose()
+ {
+  authenticationViewModel.isSiginingIn.value=false;
+  super.dispose();
+ }
   @override
   Widget build(BuildContext context) {
-    final AuthenticationViewModal authenticationViewModel = Get.put(AuthenticationViewModal());
+    
     return  Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
@@ -139,7 +146,7 @@ late TextEditingController passwordController;
                               
                               width: double.infinity,
                               alignment: Alignment.center,
-                              child: Obx(()=>authenticationViewModel.isLoading.value?  const ProgressIndicatorWidget():  Text(
+                              child: Obx(()=>authenticationViewModel.isSiginingIn.value?  const ProgressIndicatorWidget():  Text(
                                 'Log in',
                                 style: TextStyle(
                                   fontSize: 18.sp,
@@ -199,6 +206,7 @@ late TextEditingController passwordController;
     );
   }
  
+
 
 }
 
