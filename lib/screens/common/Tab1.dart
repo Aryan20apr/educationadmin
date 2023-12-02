@@ -96,7 +96,13 @@ void onRefresh() async {
                             child: ListTile(
                              
                               onTap: () {
-                                Get.to(() => PodYouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
+                                if(resourceController.liveVideos[index].isStreaming!=null&&resourceController.liveVideos[index].isStreaming!) {
+                                  Get.to(() => PodYouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
+                                }
+                                else
+                                {
+                                  Get.showSnackbar(const GetSnackBar( title: "Try Again Later",message: "The live video you are trying to play is not streaming right now.",));
+                                }
                               },
                               style: ListTileStyle.list,
                               enableFeedback: true,

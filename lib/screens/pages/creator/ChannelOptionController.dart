@@ -19,6 +19,9 @@ class ChannelOptionsController extends GetxController
  final NetworkChecker networkChecker=NetworkChecker();
   RxBool isLoading=false.obs;
  RxString phoneNumber = ''.obs;
+  RxBool isaddingVideo=false.obs;
+  RxBool isaddingLiveVideo=false.obs;
+  RxBool isUploadingFile=false.obs;
   RxBool isVideoPaid=false.obs;
   RxBool isFilePaid=false.obs;
   RxString filePath="".obs;
@@ -88,15 +91,18 @@ class ChannelOptionsController extends GetxController
     return false;
   }
 }
-Future<void> uploadVideo({required VideoRequestModal videoRequestModal})async
+Future<bool> uploadVideo({required VideoRequestModal videoRequestModal})async
 {
-  Get.back();
+  isaddingVideo.value=true;
+  
    
    if(await networkChecker.checkConnectivity()==false)
    {
     
     
     Get.showSnackbar(const GetSnackBar(message:"No internet connection",duration: Duration(seconds:3)));
+    isaddingVideo.value=false;
+    return false;
    }
   
   String? token=await authenticationManager.getToken();
@@ -104,33 +110,47 @@ Future<void> uploadVideo({required VideoRequestModal videoRequestModal})async
   VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadVideo(token: token!, videoRequestModal: videoRequestModal);
    
  
-  
-  if(videoUploadResponseModal.data!.resource!=null)
+  if(videoUploadResponseModal.data!=null)
+  {
+    if(videoUploadResponseModal.data!.resource!=null)
   {
    
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
+     isaddingVideo.value=false;
+    return true;
   }
   else
   {
     
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
+     isaddingVideo.value=false;
+    return false;
+  }}
+  else
+  {
+    Get.showSnackbar( const GetSnackBar(message:'Could not upload video',duration: Duration(seconds: 3),));
+       isaddingVideo.value=false;
+    return false;
   }
 } on Exception catch (e) {
   e.printError();
   Get.showSnackbar( const GetSnackBar(message:'Could not upload video',duration: Duration(seconds: 3),));
+  isaddingVideo.value=false;
+    return false;
 }
 
 }
 
 Future<void> uploadLiveVideo({required VideoRequestModal videoRequestModal})async
 {
-  Get.back();
+  isaddingLiveVideo.value=true;
    
    if(await networkChecker.checkConnectivity()==false)
    {
     
     
     Get.showSnackbar(const GetSnackBar(message:"No internet connection",duration: Duration(seconds:3)));
+    isaddingLiveVideo.value=false;
    }
   
   String? token=await authenticationManager.getToken();
@@ -144,16 +164,22 @@ Future<void> uploadLiveVideo({required VideoRequestModal videoRequestModal})asyn
   VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadVideo(token: token!, videoRequestModal: videoRequestModal);
    
  
-  
-  if(videoUploadResponseModal.data!.resource!=null)
+  if(videoUploadResponseModal.data!=null)
   {
-   
+    if(videoUploadResponseModal.data!.resource!=null)
+  {
+   isaddingLiveVideo.value=false;
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
   else
   {
-    
+    isaddingLiveVideo.value=false;
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
+  }}
+  else
+  {
+    isaddingLiveVideo.value=false;
+     Get.showSnackbar(const GetSnackBar(message: "Could no create live video",duration:  Duration(seconds:3 ),));
   }
 } on Exception catch (e) {
   e.printError();
@@ -164,8 +190,18 @@ Future<void> uploadLiveVideo({required VideoRequestModal videoRequestModal})asyn
 
 Future<void> uploadFile({required title,required int channeId})async
 {
-  Get.back();
+  isUploadingFile.value=true;
+
+  if(await networkChecker.checkConnectivity()==false)
+   {
+    
+    
+    Get.showSnackbar(const GetSnackBar(message:"No internet connection",duration: Duration(seconds:3)));
+    isaddingLiveVideo.value=false;
+   }
+
 String? token=await authenticationManager.getToken();
+
 FileUploadResponse fileUploadResponse=await networkService.uploadFile(token: token!, file: File(filePath.value));
 if(fileUploadResponse.data!=null&&fileUploadResponse.data!=null)
 {
@@ -173,18 +209,18 @@ if(fileUploadResponse.data!=null&&fileUploadResponse.data!=null)
    VideoUploadResponseModal videoUploadResponseModal=await networkService.uploadFileData(token: token, videoRequestModal: fileRequestModal);
   if(videoUploadResponseModal.data!.resource!=null)
   {
-    
+    isUploadingFile.value=false;
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
   else
   {
-    
+    isUploadingFile.value=false;
     Get.showSnackbar(GetSnackBar(message: videoUploadResponseModal.data!.msg,duration: const Duration(seconds:3 ),));
   }
 }
 else
 {
-    
+    isUploadingFile.value=false;
     Get.showSnackbar(const GetSnackBar(message: 'Could not upload file',duration: Duration(seconds:3 ),));
 }
 }

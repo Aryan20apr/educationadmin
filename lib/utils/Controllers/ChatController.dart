@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 class ChatController extends GetxController
 {
- final String SOCKET_URI="https://backend-for-unidev.hop.sh";
+ final String SOCKET_URI="https://backend-for-unidev-1.hop.sh";
  final String SEND_MESSAGE="sendMessage";
  final String JOIN_ROOM="joinRoom";
  final String LEAVE_ROOM="leaveRoom";
