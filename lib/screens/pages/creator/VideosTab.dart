@@ -28,6 +28,7 @@ class _VideosTabState extends State<VideosTab> {
   final _formKey = GlobalKey<FormState>();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  ScrollController scrollController=ScrollController();
   Future<bool>? isFetched;
   List<Videos> videos = [];
   // Add this function to handle the pull-to-refresh
@@ -47,17 +48,44 @@ class _VideosTabState extends State<VideosTab> {
     super.initState();
     isFetched =
         channelsController.getChannelVideos(channelId: widget.channelId);
+      scrollController.addListener(_scrollListener);
+  }
+ @override
+  void dispose() {
+    scrollController.dispose();
+    _refreshController.dispose();
+    super.dispose();
   }
 
+  void _scrollListener() {
+    if (scrollController.offset <= scrollController.position.minScrollExtent-60 &&
+        !_refreshController.isRefresh) {
+      // User has reached the top, and not currently refreshing
+      _refreshController.requestRefresh();
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: _refreshController,
-      onRefresh: _onRefresh,
-      child: SafeArea(
-        maintainBottomViewPadding: true,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+    return NotificationListener(
+  //     onNotification: (ScrollNotification scrollInfo) {
+  //   if (scrollInfo.metrics.pixels == 0.0 &&
+  //       scrollInfo is ScrollUpdateNotification &&
+  //       scrollInfo.dragDetails != null &&
+  //       scrollInfo.dragDetails!.primaryDelta! > 0) {
+  //     // The user has scrolled to the top and is pulling down
+  //     _refreshController.requestRefresh();
+  //   }
+  //   return false;
+  // },
+    onNotification: (ScrollNotification scrollInfo) {
+         scrollController.position.copyWith();
+        return false;
+      },
+      child: SmartRefresher(
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: SafeArea(
+          maintainBottomViewPadding: true,
           child: FutureBuilder(
               future: isFetched,
               builder: (context, snapshot) {
@@ -73,13 +101,15 @@ class _VideosTabState extends State<VideosTab> {
                         .videoData.value.data!.videos!.isNotEmpty) {
                       videos = channelsController.normalVideos;
                       return Obx(
-                        () => ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          addAutomaticKeepAlives: true,
-                          itemCount: channelsController.normalVideos
-                              .length, // Adjust the number of video items
-                          itemBuilder: (context, index) {
-                            return Card(
+                        () => 
+                        CustomScrollView(
+                          controller: scrollController,
+                          physics:const BouncingScrollPhysics(),
+                          slivers: [
+                            SliverList(delegate: SliverChildBuilderDelegate(
+                              childCount:channelsController.normalVideos.length,
+                              (context, index) {
+                                  return Card(
                               color: CustomColors.tileColour,
                               shape: const BeveledRectangleBorder(
                                   borderRadius:
@@ -119,7 +149,7 @@ class _VideosTabState extends State<VideosTab> {
                                       fontWeight: FontWeight.bold,
                                       color: CustomColors.secondaryColor),
                                 ),
-        
+          
                                 trailing: PopupMenuButton<String>(
                                   icon: const Icon(Icons.more_vert,
                                       color: Colors.white), // Icon color is green
@@ -185,8 +215,18 @@ class _VideosTabState extends State<VideosTab> {
                                 ),
                               ),
                             );
-                          },
-                        ),
+                            }))
+                          ],
+                        )
+                        // ListView.builder(
+                        //   //physics: const NeverScrollableScrollPhysics(),
+                        //   addAutomaticKeepAlives: true,
+                        //   itemCount: channelsController.normalVideos
+                        //       .length, // Adjust the number of video items
+                        //   itemBuilder: (context, index) {
+                            
+                        //   },
+                        // ),
                       );
                     } else {
                       return const Center(
