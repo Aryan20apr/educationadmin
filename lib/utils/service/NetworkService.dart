@@ -36,7 +36,7 @@ import '../../Modals/SingnupModal.dart';
 /// LoginService responsible to communicate with web-server
 /// via authenticaton related APIs
 class NetworkService extends GetConnect {
-  final String baseURL="https://db10-110-224-242-138.ngrok-free.app/";
+  final String baseURL="https://backend-for-unidev.hop.sh/";
 
   final String signup="auth/signup";
   final String signin="auth/signin";
