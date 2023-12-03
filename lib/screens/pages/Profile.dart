@@ -107,7 +107,7 @@ const Text(
               ElevatedCard( Icons.edit, 'Edit Profile', () {
                 Get.to(()=>const ProfileUpdateScreen());
               }),
-              ElevatedCard(Icons.file_download, 'Upload Banner', () {
+              ElevatedCard(Icons.upload_rounded, 'Upload Banner', () {
                 Get.to(()=>const UploadBanner());
               }),
               ElevatedCard(Icons.file_download, 'All Banners', () {
@@ -120,9 +120,10 @@ const Text(
               ElevatedCard(Icons.notifications, 'My Notifications', () {
                 Get.to(()=>const CreatorNotifications());
               }),
-              ElevatedCard(Icons.exit_to_app, 'Logout', () {
+              ElevatedCard(Icons.exit_to_app, 'Logout', () async{
                 AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
                 authenticationManager.logOut();
+               await Get.deleteAll();
                 Get.offAll(()=>const LoginScreen());
               }),
               // Additional content can be added here

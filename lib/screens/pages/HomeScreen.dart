@@ -25,7 +25,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
- final UserDetailsManager userDetailsManager = Get.find<UserDetailsManager>();
+ final UserDetailsManager userDetailsManager = Get.put(UserDetailsManager());
 final HomeScreenController homeScreenController=Get.put(HomeScreenController());
 final CarouselController _carouselController = CarouselController();
 Future<bool>? isFetchedUser;
@@ -119,7 +119,7 @@ void initState()
                           children: [
                             Obx(
                               ()=> Text(
-                                '${userDetailsManager.username}', // Replace with the user's name
+                                userDetailsManager.username.value, // Replace with the user's name
                                 style: TextStyle(
                                   fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,

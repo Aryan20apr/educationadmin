@@ -535,7 +535,7 @@ Future<ImageUploadResponse> uploadProfileImage({required String token,required X
   logger.i(file!.path);
  var formData = dio.FormData.fromMap({
   
-  'file': await dio.MultipartFile.fromFile(file!.path,filename: file.name),
+  'file': await dio.MultipartFile.fromFile(file.path,filename: file.name),
   
     
 });

@@ -101,7 +101,7 @@ void onRefresh() async {
                                 }
                                 else
                                 {
-                                  Get.showSnackbar(const GetSnackBar( title: "Try Again Later",message: "The live video you are trying to play is not streaming right now.",));
+                                  Get.showSnackbar(const GetSnackBar( title: "Try Again Later",message: "The live video you are trying to play is not streaming right now.",duration: Duration(seconds: 3),));
                                 }
                               },
                               style: ListTileStyle.list,

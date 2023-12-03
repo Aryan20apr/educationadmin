@@ -48,6 +48,8 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.1
   youtube_player_iframe: ^4.0.4
   pod_player: ^0.2.1
+  chewie: ^1.7.4
+  video_player: ^2.8.1
 
 dev_dependencies:
   flutter_test:
