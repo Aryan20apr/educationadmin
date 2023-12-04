@@ -32,6 +32,9 @@ NetworkChecker networkChecker=NetworkChecker();
  Rx<SubcriberData> consumerList=SubcriberData().obs;
     RxList<Videos> normalVideos=RxList.empty();
    RxList<Videos> liveVideos = RxList.empty();
+
+   RxBool isRenaming=false.obs;
+   RxBool isDeleting=false.obs;
  Logger logger=Logger();
   RxBool isLoading=false.obs;
 
@@ -173,55 +176,77 @@ NetworkChecker networkChecker=NetworkChecker();
     return true;
   }
 
-  Future<bool> editResource({required String filename,required int resourceId}) async{
-
+  Future<void> editResource({required String filename,required int resourceId}) async{
+      isRenaming.value=true;
      NetworkChecker networkChecker=NetworkChecker();
     bool check=await networkChecker.checkConnectivity();
     if(check==false) {
+      isRenaming.value=false;
       Get.showSnackbar(const GetSnackBar(message: 'Could not update',duration: Duration(seconds:3),));
-      return false;
+     
     }
     String? token=await _authmanager.getToken();
     EditResourceModal editResourceModal=await networkService.editResource(token: token!,resourceId:resourceId,title: filename );
-    if(editResourceModal.data!.updatedResource==null)
+    
+    if(editResourceModal.data!=null)
     {
+      if(editResourceModal.data!.updatedResource==null)
+    {
+      isRenaming.value=false;
       Get.back();
       Get.showSnackbar(const GetSnackBar(message:"Could not update successfully",duration: Duration(seconds: 3),));
       
-      return false;
+      
+    }
+    
+    else
+    {isRenaming.value=false;
+      Get.back();
+      Get.showSnackbar(const GetSnackBar(message:"Resource updated successfully",duration: Duration(seconds: 3),));
+      
+      
+    }
     }
     else
     {
       Get.back();
-      Get.showSnackbar(const GetSnackBar(message:"Resource updated successfully",duration: Duration(seconds: 3),));
-      
-      return true;
+      isRenaming.value=false;
+       Get.showSnackbar(const GetSnackBar(message:"Could not update successfully",duration: Duration(seconds: 3),));
+
     }
   }
 
-  Future<bool> deleteResource({required int resourceId }) async
+  Future<void> deleteResource({required int resourceId }) async
   {
+    isDeleting.value=true;
      NetworkChecker networkChecker=NetworkChecker();
     bool check=await networkChecker.checkConnectivity();
     if(check==false) {
+      isDeleting.value=false;
+      Get.back();
       Get.showSnackbar(const GetSnackBar(message: 'Could not delete',duration: Duration(seconds:3),));
-      return false;
+      
     }
     String? token=await _authmanager.getToken();
    GeneralResponse editResourceModal=await networkService.deleteresource(token: token!,resourceId:resourceId, );
+
+    
+   
     if(editResourceModal.status==false)
     {
-       Get.back();
-      Get.showSnackbar(const GetSnackBar(message:"Could not delete successfully",duration: Duration(seconds: 3),));
+      isDeleting.value=false;
+      Get.back();
+      Get.showSnackbar(const GetSnackBar(message:"Could not delete",duration: Duration(seconds: 3),));
      
-      return false;
+      
     }
     else
     {
+       isDeleting.value=false;
        Get.back();
       Get.showSnackbar(const GetSnackBar(message:"Resource delete successfully",duration: Duration(seconds: 3),));
      
-      return true;
+      
     }
   }
 

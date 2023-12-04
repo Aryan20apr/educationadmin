@@ -1,10 +1,12 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:educationadmin/Modals/BannersUploadResponse.dart';
 import 'package:educationadmin/Modals/ProfileUpdateResponse.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:permission_handler/permission_handler.dart';
+import 'package:logger/logger.dart';
 import '../../Modals/BannersResponse.dart' as banners;
 import '../core/NetworkChecker.dart';
 class BannerController extends GetxController
@@ -14,12 +16,29 @@ class BannerController extends GetxController
   RxString imagePath=''.obs;
   RxBool isLoading = false.obs;
   Rx<banners.Data> bannersList=banners.Data().obs;
+  final Logger logger=Logger();
   Future<void> pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+     if ((androidInfo.version.sdkInt <= 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt >32 ||await Permission.storage.request().isGranted)) {
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       imagePath.value = pickedImage.path;
     }
+    } else {
+      // Permission is not granted
+      if (await Permission.storage.isPermanentlyDenied) {
+        // Permission is permanently denied
+        openAppSettings();
+      } else {
+        // Permission is denied, show rationale and request again
+       
+       //pickImage();
+      }
+    }
+
+   
+    
   }
   Future<void> uploadBannerImage() async{
       isLoading.value=true;

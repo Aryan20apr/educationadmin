@@ -290,13 +290,12 @@ class _VideosTabState extends State<VideosTab> {
                                 resourceId: resourceId);
                           },
                           style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                            backgroundColor: CustomColors.primaryColor,foregroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)
                             ),
-                            minimumSize: const Size(
-                                200, 50), // Adjust button size as needed
+                            fixedSize:  Size(
+                                Get.width*0.6,Get.height*0.06), // Adjust button size as needed
                           ),
-                          child: const Text('Rename Video'),
+                          child:  Obx(()=> channelsController.isRenaming.value==false? Text('Rename Video',style: TextStyle(fontSize: 12.sp),):const ProgressIndicatorWidget()),
                         ),
                       ],
                     ),
@@ -306,9 +305,9 @@ class _VideosTabState extends State<VideosTab> {
             ));
   }
 
-  Future<bool> validateFieldsAndEdit(
+  Future<void> validateFieldsAndEdit(
       {required String videoName, required int resourceId}) async {
-    return await channelsController.editResource(
+    await channelsController.editResource(
         filename: videoName, resourceId: resourceId);
   }
 
@@ -322,22 +321,24 @@ class _VideosTabState extends State<VideosTab> {
           title: const Text('Delete Confirmation'),
           content: const Text('Are you sure you want to delete this video?'),
           actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-              ),
-              onPressed: () async {
-                channelsController.deleteResource(resourceId: resourceId);
-              },
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Colors.white),
+           
+            Center(
+              child: ElevatedButton(
+                
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.primaryColor,foregroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  fixedSize: Size(Get.width*0.6, Get.height*0.06)
+                ),
+                
+                onPressed: () async {
+                  channelsController.deleteResource(resourceId: resourceId);
+                },
+                child:  Obx(
+                  ()=> channelsController.isDeleting.value==false? const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.white),
+                  ):const ProgressIndicatorWidget(),
+                ),
               ),
             ),
           ],

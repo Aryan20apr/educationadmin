@@ -50,6 +50,7 @@ dependencies:
   pod_player: ^0.2.1
   chewie: ^1.7.4
   video_player: ^2.8.1
+  device_info_plus: ^9.1.1
 
 dev_dependencies:
   flutter_test:

@@ -50,9 +50,17 @@ class _CreatorChannelState extends State<CreatorChannel> {
 
   Future<File?> requestPermissionAndPickPDFFile() async {
     PermissionStatus status = await Permission.storage.request();
+    logger.i("STORAGE REQUEST GRANTED:${status.isGranted}");
     if (!status.isGranted) {
+
       await Permission.storage.request();
+      logger.i("STORAGE REREQUEST GRANTED:${status.isGranted}");
     }
+    
+    if (await Permission.storage.isPermanentlyDenied) {
+ 
+  openAppSettings();
+}
 
     if (status.isGranted) {
       FilePickerResult? result = await FilePicker.platform.pickFiles(

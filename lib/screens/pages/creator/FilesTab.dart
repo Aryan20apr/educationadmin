@@ -76,12 +76,11 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
                   
                   },
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    backgroundColor: CustomColors.primaryColor,foregroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)
                     ),
-                    minimumSize: const Size(200, 50), // Adjust button size as needed
+                    fixedSize: Size(Get.width*0.6, Get.height*06), // Adjust button size as needed
                   ),
-                  child: const Text('Rename file'),
+                  child:channelsController.isRenaming.value? const Text('Rename file'):const ProgressIndicatorWidget(),
                 ),
               ],
             ),
@@ -91,9 +90,9 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
     )
               );
       }
-   Future<bool> validateFieldsAndEdit({required String videoName,required int resourceId})async
+   Future<void> validateFieldsAndEdit({required String videoName,required int resourceId})async
   {
-    return await channelsController.editResource(filename:videoName,resourceId: resourceId);
+     await channelsController.editResource(filename:videoName,resourceId: resourceId);
   }
    Future<void> _showDeleteConfirmationDialog({required BuildContext context,required int resourceId}) async{
     await showDialog(
@@ -114,17 +113,17 @@ Future<void> showEditDialog({required BuildContext context,required String fileN
               child: const Text('Cancel'),
             ),
             ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: CustomColors.primaryColor,foregroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
               ),
               onPressed:()async
               {
                   channelsController.deleteResource(resourceId:resourceId );
               },
-              child: const Text(
+              child: channelsController.isDeleting.value==false? const Text(
                 'Delete',
                 style: TextStyle(color: Colors.white),
-              ),
+              ):const ProgressIndicatorWidget(),
             ),
           ],
         );

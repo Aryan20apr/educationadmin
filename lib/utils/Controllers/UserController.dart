@@ -1,5 +1,6 @@
 
 import 'dart:developer';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:educationadmin/Modals/ProfileUpdateResponse.dart';
 import 'package:educationadmin/Modals/SingnupModal.dart';
 import 'package:logger/logger.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 
@@ -33,11 +35,24 @@ class UserDetailsManager extends GetxController with CacheManager {
 
 NetworkService networkService=NetworkService();
   Future<void> pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+     if ((androidInfo.version.sdkInt <= 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt >32 ||await Permission.storage.request().isGranted)) {
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       imagePath.value = pickedImage.path;
     }
+    } else {
+      // Permission is not granted
+      if (await Permission.storage.isPermanentlyDenied) {
+        // Permission is permanently denied
+        openAppSettings();
+      } else {
+        // Permission is denied, show rationale and request again
+       
+       //pickImage();
+      }
+  }
   }
   Future<void> updateProfile({required String email,required String username}) async{
       isUpdating.value=true;

@@ -1,9 +1,11 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:educationadmin/Modals/ChannelCreationResponse.dart';
 import 'package:educationadmin/utils/Controllers/AuthenticationController.dart';
 import 'package:educationadmin/utils/service/NetworkService.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ImagePickerController extends GetxController {
   RxString imagePath = ''.obs;
@@ -12,12 +14,24 @@ class ImagePickerController extends GetxController {
   RxBool isChannelPaid=false.obs;
   RxBool isLoading=false.obs;
   void pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+     if ((androidInfo.version.sdkInt <= 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt >32 ||await Permission.storage.request().isGranted)) {
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      imagePath.value = pickedFile.path;
+    if (pickedImage != null) {
+      imagePath.value = pickedImage.path;
     }
+    } else {
+      // Permission is not granted
+      if (await Permission.storage.isPermanentlyDenied) {
+        // Permission is permanently denied
+        openAppSettings();
+      } else {
+        // Permission is denied, show rationale and request again
+       
+       //pickImage();
+      }
+  }
   }
   
   Future<void> createChannel() async{

@@ -199,29 +199,23 @@ Future<void> _showDeleteConfirmationDialog(BuildContext context,int index) async
           title: const Text('Delete Confirmation'),
           content: const Text('Are you sure you want to remove this subscriber?'),
           actions: <Widget>[
-            TextButton(
-              onPressed: () {
-              Get.back();
-              },
-              child: const Text('Cancel'),
-            ),
+          
             Obx(
-              ()=> ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all( RoundedRectangleBorder( borderRadius: BorderRadius.circular(10))),
-                 fixedSize: MaterialStateProperty.all(Size(Get.width*0.3, Get.height*0.01)),
-                  backgroundColor: MaterialStateProperty.all(CustomColors.primaryColor),
-                ),
-                onPressed:() async{
-                                   controller.isLoading.value=false;
-                controller.removeSubscriber(channeId: widget.channelId,index:index);
-                                  },
-                child:controller.isLoading.value==false?  Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.white,fontSize:10.sp),
-                ):const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(color: CustomColors.primaryColorDark,),
+              ()=> Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                   backgroundColor: CustomColors.primaryColor,foregroundColor: Colors.white,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    fixedSize: Size(Get.width*0.6, Get.height*0.06)
+                  ),
+                
+                  onPressed:() async{
+                                     controller.isLoading.value=false;
+                  controller.removeSubscriber(channeId: widget.channelId,index:index);
+                                    },
+                  child:controller.isLoading.value==false?  Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.white,fontSize:10.sp),
+                  ):const ProgressIndicatorWidget(),
                 ),
               ),
             ),

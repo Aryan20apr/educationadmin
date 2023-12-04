@@ -60,7 +60,7 @@ isChannelFetched=Future.delayed(Duration.zero,()=>result);
           backgroundColor: CustomColors.accentColor,
           foregroundColor: Colors.white,
           onPressed: () {
-            Get.to(()=> CreateChannel())!.then((value) => setState((){
+            Get.to(()=>const CreateChannel())!.then((value) => setState((){
               createrChannelsController.getChannels();
             }));
           },

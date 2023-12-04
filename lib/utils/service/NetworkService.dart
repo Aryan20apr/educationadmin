@@ -523,7 +523,13 @@ Future<GeneralResponse> deleteresource({required String token,required int resou
   try {
   Response response=await delete('$baseURL$deleteResource$resourceId', headers: {"Authorization":"Bearer $token"});
   logger.e("Delete resource response ${response.body}");
-  return GeneralResponse(msg: "Successfully deleted",status: true);
+  if(response.body!=null) {
+    return GeneralResponse(msg: "Successfully deleted",status: true);
+  }
+  else
+  {
+    return GeneralResponse(msg: "Could not delete",status: false);
+  }
 } on Exception catch (e) {
   e.printError();
   return GeneralResponse(msg: 'Could not delete the resource',status: false);
