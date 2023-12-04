@@ -34,7 +34,13 @@ class DownloadsPage extends StatelessWidget {
           } else {
             Logger().e("files loaded");
             final pdfFiles = snapshot.data;
-            return PdfListView(pdfFiles!);
+            if(pdfFiles!.isNotEmpty) {
+              return PdfListView(pdfFiles);}
+            else
+            {
+              return SizedBox(height: Get.height*0.8,child:  Center(child: Text('You have no downloads',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 12.sp),)),);
+            }
+            
           }
         },
       ),

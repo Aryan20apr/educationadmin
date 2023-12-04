@@ -51,11 +51,11 @@ final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
 
        UserModal userModal= await _networkService.getUserDetails(token: response.data!.token);
       _userdetails.initializeUserDetails(userModal: userModal);
-        isSiginingIn.value=true;
+        isSiginingIn.value=false;
       Get.off(()=>const MainWrapper());
       
     } else {
-           isSiginingIn.value=true;
+           isSiginingIn.value=false;
       /// Show user a dialog about the error response
       Get.defaultDialog(
         buttonColor: CustomColors.primaryColor,

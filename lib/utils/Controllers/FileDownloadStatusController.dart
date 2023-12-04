@@ -219,13 +219,17 @@ void deleteFile({required String name,required String createdAt}) async
 }
 
 Future<List<FileSystemEntity>> getPdfFiles() async {
-  await Permission.manageExternalStorage.request();
+
 
     final directory = await getApplicationDocumentsDirectory();
     // var path = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
       //final directory=await Directory(path);
+      
        final filesDirectory = Directory('${directory.path}/files');
-    
+      if(await filesDirectory.exists()==false)
+      {
+       await filesDirectory.create(recursive: true);
+      }
     logger.e("Application document directory is ${filesDirectory.path}");
     
     List<FileSystemEntity> files = filesDirectory.listSync(); // Get a list of files in the application directory

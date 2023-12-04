@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:educationadmin/Modals/BannersResponse.dart';
@@ -34,7 +35,7 @@ import '../../Modals/SingnupModal.dart';
 /// LoginService responsible to communicate with web-server
 /// via authenticaton related APIs
 class NetworkService extends GetConnect {
-  final String baseURL="https://backend-for-unidev.hop.sh/";
+  final String baseURL="https://backend-for-unidev-1.hop.sh/";
 
   final String signup="auth/signup";
   final String signin="auth/signin";
@@ -111,6 +112,7 @@ Map<String,dynamic> map=model.toJson();
  Future<SignupResponseModal> login(LoginModal model) async {
     Map<String,dynamic> map=model.toJson();
   map['role']='consumer';
+  log("Sigin request body is $map");
     try {
   Response<Map<String,dynamic>> response = await post('$baseURL$signin', map);
   logger.e(response.body.toString());
