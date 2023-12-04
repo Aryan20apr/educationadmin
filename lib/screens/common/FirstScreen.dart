@@ -19,8 +19,8 @@ import 'MainScreen.dart';
 
 
 class FirstScreen extends StatelessWidget {
-  final AuthenticationManager _authmanager = Get.put(AuthenticationManager());
-  final UserDetailsManager _userdetails=Get.put(UserDetailsManager());
+  final AuthenticationManager _authmanager = Get.put(AuthenticationManager(),permanent:true);
+  final UserDetailsManager _userdetails=Get.put(UserDetailsManager(),permanent: true);
 
  final Logger logger=Logger();
   Future<void> initializeSettings() async {

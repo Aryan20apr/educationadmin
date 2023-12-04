@@ -46,6 +46,7 @@ final _formKey = GlobalKey<FormState>();
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
+                    SizedBox(height: Get.height*0.05,),
                     GestureDetector(
                       onTap: () {
                         _profileController.pickImage();
@@ -54,54 +55,76 @@ final _formKey = GlobalKey<FormState>();
                           alignment: Alignment.bottomRight,
                           children: [
                             Obx(
-                              ()=> ClipOval(
-                                child: CircleAvatar(
-                                  radius: avatarSize,
+                              ()=> Container(
+                                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: CustomColors.primaryColor,
+                    width: 4.0,
+                  )),
+                                child: ClipOval(
+                                  child: CircleAvatar(
+                                    
+                                    radius: avatarSize,
+                                    backgroundColor: Colors.grey.shade300,
+                                   
+                                    child: _profileController.imagePath.isNotEmpty
+                                          ? Image(image:  
+                                               FileImage(
+                                                File(_profileController.imagePath.value),
+                                              ),
+                                              fit: BoxFit.cover,
+                                             width: double.infinity,
+                                             height: double.infinity,
+                                              
+                                            )
+                                             
+                                            
+                                        :_profileController.image.value.isNotEmpty?
+                                        CachedNetworkImage(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  colorBlendMode: BlendMode.darken,
+                                                  imageUrl: _profileController.image.value,
+                                                            placeholder: (context, url) => Image.asset(
+                                                            
+                                                              
+                                  'assets/default_image.png',
+                                  height: constraints.maxHeight*0.1,
+                                  fit: BoxFit.fill,
+                                  // width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
+                                  // height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
+                                                            ),
+                                                            errorWidget: (context, url, error) => Image.asset(
+                                  'assets/default_image.png',
                                   
-                                 
-                                  child: _profileController.imagePath.isNotEmpty
-                                        ? Image(image:  
-                                             FileImage(
-                                              File(_profileController.imagePath.value),
-                                            ),
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                          )
-                                           
-                                          
-                                      :_profileController.image.value.isNotEmpty?
-                                      CachedNetworkImage(
-                                width: double.infinity,
-                                height: double.infinity,
-                                colorBlendMode: BlendMode.darken,
-                                                imageUrl: _profileController.image.value,
-                                                          placeholder: (context, url) => Image.asset(
-                                'assets/default_image.png',
-                                fit: BoxFit.fill,
-                                // width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
-                                // height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
-                                                          ),
-                                                          errorWidget: (context, url, error) => Image.asset(
-                                'assets/default_image.png',
-                                fit: BoxFit.fill,
-                                width: Get.width * 0.1 * 2, // Set the width to match the diameter of the CircleAvatar
-                                height: Get.width * 0.1 * 2, // Set the height to match the diameter of the CircleAvatar
-                                                          ),
-                                                          fit: BoxFit.cover,
-                                              ):const Icon(Icons.person)
+                                  fit: BoxFit.fill,
+                                  width: constraints.maxWidth*0.2, // Set the width to match the diameter of the CircleAvatar
+                                  height: constraints.maxHeight*0.1, // Set the height to match the diameter of the CircleAvatar
+                                                            ),
+                                                            fit: BoxFit.cover,
+                                                ): Icon(Icons.person,size: constraints.maxWidth*0.2,)
+                                  ),
                                 ),
                               ),
                             ),
                             
-                              Container(
-                                decoration:const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.blue,
-                                ),
-                                child: const Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
+                              Positioned(
+                                bottom: 2,
+                right: 20,
+                                child: Container(
+                                  height: Get.height*0.05,
+                                  decoration:const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: CustomColors.primaryColor,
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                           ],
@@ -167,7 +190,7 @@ final _formKey = GlobalKey<FormState>();
                                           SizedBox(height: constraints.maxHeight*0.05,),
                                            Obx(
                                              ()=> ElevatedButton(
-                                              style: ElevatedButton.styleFrom(elevation: 10,foregroundColor: Colors.white,backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                              style: ElevatedButton.styleFrom(fixedSize: Size(Get.width*0.8, Get.height*0.08),elevation: 10,foregroundColor: Colors.white,backgroundColor: CustomColors.primaryColor,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                                                       onPressed: () {
                                                         if(_formKey.currentState!.validate())
                                                         {
@@ -176,7 +199,7 @@ final _formKey = GlobalKey<FormState>();
                                                           }
                                                         }
                                                       },
-                                                      child:_profileController.isUpdating.value?const ProgressIndicatorWidget(): const Text("Update Profile"),
+                                                      child: _profileController.isUpdating.value?const ProgressIndicatorWidget(): const Text("Update Profile"),
                                                     ),
                                            ),
                                                   SizedBox(height: constraints.maxHeight*0.05,)
@@ -209,5 +232,3 @@ final _formKey = GlobalKey<FormState>();
     super.dispose();
   }
 }
-
-

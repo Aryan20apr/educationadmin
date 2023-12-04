@@ -18,6 +18,8 @@ void main() {
 
 class ProfileScreen extends StatelessWidget {
   final UserDetailsManager userDetailsManager = Get.find<UserDetailsManager>();
+
+   ProfileScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -117,6 +119,8 @@ const Text(
               ElevatedCard(Icons.exit_to_app, 'Logout', () {
                 AuthenticationManager authenticationManager=Get.put(AuthenticationManager());
                 authenticationManager.logOut();
+                Get.deleteAll();
+                
                 Get.offAll(()=>const LoginScreen());
               }),
               // Additional content can be added here
