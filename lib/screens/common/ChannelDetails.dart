@@ -1,7 +1,5 @@
-
-
-import 'package:educationadmin/Modals/ChannelListModal.dart';
-import 'package:educationadmin/utils/ColorConstants.dart';
+import 'package:talentsearchenglish/Modals/ChannelListModal.dart';
+import 'package:talentsearchenglish/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -11,14 +9,15 @@ import 'Tab2.dart';
 
 class ChannelDetails extends StatefulWidget {
   Channels channel;
-   ChannelDetails({super.key,required this.channel});
+  ChannelDetails({super.key, required this.channel});
 
   @override
   State<ChannelDetails> createState() => _ChannelDetailsState();
 }
 
-class _ChannelDetailsState extends State<ChannelDetails>  with SingleTickerProviderStateMixin{
-   late TabController tabController;
+class _ChannelDetailsState extends State<ChannelDetails>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
 
   @override
   void initState() {
@@ -31,7 +30,8 @@ class _ChannelDetailsState extends State<ChannelDetails>  with SingleTickerProvi
     tabController.dispose();
     super.dispose();
   }
-bool _isSearchBarOpen = false;
+
+  bool _isSearchBarOpen = false;
   final TextEditingController _searchBarController = TextEditingController();
 
   void _toggleSearchBar() {
@@ -39,38 +39,36 @@ bool _isSearchBarOpen = false;
       _isSearchBarOpen = !_isSearchBarOpen;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title:  Text(widget.channel.name!),
+        title: Text(widget.channel.name!),
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: [
-          
             Container(
               color: CustomColors.secondaryColor.withOpacity(1),
               width: Get.width,
               child: Padding(
-                padding: const EdgeInsets.only(left:10.0,right: 10.0,top: 10.0),
+                padding:
+                    const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                 child: Container(
-                  
                   // height: 50,
-                  
+
                   decoration: BoxDecoration(
-                      color:Colors.grey.shade200,
+                      color: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(20)),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: TabBar(
-                    indicatorPadding:const EdgeInsets.all(0),
-                    
-                    onTap: (index){
+                    indicatorPadding: const EdgeInsets.all(0),
+                    onTap: (index) {
                       setState(() {
-                        tabController.index=index;
+                        tabController.index = index;
                       });
                     },
                     labelPadding: EdgeInsets.zero,
@@ -78,18 +76,17 @@ bool _isSearchBarOpen = false;
                     labelColor: Colors.black,
                     indicatorColor: CustomColors.accentColor,
                     splashBorderRadius: BorderRadius.circular(20),
-                    indicator: BoxDecoration(                    color: CustomColors.accentColor,
-                        borderRadius:BorderRadius.circular(20)
-                    ),
+                    indicator: BoxDecoration(
+                        color: CustomColors.accentColor,
+                        borderRadius: BorderRadius.circular(20)),
                     controller: tabController,
                     tabs: const [
                       Tab(
-                         child: Center(child: Text('Videos')),
+                        child: Center(child: Text('Videos')),
                       ),
                       Tab(
                         child: Center(child: Text('Files')),
                       ),
-                        
                     ],
                   ),
                 ),
@@ -97,18 +94,25 @@ bool _isSearchBarOpen = false;
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left:10.0,right: 10.0,bottom: 10.0,),
+                padding: const EdgeInsets.only(
+                  left: 10.0,
+                  right: 10.0,
+                  bottom: 10.0,
+                ),
                 child: TabBarView(
                   controller: tabController,
                   children: [
-                    
-                     Padding(
-                       padding: const EdgeInsets.only(top:8.0),
-                       child: VideoResourcesTab(channelId: widget.channel.id!,),
-                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top:8.0),
-                      child: FileResourcesTab(channelId: widget.channel.id!,),
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: VideoResourcesTab(
+                        channelId: widget.channel.id!,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: FileResourcesTab(
+                        channelId: widget.channel.id!,
+                      ),
                     ),
                   ],
                 ),
@@ -119,8 +123,8 @@ bool _isSearchBarOpen = false;
       ),
     );
   }
-
 }
+
 class _CustomClipper extends CustomClipper<Rect> {
   final int _index;
 

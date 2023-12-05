@@ -2,8 +2,8 @@
 // import 'dart:developer';
 
 
-// import 'package:educationadmin/Modals/VideoResourcesModal.dart';
-// import 'package:educationadmin/screens/common/ChatView.dart';
+// import 'package:talentsearchenglish/Modals/VideoResourcesModal.dart';
+// import 'package:talentsearchenglish/screens/common/ChatView.dart';
 // import 'package:flutter/material.dart';
 // import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -104,8 +104,8 @@
 // // import 'dart:developer';
 
 
-// // import 'package:educationadmin/Modals/VideoResourcesModal.dart';
-// // import 'package:educationadmin/screens/common/ChatView.dart';
+// // import 'package:talentsearchenglish/Modals/VideoResourcesModal.dart';
+// // import 'package:talentsearchenglish/screens/common/ChatView.dart';
 // // import 'package:flutter/material.dart';
 // // import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 

@@ -1,18 +1,11 @@
-
-
-
-import 'package:educationadmin/screens/pages/HomeScreen.dart';
-import 'package:educationadmin/screens/pages/Messages.dart';
-import 'package:educationadmin/screens/pages/Profile.dart';
+import 'package:talentsearchenglish/screens/pages/HomeScreen.dart';
+import 'package:talentsearchenglish/screens/pages/Messages.dart';
+import 'package:talentsearchenglish/screens/pages/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 import '../../screens/pages/Explore2.dart';
-
-
-
-
 
 class MainWrapperController extends GetxController {
   late PageController pageController;
@@ -23,9 +16,8 @@ class MainWrapperController extends GetxController {
   List<Widget> pages = [
     const HomeScreen(),
     const ExploreScreen(),
-     ChatScreen(),
-   
-   ProfileScreen(),
+    ChatScreen(),
+    ProfileScreen(),
   ];
 
   ThemeMode get theme => Get.isDarkMode ? ThemeMode.dark : ThemeMode.light;
@@ -39,12 +31,12 @@ class MainWrapperController extends GetxController {
     currentPage.value = page;
     pageController.jumpToPage(page);
   }
+
   void animateToTab(int page) {
     Logger().e("Animating to page $page");
     currentPage.value = page;
-   pageController.animateToPage(page,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.ease);
+    pageController.animateToPage(page,
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   @override

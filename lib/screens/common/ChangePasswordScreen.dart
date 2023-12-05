@@ -1,12 +1,11 @@
-import 'package:educationadmin/authentication/LoginScreen.dart';
-import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
-import 'package:educationadmin/screens/pages/Explore2.dart';
-import 'package:educationadmin/screens/pages/Profile.dart';
-import 'package:educationadmin/utils/ColorConstants.dart';
+import 'package:talentsearchenglish/authentication/LoginScreen.dart';
+import 'package:talentsearchenglish/authentication/viewmodal/LoginViewModal.dart';
+import 'package:talentsearchenglish/screens/pages/Explore2.dart';
+import 'package:talentsearchenglish/screens/pages/Profile.dart';
+import 'package:talentsearchenglish/utils/ColorConstants.dart';
 
-import 'package:educationadmin/widgets/CircularWidget.dart';
+import 'package:talentsearchenglish/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
-
 
 import 'package:get/get.dart';
 
@@ -16,8 +15,10 @@ import '../../utils/Flag.dart';
 import '../../widgets/ProgressIndicatorWidget.dart';
 
 class ChangePassword extends StatefulWidget {
- ChangePassword({super.key,});
-  
+  ChangePassword({
+    super.key,
+  });
+
   @override
   State<ChangePassword> createState() => _ChangePassword();
 }
@@ -26,32 +27,32 @@ class _ChangePassword extends State<ChangePassword> {
   final AuthenticationViewModal _authenticationViewModel =
       Get.put(AuthenticationViewModal());
 
- final _formKey = GlobalKey<FormState>();
-  
- 
+  final _formKey = GlobalKey<FormState>();
+
   late TextEditingController passwordController;
   late TextEditingController passwordController2;
-  
 
   @override
   void initState() {
-   
-
     super.initState();
     passwordController = TextEditingController();
-    passwordController2=TextEditingController();
-    _authenticationViewModel.isChangingPassord.value=false;
-  
+    passwordController2 = TextEditingController();
+    _authenticationViewModel.isChangingPassord.value = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: CustomColors.primaryColorDark,
-          foregroundColor: CustomColors.accentColor,
-          title:Text('Change Password',style: TextStyle(fontSize: 12.sp,fontWeight: FontWeight.bold,color: CustomColors.accentColor),)
-        ),
+            backgroundColor: CustomColors.primaryColorDark,
+            foregroundColor: CustomColors.accentColor,
+            title: Text(
+              'Change Password',
+              style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                  color: CustomColors.accentColor),
+            )),
         resizeToAvoidBottomInset: true,
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -62,20 +63,17 @@ class _ChangePassword extends State<ChangePassword> {
               padding: EdgeInsets.zero,
               child: Stack(
                 children: [
-                 
                   Column(
-                      
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height:20.h,
+                          height: 20.h,
                         ),
                         LayoutBuilder(builder: (context, constraints) {
                           return Form(
-                              key: _formKey,
+                            key: _formKey,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              
                               children: [
                                 Center(
                                   child: Text(
@@ -85,20 +83,13 @@ class _ChangePassword extends State<ChangePassword> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                               
                                 const SizedBox(height: 20.0),
-                          
-                                
-                                
-                          
-                               
-                                
                                 Container(
                                   width: constraints.maxWidth * 0.8,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.0),
-                                    color:
-                                        Colors.grey[200], // Grey background color
+                                    color: Colors
+                                        .grey[200], // Grey background color
                                   ),
                                   child: TextFormField(
                                     controller: passwordController,
@@ -108,26 +99,24 @@ class _ChangePassword extends State<ChangePassword> {
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder
                                           .none, // Hide the default border
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 20.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20.0),
                                     ),
                                     validator: (value) {
-                                      
-                                      
-    if (value == null || value.isEmpty ) {
-      return 'Please enter valid password';
-    }
-    return null;
-  },
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter valid password';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
-                            Container(
+                                Container(
                                   width: constraints.maxWidth * 0.8,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.0),
-                                    color:
-                                        Colors.grey[200], // Grey background color
+                                    color: Colors
+                                        .grey[200], // Grey background color
                                   ),
                                   child: TextFormField(
                                     controller: passwordController2,
@@ -137,37 +126,41 @@ class _ChangePassword extends State<ChangePassword> {
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder
                                           .none, // Hide the default border
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 20.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20.0),
                                     ),
                                     validator: (value) {
-                                      
-                                      
-    if (value == null || value.isEmpty|| passwordController.text!=passwordController2.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  },
+                                      if (value == null ||
+                                          value.isEmpty ||
+                                          passwordController.text !=
+                                              passwordController2.text) {
+                                        return 'Passwords do not match';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
-                          
                                 ElevatedButton(
                                   onPressed: () async {
-                                   
-                                  bool validate=  _formKey.currentState!.validate();
-                                  if(validate) {
-                                  await  _authenticationViewModel.changePassword(
-                                        password: passwordController.text,verificationType: VerificationType.ResetPassword);
-                                  Get.offAll(()=>ProfileScreen());
-                                  }
+                                    bool validate =
+                                        _formKey.currentState!.validate();
+                                    if (validate) {
+                                      await _authenticationViewModel
+                                          .changePassword(
+                                              password: passwordController.text,
+                                              verificationType: VerificationType
+                                                  .ResetPassword);
+                                      Get.offAll(() => ProfileScreen());
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Theme.of(context).primaryColor,
                                     foregroundColor:
                                         Theme.of(context).primaryColorDark,
-                                    maximumSize: Size(constraints.maxWidth * 0.8,
+                                    maximumSize: Size(
+                                        constraints.maxWidth * 0.8,
                                         constraints.maxHeight * 0.2),
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
@@ -179,7 +172,8 @@ class _ChangePassword extends State<ChangePassword> {
                                       width: double.infinity,
                                       alignment: Alignment.center,
                                       child: Obx(
-                                        () =>  _authenticationViewModel.isChangingPassord.value
+                                        () => _authenticationViewModel
+                                                .isChangingPassord.value
                                             ? const ProgressIndicatorWidget()
                                             : const Text(
                                                 'Update Password',
@@ -190,7 +184,6 @@ class _ChangePassword extends State<ChangePassword> {
                                               ),
                                       )),
                                 ),
-                                
                               ],
                             ),
                           );
@@ -202,9 +195,9 @@ class _ChangePassword extends State<ChangePassword> {
           ),
         ));
   }
-  void dispose()
-  {
-     _authenticationViewModel.isChangingPassord.value=false;
-     super.dispose();
+
+  void dispose() {
+    _authenticationViewModel.isChangingPassord.value = false;
+    super.dispose();
   }
 }

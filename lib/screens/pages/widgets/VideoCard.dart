@@ -1,8 +1,8 @@
-import 'package:educationadmin/Modals/ChannelListModal.dart';
-import 'package:educationadmin/screens/common/ChannelDetails.dart';
+import 'package:talentsearchenglish/Modals/ChannelListModal.dart';
+import 'package:talentsearchenglish/screens/common/ChannelDetails.dart';
 
-import 'package:educationadmin/utils/ColorConstants.dart';
-import 'package:educationadmin/utils/Flag.dart';
+import 'package:talentsearchenglish/utils/ColorConstants.dart';
+import 'package:talentsearchenglish/utils/Flag.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -54,37 +54,33 @@ class VideoCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-          
-
-              if (!channel.isCompletelyPaid! || channel.price == 0) {
-                Get.to(() => ChannelDetails(
-                      channel: channel,
-                    ));
-              }
-               else {
-                // Get.defaultDialog(
-                //   title: 'Attention',
-                //   backgroundColor: CustomColors.secondaryColor,
-                //   middleText: 'This content is not available free of cost.',
-                //   //textConfirm: 'This content is not available free of cost',
-                //   confirmTextColor: Colors.white,
-                //   confirm: ElevatedButton(
-                //       onPressed: () {
-                //         Get.back();
-                //       },
-                //       style: ElevatedButton.styleFrom(
-                //           backgroundColor: CustomColors.primaryColor,
-                //           foregroundColor: CustomColors.secondaryColor),
-                //       child: const Text('Ok')),
-                // );
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SubscriptionModalBottomSheet(channel: channel);
-                  },
-                );
-              }
-            
+            if (!channel.isCompletelyPaid! || channel.price == 0) {
+              Get.to(() => ChannelDetails(
+                    channel: channel,
+                  ));
+            } else {
+              // Get.defaultDialog(
+              //   title: 'Attention',
+              //   backgroundColor: CustomColors.secondaryColor,
+              //   middleText: 'This content is not available free of cost.',
+              //   //textConfirm: 'This content is not available free of cost',
+              //   confirmTextColor: Colors.white,
+              //   confirm: ElevatedButton(
+              //       onPressed: () {
+              //         Get.back();
+              //       },
+              //       style: ElevatedButton.styleFrom(
+              //           backgroundColor: CustomColors.primaryColor,
+              //           foregroundColor: CustomColors.secondaryColor),
+              //       child: const Text('Ok')),
+              // );
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return SubscriptionModalBottomSheet(channel: channel);
+                },
+              );
+            }
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,41 +170,44 @@ class VideoCard extends StatelessWidget {
                             print('Delete selected');
                             await _showDeleteConfirmationDialog(context);
                           } else if (value == 'subscribe') {
-                             showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SubscriptionModalBottomSheet(channel: channel);
-                  },
-                );
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SubscriptionModalBottomSheet(
+                                    channel: channel);
+                              },
+                            );
                           }
                         },
                       )
-                    : channel.isCompletelyPaid! ? ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 10,
-                          shape: const ContinuousRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          backgroundColor: CustomColors.accentColor,
-                          foregroundColor: CustomColors.primaryColorDark,
-                        ),
-                        onPressed: () {
-                          if(channel.isCompletelyPaid!||channel.price!>0);
-                          {
-                             showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SubscriptionModalBottomSheet(channel: channel);
-                  },
-                );
-                          }
-                        },
-                        child: Text(
-                          'Subscribe',
-                          style: TextStyle(fontSize: 12.sp),
-                        )
-                        ): const SizedBox()
-                        ,
+                    : channel.isCompletelyPaid!
+                        ? ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              shape: const ContinuousRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              backgroundColor: CustomColors.accentColor,
+                              foregroundColor: CustomColors.primaryColorDark,
+                            ),
+                            onPressed: () {
+                              if (channel.isCompletelyPaid! ||
+                                  channel.price! > 0) ;
+                              {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SubscriptionModalBottomSheet(
+                                        channel: channel);
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Subscribe',
+                              style: TextStyle(fontSize: 12.sp),
+                            ))
+                        : const SizedBox(),
               ),
             ],
           ),

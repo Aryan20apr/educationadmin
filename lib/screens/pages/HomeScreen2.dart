@@ -1,9 +1,9 @@
 import 'dart:ffi';
 
-import 'package:educationadmin/screens/pages/Explore2.dart';
-import 'package:educationadmin/screens/pages/widgets/DefaultCarousel.dart';
-import 'package:educationadmin/utils/Controllers/HomeScreenController.dart';
-import 'package:educationadmin/utils/Controllers/UserController.dart';
+import 'package:talentsearchenglish/screens/pages/Explore2.dart';
+import 'package:talentsearchenglish/screens/pages/widgets/DefaultCarousel.dart';
+import 'package:talentsearchenglish/utils/Controllers/HomeScreenController.dart';
+import 'package:talentsearchenglish/utils/Controllers/UserController.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sizer/sizer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:educationadmin/utils/ColorConstants.dart';
+import 'package:talentsearchenglish/utils/ColorConstants.dart';
 import '../../widgets/ProgressIndicatorWidget.dart';
 import '../common/ChannelDetails.dart';
 import 'widgets/HomeVideoCard.dart';
@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(width: 4.0),
                               Text(
-                                '123K Followers', // Replace with user-related details
+                                'Talentians', // Replace with user-related details
                                 style: TextStyle(
                                   color: ColorConstants.textColor,
                                 ),
@@ -329,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                'For You',
+                                'Subscribed Channels',
                                 // Add the "For You" heading
                                 style: TextStyle(
                                   fontSize: 16.sp,
@@ -365,16 +365,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                               //        homeScreenController.channelData.value.channels![index],
 
                                               // ));
-                                            print(homeScreenController
-                                                      .channelData
-                                                      .value
-                                                      .channels![index]
-                                                      .isCompletelyPaid!);
-                                                      print(homeScreenController
-                                                      .channelData
-                                                      .value
-                                                      .channels![index]
-                                                      .price);
+                                              print(homeScreenController
+                                                  .channelData
+                                                  .value
+                                                  .channels![index]
+                                                  .isCompletelyPaid!);
+                                              print(homeScreenController
+                                                  .channelData
+                                                  .value
+                                                  .channels![index]
+                                                  .price);
                                               if (homeScreenController
                                                       .channelData
                                                       .value

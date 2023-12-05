@@ -1,6 +1,5 @@
-
-import 'package:educationadmin/utils/ColorConstants.dart';
-import 'package:educationadmin/utils/Controllers/MainWrapperController.dart';
+import 'package:talentsearchenglish/utils/ColorConstants.dart';
+import 'package:talentsearchenglish/utils/Controllers/MainWrapperController.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,8 +9,6 @@ import 'package:sizer/sizer.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 import 'package:logger/logger.dart';
 
-
-
 class MainWrapper extends StatefulWidget {
   const MainWrapper({super.key});
 
@@ -20,21 +17,18 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-   final MainWrapperController _mainWrapperController =
+  final MainWrapperController _mainWrapperController =
       Get.put(MainWrapperController());
- final List<int> tabHistory = [0]; // Initialize with the first tab (index 0).
- Logger logger=Logger();
+  final List<int> tabHistory = [0]; // Initialize with the first tab (index 0).
+  Logger logger = Logger();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       bottomNavigationBar: BottomAppBar(
-       
-        
         notchMargin: 10,
         child: Container(
           //color: Theme.of(context).appBarTheme.backgroundColor,
-          padding:  EdgeInsets.symmetric( vertical: Get.bottomBarHeight),
+          padding: EdgeInsets.symmetric(vertical: Get.bottomBarHeight),
           child: Obx(
             () => WillPopScope(
               onWillPop: _onBackPressed,
@@ -51,13 +45,12 @@ class _MainWrapperState extends State<MainWrapper> {
                       icon: FontAwesomeIcons.compass,
                       page: 1,
                       context,
-                      label: "Explore"),
+                      label: "Channels"),
                   _bottomAppBarItem(
                       icon: FontAwesomeIcons.solidMessage,
                       page: 2,
                       context,
-                      label: "Messages"),
-                  
+                      label: "Notifications"),
                   _bottomAppBarItem(
                       icon: FontAwesomeIcons.user,
                       page: 3,
@@ -73,13 +66,12 @@ class _MainWrapperState extends State<MainWrapper> {
         padEnds: false,
         controller: _mainWrapperController.pageController,
         physics: const BouncingScrollPhysics(),
-        onPageChanged: (index){
+        onPageChanged: (index) {
           logger.e("Adding $index");
-          if(index==0)
-          {tabHistory.clear();
-          tabHistory.add(index);}
-          else
-          {
+          if (index == 0) {
+            tabHistory.clear();
+            tabHistory.add(index);
+          } else {
             tabHistory.add(index);
           }
           _mainWrapperController.animateToTab(index);
@@ -120,13 +112,12 @@ class _MainWrapperState extends State<MainWrapper> {
     );
   }
 
-
   Future<bool> _onBackPressed() {
     if (tabHistory.isNotEmpty) {
       // If there is tab history, pop the last tab and switch to it.
       logger.e("Current tab list is ${tabHistory.toString()}");
       tabHistory.removeLast();
-      int lastTab=tabHistory.removeLast();
+      int lastTab = tabHistory.removeLast();
       _mainWrapperController.goToTab(lastTab);
       return Future.value(false);
     } else {

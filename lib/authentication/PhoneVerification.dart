@@ -1,8 +1,8 @@
-import 'package:educationadmin/authentication/LoginScreen.dart';
-import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
-import 'package:educationadmin/screens/pages/Explore2.dart';
-import 'package:educationadmin/utils/Flag.dart';
-import 'package:educationadmin/widgets/CircularWidget.dart';
+import 'package:talentsearchenglish/authentication/LoginScreen.dart';
+import 'package:talentsearchenglish/authentication/viewmodal/LoginViewModal.dart';
+import 'package:talentsearchenglish/screens/pages/Explore2.dart';
+import 'package:talentsearchenglish/utils/Flag.dart';
+import 'package:talentsearchenglish/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -31,15 +31,14 @@ class _HomeScreenState extends State<PhoneVerification> {
 
   @override
   void initState() {
-     super.initState();
+    super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
 
     fullnameController = TextEditingController();
     phoneNumberController = TextEditingController();
     confirmPasswordController = TextEditingController();
-      _authenticationViewModel.isSendingOtp.value = false;
-   
+    _authenticationViewModel.isSendingOtp.value = false;
   }
 
   @override

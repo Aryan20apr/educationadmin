@@ -1,6 +1,5 @@
-
-import 'package:educationadmin/screens/pages/HomeScreen.dart';
-import 'package:educationadmin/utils/Controllers/UserController.dart';
+import 'package:talentsearchenglish/screens/pages/HomeScreen.dart';
+import 'package:talentsearchenglish/utils/Controllers/UserController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -40,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: (){
-                                Get.to(()=>HomeScreen());
+                              onTap: () {
+                                Get.to(() => HomeScreen());
                               },
                               child: CircleAvatar(
                                 radius: containerConstraints.maxHeight * 0.2,
@@ -128,10 +127,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: constraints.maxHeight*0.02,
+                  height: constraints.maxHeight * 0.02,
                 ),
                 Container(
-                decoration: BoxDecoration(
+                  decoration: BoxDecoration(
                       borderRadius:
                           const BorderRadius.all(Radius.circular(20.0)),
                       color: Colors.white,
@@ -141,7 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           blurRadius: 25.0,
                         ),
                       ]),
-
                   height: Get.height * 0.4,
                   width: Get.width,
                   child: Column(

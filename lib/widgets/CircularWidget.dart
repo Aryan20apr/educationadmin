@@ -1,8 +1,9 @@
 import 'dart:math';
 
-import 'package:educationadmin/utils/ColorConstants.dart';
+import 'package:talentsearchenglish/utils/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+
 class CirclesWidget extends StatelessWidget {
   const CirclesWidget({super.key});
 
@@ -19,13 +20,15 @@ class CirclePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
-      ..color =  CustomColors.primaryColor.withOpacity(0.5); // Purple color with 50% opacity
- final Paint paint2 = Paint()
+      ..color = CustomColors.primaryColor
+          .withOpacity(0.5); // Purple color with 50% opacity
+    final Paint paint2 = Paint()
       ..color = CustomColors.primaryColor.withOpacity(0.5);
     const center = Offset(50, 30); // Top-left corner (more left)
     final radius = min(size.width / 4, size.height / 2);
 
-    final center2 = Offset(center.dx + radius * 0.5 - 70, center.dy + radius * 0.85);
+    final center2 =
+        Offset(center.dx + radius * 0.5 - 70, center.dy + radius * 0.85);
 
     canvas.drawCircle(center, radius, paint);
     canvas.drawCircle(center2, radius, paint2);

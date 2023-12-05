@@ -1,8 +1,7 @@
-
-import 'package:educationadmin/authentication/viewmodal/LoginViewModal.dart';
-import 'package:educationadmin/screens/pages/Explore2.dart';
-import 'package:educationadmin/utils/Flag.dart';
-import 'package:educationadmin/widgets/CircularWidget.dart';
+import 'package:talentsearchenglish/authentication/viewmodal/LoginViewModal.dart';
+import 'package:talentsearchenglish/screens/pages/Explore2.dart';
+import 'package:talentsearchenglish/utils/Flag.dart';
+import 'package:talentsearchenglish/widgets/CircularWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -23,20 +22,15 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
   final AuthenticationViewModal _authenticationViewModel =
       Get.put(AuthenticationViewModal());
 
- final _formKey = GlobalKey<FormState>();
-  
- 
+  final _formKey = GlobalKey<FormState>();
+
   late TextEditingController phoneNumberController;
-  
 
   @override
   void initState() {
-   
-
-   super.initState();
+    super.initState();
     phoneNumberController = TextEditingController();
-    _authenticationViewModel.isSendingOtp.value=false;
-   
+    _authenticationViewModel.isSendingOtp.value = false;
   }
 
   @override
@@ -62,7 +56,7 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
                         ),
                         LayoutBuilder(builder: (context, constraints) {
                           return Form(
-                              key: _formKey,
+                            key: _formKey,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,64 +67,67 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.bold),
                                 ),
-                               
                                 const SizedBox(height: 20.0),
-                          
                                 Text(
-                                      'Enter your registered phone number for verification:',
-                                      textAlign: TextAlign.center,style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w300),
-                                    ),
+                                  'Enter your registered phone number for verification:',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w300),
+                                ),
                                 const SizedBox(height: 20.0),
-                          
-                               
                                 const SizedBox(height: 20.0),
                                 Container(
                                   width: constraints.maxWidth * 0.8,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.0),
-                                    color:
-                                        Colors.grey[200], // Grey background color
+                                    color: Colors
+                                        .grey[200], // Grey background color
                                   ),
                                   child: TextFormField(
                                     controller: phoneNumberController,
                                     keyboardType: TextInputType.number,
                                     decoration: const InputDecoration(
-                                      hintText: 'Enter your 10 digit phone number',
+                                      hintText:
+                                          'Enter your 10 digit phone number',
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder
                                           .none, // Hide the default border
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 20.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 20.0),
                                     ),
                                     validator: (value) {
-                                       String pattern=r'^[0-9]{10}$';
-                                       RegExp regExp=RegExp(pattern);
-    if (value == null || value.isEmpty|| value.length!=10|| !regExp.hasMatch(value)) {
-      return 'Please enter valid phone number';
-    }
-    return null;
-  },
+                                      String pattern = r'^[0-9]{10}$';
+                                      RegExp regExp = RegExp(pattern);
+                                      if (value == null ||
+                                          value.isEmpty ||
+                                          value.length != 10 ||
+                                          !regExp.hasMatch(value)) {
+                                        return 'Please enter valid phone number';
+                                      }
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 20.0),
-                          
                                 ElevatedButton(
                                   onPressed: () async {
-                                   
-                                  bool validate=  _formKey.currentState!.validate();
-                                  if(validate) {
-                                    _authenticationViewModel.sendOtp(
-                                        phone: phoneNumberController.text,verificationType: VerificationType.ForgotPassword);
-                                  }
+                                    bool validate =
+                                        _formKey.currentState!.validate();
+                                    if (validate) {
+                                      _authenticationViewModel.sendOtp(
+                                          phone: phoneNumberController.text,
+                                          verificationType:
+                                              VerificationType.ForgotPassword);
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Theme.of(context).primaryColor,
                                     foregroundColor:
                                         Theme.of(context).primaryColorDark,
-                                    maximumSize: Size(constraints.maxWidth * 0.8,
+                                    maximumSize: Size(
+                                        constraints.maxWidth * 0.8,
                                         constraints.maxHeight * 0.2),
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
@@ -154,7 +151,6 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
                                               ),
                                       )),
                                 ),
-                                
                               ],
                             ),
                           );
@@ -166,10 +162,10 @@ class _HomeScreenState extends State<ForgotPasswordPhoneVerification> {
           ),
         ));
   }
+
   @override
-   void dispose()
-  {
-    _authenticationViewModel.isSendingOtp.value=false;
+  void dispose() {
+    _authenticationViewModel.isSendingOtp.value = false;
     super.dispose();
   }
 }

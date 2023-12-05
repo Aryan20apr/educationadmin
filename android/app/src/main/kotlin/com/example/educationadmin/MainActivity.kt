@@ -1,4 +1,4 @@
-package com.example.educationadmin
+package com.example.talentsearchenglish
 
 import io.flutter.embedding.android.FlutterActivity
 
