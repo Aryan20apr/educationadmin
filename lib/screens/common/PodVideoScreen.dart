@@ -25,12 +25,13 @@ class PodYouTubePlayerScreenState extends State<PodYouTubePlayerScreen> {
   void initState() {
 
      controller = PodPlayerController(
-    playVideoFrom: PlayVideoFrom.youtube(widget.video.link!,live: widget.video.isLive??false),
+    playVideoFrom: PlayVideoFrom.youtube(widget.video.link!,live: widget.video.isLive??false,videoPlayerOptions: VideoPlayerOptions()),
     podPlayerConfig: const PodPlayerConfig(
       autoPlay: true,
       isLooping: false,
       videoQualityPriority: [1080,720, 480,360]
-    )
+    ),
+    
   )..initialise();
 
     super.initState();

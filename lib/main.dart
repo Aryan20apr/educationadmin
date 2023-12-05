@@ -5,14 +5,14 @@ import 'package:educationadmin/utils/Themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';    
 import 'package:get/get.dart';
-
+import 'package:in_app_update/in_app_update.dart';
 
 import 'package:sizer/sizer.dart';
 
 import 'screens/common/FirstScreen.dart';
 
 
-void main() async{
+void main() {
    WidgetsFlutterBinding.ensureInitialized();
     
   runApp(  DevicePreview(
