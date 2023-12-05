@@ -49,6 +49,7 @@ dependencies:
  
   pod_player: ^0.2.1
   flutter_launcher_icons: ^0.13.1
+  in_app_update: ^4.2.2
 
 dev_dependencies:
   flutter_test:
