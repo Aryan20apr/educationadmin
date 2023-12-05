@@ -10,6 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import '../../../utils/ColorConstants.dart';
 import '../../../widgets/ProgressIndicatorWidget.dart';
+import '../../common/PodVideoScreen.dart';
 
 class LiveVideosTab extends StatefulWidget {
   const LiveVideosTab(
@@ -110,7 +111,7 @@ class _LiveVideosTabState extends State<LiveVideosTab> {
                               //tileColor:CustomColors.tileColour,
                               onTap: () {
                                 Get.to(() =>
-                                    YouTubePlayerScreen(video: videos[index]));
+                                   PodYouTubePlayerScreen(video: videos[index]));
                               },
                               contentPadding: const EdgeInsets.all(10),
                               subtitle: Column(

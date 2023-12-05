@@ -4,8 +4,7 @@ import 'dart:developer';
 import 'dart:async';
 import 'package:educationadmin/widgets/ProgressIndicatorWidget.dart';
 import 'package:get/get.dart';
-import 'package:chewie/chewie.dart';
-import 'package:chewie/chewie.dart';
+
 import 'package:pod_player/pod_player.dart';
 import 'package:educationadmin/Modals/VideoResourcesModal.dart';
 import 'package:educationadmin/screens/common/ChatView.dart';
@@ -30,7 +29,7 @@ class PodYouTubePlayerScreenState extends State<PodYouTubePlayerScreen> {
     podPlayerConfig: const PodPlayerConfig(
       autoPlay: true,
       isLooping: false,
-      videoQualityPriority: [720, 360]
+      videoQualityPriority: [1080,720, 480,360]
     )
   )..initialise();
 
