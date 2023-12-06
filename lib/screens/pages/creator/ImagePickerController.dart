@@ -15,7 +15,7 @@ class ImagePickerController extends GetxController {
   RxBool isLoading=false.obs;
   void pickImage() async {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-     if ((androidInfo.version.sdkInt <= 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt >32 ||await Permission.storage.request().isGranted)) {
+     if ((androidInfo.version.sdkInt > 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt <=32 && await Permission.storage.request().isGranted)) {
       final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {

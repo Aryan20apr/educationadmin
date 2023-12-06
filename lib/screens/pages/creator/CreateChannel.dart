@@ -61,6 +61,7 @@ class CreateChannelState extends State<CreateChannel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        
         title:  Text("Create Channel",style:TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold)),
       ),
       body: SingleChildScrollView(

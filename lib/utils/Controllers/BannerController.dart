@@ -19,7 +19,9 @@ class BannerController extends GetxController
   final Logger logger=Logger();
   Future<void> pickImage() async {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-     if ((androidInfo.version.sdkInt <= 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt >32 ||await Permission.storage.request().isGranted)) {
+    bool status=(androidInfo.version.sdkInt > 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt <=32 && await Permission.storage.request().isGranted);
+    logger.i("Status is $status");
+     if (status) {
       final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {

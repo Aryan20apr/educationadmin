@@ -18,6 +18,8 @@ void main() {
 
 class ProfileScreen extends StatelessWidget {
   final UserDetailsManager userDetailsManager = Get.find<UserDetailsManager>();
+
+   ProfileScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(

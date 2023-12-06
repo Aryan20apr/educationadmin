@@ -36,7 +36,7 @@ class UserDetailsManager extends GetxController with CacheManager {
 NetworkService networkService=NetworkService();
   Future<void> pickImage() async {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
-     if ((androidInfo.version.sdkInt <= 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt >32 ||await Permission.storage.request().isGranted)) {
+     if ((androidInfo.version.sdkInt > 32&& await Permission.photos.request().isGranted)||(androidInfo.version.sdkInt <=32 && await Permission.storage.request().isGranted)) {
       final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {

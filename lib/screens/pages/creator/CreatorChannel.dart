@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:circular_menu/circular_menu.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:educationadmin/Modals/VideoRequestModal.dart';
 import 'package:educationadmin/screens/pages/creator/ChannelOptionController.dart';
 import 'package:educationadmin/screens/pages/creator/DescriptionTab.dart';
@@ -49,20 +50,19 @@ class _CreatorChannelState extends State<CreatorChannel> {
   }
 
   Future<File?> requestPermissionAndPickPDFFile() async {
-    PermissionStatus status = await Permission.storage.request();
-    logger.i("STORAGE REQUEST GRANTED:${status.isGranted}");
-    if (!status.isGranted) {
+    // PermissionStatus status = await Permission.storage.request();
+   
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+     logger.i("SDK Version: ${androidInfo.version.sdkInt }");
+    if ((androidInfo.version.sdkInt > 32 &&
+            await Permission.photos.request().isGranted &&
+            await Permission.audio.request().isGranted) ||
+        (androidInfo.version.sdkInt <= 32 &&
+            await Permission.storage.request().isGranted)) {
+      //logger.i("STORAGE REQUEST GRANTED");
 
-      await Permission.storage.request();
-      logger.i("STORAGE REREQUEST GRANTED:${status.isGranted}");
-    }
-    
-    if (await Permission.storage.isPermanentlyDenied) {
- 
-  openAppSettings();
-}
-
-    if (status.isGranted) {
+      //await Permission.storage.request();
+      //logger.i("STORAGE REREQUEST GRANTED:${status.isGranted}");
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf'],
@@ -71,7 +71,24 @@ class _CreatorChannelState extends State<CreatorChannel> {
       if (result != null && result.files.isNotEmpty) {
         return File(result.files.first.path!);
       }
+    } else if ((androidInfo.version.sdkInt > 32 &&
+                await Permission.photos.isPermanentlyDenied ||
+            await Permission.audio.isPermanentlyDenied) ||
+        (androidInfo.version.sdkInt <= 32 &&
+            await Permission.storage.isPermanentlyDenied)) {
+      openAppSettings();
     }
+
+    // if (status.isGranted) {
+    //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+    //     type: FileType.custom,
+    //     allowedExtensions: ['pdf'],
+    //   );
+
+    //   if (result != null && result.files.isNotEmpty) {
+    //     return File(result.files.first.path!);
+    //   }
+    // }
 
     return null;
   }
@@ -791,7 +808,7 @@ class _CreatorChannelState extends State<CreatorChannel> {
     );
   }
 }
-                              
+
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar _tabBar;
 
