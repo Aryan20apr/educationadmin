@@ -73,11 +73,11 @@ class _ChannelDetailsState extends State<ChannelDetails>
                     },
                     labelPadding: EdgeInsets.zero,
                     unselectedLabelColor: Colors.black,
-                    labelColor: Colors.black,
-                    indicatorColor: CustomColors.accentColor,
+                    labelColor: CustomColors.accentColor,
+                    indicatorColor: CustomColors.primaryColorDark,
                     splashBorderRadius: BorderRadius.circular(20),
                     indicator: BoxDecoration(
-                        color: CustomColors.accentColor,
+                        color: CustomColors.primaryColorDark,
                         borderRadius: BorderRadius.circular(20)),
                     controller: tabController,
                     tabs: const [
@@ -93,29 +93,16 @@ class _ChannelDetailsState extends State<ChannelDetails>
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 10.0,
-                  right: 10.0,
-                  bottom: 10.0,
-                ),
-                child: TabBarView(
-                  controller: tabController,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: VideoResourcesTab(
-                        channelId: widget.channel.id!,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: FileResourcesTab(
-                        channelId: widget.channel.id!,
-                      ),
-                    ),
-                  ],
-                ),
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  VideoResourcesTab(
+                    channelId: widget.channel.id!,
+                  ),
+                  FileResourcesTab(
+                    channelId: widget.channel.id!,
+                  ),
+                ],
               ),
             )
           ],

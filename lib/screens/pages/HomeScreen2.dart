@@ -329,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                'Subscribed Channels',
+                                'Subscribed Courses',
                                 // Add the "For You" heading
                                 style: TextStyle(
                                   fontSize: 16.sp,

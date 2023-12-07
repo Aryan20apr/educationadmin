@@ -45,7 +45,7 @@ class _MainWrapperState extends State<MainWrapper> {
                       icon: FontAwesomeIcons.compass,
                       page: 1,
                       context,
-                      label: "Channels"),
+                      label: "Courses"),
                   _bottomAppBarItem(
                       icon: FontAwesomeIcons.solidMessage,
                       page: 2,
