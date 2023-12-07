@@ -86,13 +86,14 @@ void onRefresh() async {
                                   
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
                                   //backgroundBlendMode: BlendMode.plus,
-                                              gradient: LinearGradient(
+                                              // gradient: LinearGradient(
                                                
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                                colors: [Color.fromARGB(255, 1, 96, 90),Color.fromARGB(255, 3, 164, 150),Color.fromARGB(255, 1, 96, 90)
-                                                ], // Adjust colors as needed
-                                              ),
+                                              //   begin: Alignment.topLeft,
+                                              //   end: Alignment.bottomRight,
+                                              //   colors: [Color.fromARGB(255, 48, 32, 1),Color.fromARGB(255, 1, 48, 45),Color.fromARGB(255, 1, 48, 45)
+                                              //   ], // Adjust colors as needed
+                                              // ),
+                                              color: Colors.red
                                             ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -116,90 +117,78 @@ void onRefresh() async {
                       
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                              decoration:const BoxDecoration(
-                                
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                backgroundBlendMode: BlendMode.plus,
-                                            gradient: LinearGradient(
-                                              
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [CustomColors.primaryColorDark,Color.fromARGB(255, 3, 135, 124),CustomColors.primaryColorDark], // Adjust colors as needed
-                                            ),
-                                          ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: resourceController.liveVideos.length,//data!.videos!.length,
-                              itemBuilder: (context, index) {
-                                String datetime=parseDateTimeAndSeparate(resourceController.liveVideos[index].startDate!);
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: ListTile(
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: resourceController.liveVideos.length,//data!.videos!.length,
+                            itemBuilder: (context, index) {
+                              String datetime=parseDateTimeAndSeparate(resourceController.liveVideos[index].startDate!);
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: ListTile(
+                                 
+                                  onTap: () {
+                                    if(resourceController.liveVideos[index].isStreaming!=null&&resourceController.liveVideos[index].isStreaming!) {
+                                      Get.to(() => PodYouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
+                                    }
+                                    else
+                                    {
+                                      Get.showSnackbar(const GetSnackBar( title: "Try Again Later",message: "The live video you are trying to play is not streaming right now.",duration: Duration(seconds: 3),));
+                                    }
+                                  },
+                                  style: ListTileStyle.list,
+                                  enableFeedback: true,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                  tileColor: const Color.fromARGB(255, 30, 112, 106),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                  leading: Container(
                                    
-                                    onTap: () {
-                                      if(resourceController.liveVideos[index].isStreaming!=null&&resourceController.liveVideos[index].isStreaming!) {
-                                        Get.to(() => PodYouTubePlayerScreen(video: resourceController.liveVideos[index]/*videos[index]*/));
-                                      }
-                                      else
-                                      {
-                                        Get.showSnackbar(const GetSnackBar( title: "Try Again Later",message: "The live video you are trying to play is not streaming right now.",duration: Duration(seconds: 3),));
-                                      }
-                                    },
-                                    style: ListTileStyle.list,
-                                    enableFeedback: true,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                    tileColor: CustomColors.tileColour,
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                                    leading: Container(
-                                     
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        gradient: _buildTileGradient(), // Use the custom gradient
-                                      ),
-                                      child: const Icon(Icons.video_file_rounded, color: CustomColors.secondaryColor),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      gradient: _buildTileGradient(), // Use the custom gradient
                                     ),
-                                    title: Text(
-                                      "${resourceController.liveVideos[index].title}",
-                                      style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(datetime,  style: const TextStyle(color: CustomColors.secondaryColor, ),),
-                                        if(resourceController.liveVideos[index].isStreaming!=null&&resourceController.liveVideos[index].isStreaming!)
-                                        Container(decoration:const BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(8)),color: Colors.amber),child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text('Streaming Now',style: TextStyle(color: Colors.green.shade900,fontWeight: FontWeight.bold),),
-                                        ))
-                                      ],
-                                    ),
-                                    trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
-                                    
+                                    child: const Icon(Icons.video_file_rounded, color: CustomColors.secondaryColor),
                                   ),
-                                );
-                              },
-                                                  ),
-                            ),
+                                  title: Text(
+                                    "${resourceController.liveVideos[index].title}",
+                                    style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(datetime,  style: const TextStyle(color: CustomColors.secondaryColor, ),),
+                                      if(resourceController.liveVideos[index].isStreaming!=null&&resourceController.liveVideos[index].isStreaming!)
+                                      Container(decoration:const BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(8)),color: Colors.amber),child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Text('Streaming Now',style: TextStyle(color: Colors.green.shade900,fontWeight: FontWeight.bold),),
+                                      ))
+                                    ],
+                                  ),
+                                  trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
+                                  
+                                ),
+                              );
+                            },
+                                                ),
                           ),
                         ),
                        Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                        decoration:const BoxDecoration(
+                         decoration:const BoxDecoration(
                                   
                                   borderRadius: BorderRadius.all(Radius.circular(10)),
                                   //backgroundBlendMode: BlendMode.plus,
-                                              gradient: LinearGradient(
+                                              // gradient: LinearGradient(
                                                
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                                colors: [Color.fromARGB(255, 1, 96, 90),Color.fromARGB(255, 3, 164, 150),Color.fromARGB(255, 1, 96, 90)
-                                                ], // Adjust colors as needed
-                                              ),
+                                              //   begin: Alignment.topLeft,
+                                              //   end: Alignment.bottomRight,
+                                              //   colors: [Color.fromARGB(255, 48, 32, 1),Color.fromARGB(255, 1, 48, 45),Color.fromARGB(255, 1, 48, 45)
+                                              //   ], // Adjust colors as needed
+                                              // ),
+                                              color: CustomColors.primaryColorDark
                                             ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -224,61 +213,51 @@ void onRefresh() async {
                           ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            decoration:const BoxDecoration(
-                                backgroundBlendMode: BlendMode.plus,
-                                          gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [CustomColors.primaryColorDark,Color.fromARGB(255, 3, 135, 124),CustomColors.primaryColorDark], // Adjust colors as needed
-                                          ),
-                                        ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: resourceController.normalVideos.length,//data!.videos!.length,
-                              itemBuilder: (context, index) {
-                                // List<Videos>? videos = data.videos;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: ListTile(
-                                    
-                                    onTap: () {
-                                      Get.to(() => PodYouTubePlayerScreen(video: resourceController.normalVideos[index]/*videos[index]*/));
-                                    },
-                                    style: ListTileStyle.list,
-                                    enableFeedback: true,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                    tileColor: CustomColors.tileColour,
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                                    leading: Container(
-                                     
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        gradient: _buildTileGradient(), // Use the custom gradient
-                                      ),
-                                      child: const Icon(Icons.video_file_rounded, color: CustomColors.secondaryColor),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: resourceController.normalVideos.length,//data!.videos!.length,
+                            itemBuilder: (context, index) {
+                              // List<Videos>? videos = data.videos;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: ListTile(
+                                  
+                                  onTap: () {
+                                    Get.to(() => PodYouTubePlayerScreen(video: resourceController.normalVideos[index]/*videos[index]*/));
+                                  },
+                                  style: ListTileStyle.list,
+                                  enableFeedback: true,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                  tileColor: const Color.fromARGB(255, 30, 112, 106),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                  leading: Container(
+                                   
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      gradient: _buildTileGradient(), // Use the custom gradient
                                     ),
-                                    title: Text(
-                                      "${resourceController.normalVideos[index].title}",
-                                      style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
-                                    ),
-                                    // subtitle: Row(
-                                    //   children: <Widget>[
-                                    //     const Icon(Icons.linear_scale, color: CustomColors.accentColor),
-                                    //     Text(
-                                    //       resourceController.videoData.value.data!.videos![index].title ?? "",
-                                    //       style: const TextStyle(color: CustomColors.secondaryColor),
-                                    //     )
-                                    //   ],
-                                    // ),
-                                    trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
+                                    child: const Icon(Icons.video_file_rounded, color: CustomColors.secondaryColor),
                                   ),
-                                );
-                              },
-                            ),
+                                  title: Text(
+                                    "${resourceController.normalVideos[index].title}",
+                                    style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
+                                  ),
+                                  // subtitle: Row(
+                                  //   children: <Widget>[
+                                  //     const Icon(Icons.linear_scale, color: CustomColors.accentColor),
+                                  //     Text(
+                                  //       resourceController.videoData.value.data!.videos![index].title ?? "",
+                                  //       style: const TextStyle(color: CustomColors.secondaryColor),
+                                  //     )
+                                  //   ],
+                                  // ),
+                                  trailing:const Icon(Icons.arrow_circle_right_outlined,color: CustomColors.accentColor,),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),

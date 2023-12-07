@@ -74,65 +74,55 @@ void onRefresh() async {
                   
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                       decoration:const BoxDecoration(
-                              backgroundBlendMode: BlendMode.plus,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [CustomColors.primaryColorDark,Color.fromARGB(255, 3, 135, 124),CustomColors.primaryColorDark], // Adjust colors as needed
-                    ),
-                  ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                        itemCount: data!.files!.length,
-                        itemBuilder: (context, index) {
-                          
-                          List<Files>? files=data.files;
-                          FileController fileController=Get.put(FileController(),tag: files![index].link);
-                          fileController.checkFileDownloadStatus(filename:files[index].title!,createdAt: files[index].createdAt!);
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical:8.0),
-                            child: ListTile(
-                              onTap: (){
-                                 Get.to(()=>PdfView(file: files[index]));
-                              },
-                              style: ListTileStyle.list,
-                              enableFeedback: true,
-                              shape: RoundedRectangleBorder(borderRadius:  BorderRadius.circular(20)),
-                              tileColor: CustomColors.tileColour,
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                                    leading: Container(
-                            padding: const EdgeInsets.only(right: 12.0),
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    right: BorderSide(width: 1.0, color: Colors.white24))),
-                            child: const Icon(Icons.picture_as_pdf, color: CustomColors.accentColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                      itemCount: data!.files!.length,
+                      itemBuilder: (context, index) {
+                        
+                        List<Files>? files=data.files;
+                        FileController fileController=Get.put(FileController(),tag: files![index].link);
+                        fileController.checkFileDownloadStatus(filename:files[index].title!,createdAt: files[index].createdAt!);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical:8.0),
+                          child: ListTile(
+                            onTap: (){
+                               Get.to(()=>PdfView(file: files[index]));
+                            },
+                            style: ListTileStyle.list,
+                            enableFeedback: true,
+                            shape: RoundedRectangleBorder(borderRadius:  BorderRadius.circular(20)),
+                            tileColor: const Color.fromARGB(255, 30, 112, 106),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                  leading: Container(
+                          padding: const EdgeInsets.only(right: 12.0),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  right: BorderSide(width: 1.0, color: Colors.white24))),
+                          child: const Icon(Icons.picture_as_pdf, color: CustomColors.accentColor),
+                                  ),
+                                  title: Text(
+                          "${files[index].title}",
+                          style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
+                                  ),
+                                  // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+                              
+                                  subtitle:  Row(
+                          children: <Widget>[
+                            const Icon(Icons.linear_scale, color: Colors.yellowAccent),
+                            Text(files[index].description??"", style: const TextStyle(color: Colors.white))
+                          ],
+                                  ),
+                                  trailing: Obx(()=>(fileController.isDownloading.value? LoadingAnimationWidget.threeArchedCircle(color: Colors.white, size: Get.width*0.05):IconButton(onPressed: () {
+                                   fileController.isDownloaded.value==false?fileController.downloadFile(file:files[index]): fileController.deleteFile(name:files[index].title!,createdAt: files[index].createdAt!);
+                                  }
+                                  ,icon: Obx(() => Icon(fileController.isDownloaded.value? Icons.check_circle_outline_rounded:Icons.download, color: CustomColors.accentColor,),)))),
+                        )
+                        );
+                      },
                                     ),
-                                    title: Text(
-                            "${files[index].title}",
-                            style: const TextStyle(color: CustomColors.secondaryColor, fontWeight: FontWeight.bold),
-                                    ),
-                                    // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-                                
-                                    subtitle:  Row(
-                            children: <Widget>[
-                              const Icon(Icons.linear_scale, color: Colors.yellowAccent),
-                              Text(files[index].description??"", style: const TextStyle(color: Colors.white))
-                            ],
-                                    ),
-                                    trailing: Obx(()=>(fileController.isDownloading.value? LoadingAnimationWidget.threeArchedCircle(color: Colors.white, size: Get.width*0.05):IconButton(onPressed: () {
-                                     fileController.isDownloaded.value==false?fileController.downloadFile(file:files[index]): fileController.deleteFile(name:files[index].title!,createdAt: files[index].createdAt!);
-                                    }
-                                    ,icon: Obx(() => Icon(fileController.isDownloaded.value? Icons.check_circle_outline_rounded:Icons.download, color: CustomColors.accentColor,),)))),
-                          )
-                          );
-                        },
-                                      ),
-                      ),
                     ),
                   );
                 }

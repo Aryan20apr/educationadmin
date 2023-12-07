@@ -75,10 +75,10 @@ bool _isSearchBarOpen = false;
                     },
                     labelPadding: EdgeInsets.zero,
                     unselectedLabelColor: Colors.black,
-                    labelColor: Colors.black,
-                    indicatorColor: CustomColors.accentColor,
+                    labelColor: CustomColors.accentColor,
+                    indicatorColor: CustomColors.primaryColorDark,
                     splashBorderRadius: BorderRadius.circular(20),
-                    indicator: BoxDecoration(                    color: CustomColors.accentColor,
+                    indicator: BoxDecoration(                    color: CustomColors.primaryColorDark,
                         borderRadius:BorderRadius.circular(20)
                     ),
                     controller: tabController,
