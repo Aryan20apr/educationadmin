@@ -96,22 +96,13 @@ bool _isSearchBarOpen = false;
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left:10.0,right: 10.0,bottom: 10.0,),
-                child: TabBarView(
-                  controller: tabController,
-                  children: [
-                    
-                     Padding(
-                       padding: const EdgeInsets.only(top:8.0),
-                       child: VideoResourcesTab(channelId: widget.channel.id!,),
-                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top:8.0),
-                      child: FileResourcesTab(channelId: widget.channel.id!,),
-                    ),
-                  ],
-                ),
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  
+                   VideoResourcesTab(channelId: widget.channel.id!,),
+                  FileResourcesTab(channelId: widget.channel.id!,),
+                ],
               ),
             )
           ],
