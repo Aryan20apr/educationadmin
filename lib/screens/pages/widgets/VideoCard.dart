@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../common/ChannelDetailsCopy.dart';
 import 'SubscriptionModalBottomSheet.dart';
 
 class VideoCard extends StatelessWidget {
@@ -61,7 +62,7 @@ class VideoCard extends StatelessWidget {
                   ));
             } else {
               if (!channel.isCompletelyPaid! || channel.price == 0) {
-                Get.to(() => ChannelDetails(
+                Get.to(() => ChannelDetailsCopy(
                       channel: channel,
                     ));
               } else {
