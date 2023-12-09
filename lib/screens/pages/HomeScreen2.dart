@@ -14,6 +14,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:educationadmin/utils/ColorConstants.dart';
 import '../../widgets/ProgressIndicatorWidget.dart';
 import '../common/ChannelDetails.dart';
+import '../common/ChannelDetailsCopy.dart';
 import 'widgets/HomeVideoCard.dart';
 
 class HomeScreen extends StatefulWidget {

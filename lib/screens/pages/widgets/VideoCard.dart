@@ -62,7 +62,7 @@ class VideoCard extends StatelessWidget {
                   ));
             } else {
               if (!channel.isCompletelyPaid! || channel.price == 0) {
-                Get.to(() => ChannelDetailsCopy(
+                Get.to(() => ChannelDetails(
                       channel: channel,
                     ));
               } else {

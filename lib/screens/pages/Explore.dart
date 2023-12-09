@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../common/ChannelDetails.dart';
+import '../common/ChannelDetailsCopy.dart';
 
 
 class ExploreScreen extends StatefulWidget {

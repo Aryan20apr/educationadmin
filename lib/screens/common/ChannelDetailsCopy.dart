@@ -7,16 +7,16 @@ import 'package:get/get.dart';
 import 'Tab1.dart';
 import 'Tab2.dart';
 
-class ChannelDetailsCopy extends StatefulWidget {
+class ChannelDetails extends StatefulWidget {
   final Channels channel;
 
- const ChannelDetailsCopy({Key? key, required this.channel}) : super(key: key);
+ const ChannelDetails({Key? key, required this.channel}) : super(key: key);
 
   @override
-  State<ChannelDetailsCopy> createState() => _ChannelDetailsCopyState();
+  State<ChannelDetails> createState() => _ChannelDetailsCopyState();
 }
 
-class _ChannelDetailsCopyState extends State<ChannelDetailsCopy>
+class _ChannelDetailsCopyState extends State<ChannelDetails>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 
