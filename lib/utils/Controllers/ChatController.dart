@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatController extends GetxController {
-  final String SOCKET_URI = "https://talentsearchbackend.hop.sh";
+  final String SOCKET_URI = "https://octopus-app-hg35x.ondigitalocean.app";
   final String SEND_MESSAGE = "sendMessage";
   final String JOIN_ROOM = "joinRoom";
   final String LEAVE_ROOM = "leaveRoom";

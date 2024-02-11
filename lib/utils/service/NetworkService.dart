@@ -35,7 +35,7 @@ import '../../Modals/SingnupModal.dart';
 /// LoginService responsible to communicate with web-server
 /// via authenticaton related APIs
 class NetworkService extends GetConnect {
-  final String baseURL = "https://talentsearchbackend.hop.sh/";
+  final String baseURL = "https://octopus-app-hg35x.ondigitalocean.app/";
 
   final String signup = "auth/signup";
   final String signin = "auth/signin";

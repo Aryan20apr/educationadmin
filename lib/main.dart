@@ -15,7 +15,7 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: kReleaseMode,
+      enabled: !kReleaseMode,
 
       builder: (context) => const MyApp(), // Wrap your app
     ),
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType) {
       return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Talent Search English',
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           defaultTransition: Transition.rightToLeftWithFade,
